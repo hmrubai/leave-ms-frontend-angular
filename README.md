@@ -1,6 +1,6 @@
-## LANTA Service Limited - Frontend
+## Leave Management System
 
-This application will be use as an accounting system for Lanta Services Limited. This application will be used to maintain the budget, receiving cash by bank, distribution of money according to the budget.
+This application will be use as a frontend application of Leave Management System. 
 
 ## Contributor
 
@@ -9,10 +9,22 @@ This application will be use as an accounting system for Lanta Services Limited.
 ## Features
 
 - Master Settings
-- Projects
-- Budget
-- Vendor
-- Receiving
-- Distribution
-- Project progress 
-- Report
+- User/Employee List (System Administrator, Approval Authority, Employee)
+- Department 
+- Section List
+- Designation List
+- Branch List
+- Leave Type (SL, CL, AL, PL, ML..)
+- Calender (With Day Types)
+- Leave Balance (Policy Setup)
+- Leave Email Template Setup
+
+- Approval Flow Setup
+- Setup Approval Flow/Chain
+- Modify (Partial)
+
+- Leave Application
+- Application Types (Pending, Approved, Rejected, Withdrawals)
+- Employee Leave Balance
+- Apply for a Leave
+- All types of leave applications (Pending, Approved, Rejected, Withdrawals)
