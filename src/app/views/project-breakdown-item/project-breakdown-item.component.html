@@ -1,0 +1,118 @@
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <h5><i class="fa fa-list"></i> Item List 
+          <small *ngIf="is_loaded"> ({{ project_details.project_name }} - {{ project_details.category }} ) </small></h5>
+          <button class="btn btn-square btn-success btn-sm float-right btn-sm-custom" (click)="addCategoryModal.show()"><i class="fa fa-plus"></i> Add New Item</button>
+          <button class="btn btn-square btn-dark btn-sm float-right btn-sm-custom mr-2" (click)="backToLocation()"><i class="fa fa-arrow-left"></i> Back</button>
+          <!--<ng-select [items]="itemTypeList" bindLabel="name" class="col-lg-2 form-control-sm float-right fs-top"
+            bindValue="id" [(ngModel)]="item_category" (change)="getItemList()" placeholder="Select Category">
+          </ng-select>-->
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Item Name</th>
+                <th>Unit Price (৳)</th>
+                <th>Quantity</th>
+                <th>Total Amount (৳)</th>
+                <th>Is Acitve</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of breakdownItemList; let i = index;">
+                <td>{{ item.item_name }}</td>
+                <td>{{ item.unit_price | currency:'৳ ':'symbol':'0.0' }}</td>
+                <td>{{ item.quantity }} ({{ item.unit_name }})</td>
+                <td>{{ item.total_price | currency:'৳ ':'symbol':'0.0' }}</td>
+                <td>
+                    <span *ngIf="item.is_active" class="status bg-success">Active</span>
+                    <span *ngIf="!item.is_active" class="status bg-danger">Inactive</span>
+                </td>
+
+                <td>
+                    <button class="btn btn-primary btn-sm" (click)="editItem(item)"><i class="fa fa-pencil"></i>&nbsp;Edit</button>
+                </td>
+              </tr>
+              <tr *ngIf="breakdownItemList.length <= 0">
+                <td colspan="4">No Item added</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer">
+            {{ breakdownItemList.length }} Rows
+        </div>
+      </div>
+    </div>
+</div>
+<!--<block-ui></block-ui>-->
+
+<div bsModal #addCategoryModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-info" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ modalTitle }}</h4>
+        <button type="button" class="close" (click)="addCategoryModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="entryForm" class="form-horizontal">
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Item</label>
+                <div class="col-md-9">
+                    <ng-select [items]="itemList" bindLabel="name" (change)="setUnitPrice($event)"
+                     bindValue="id" formControlName="item_id" placeholder="Select Item"
+                      [ngClass]="{ 'is-invalid': submitted && f.item_id.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.item_id.errors" class="error-text">
+                      <span *ngIf="f.item_id.errors.required" class="text-danger"> Item is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="textarea-input">Unit Price</label>
+                <div class="col-md-9">
+                    <input type="number" formControlName="unit_price"  (keyup)="getTotalValue($event)" [ngClass]="{ 'is-invalid': submitted && f.unit_price.errors }" class="form-control" placeholder="Unit Price">
+                    <div *ngIf="submitted && f.unit_price.errors" class="error-text">
+                      <span *ngIf="f.unit_price.errors.required" class="text-danger"> Unit Price is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="textarea-input">Quantity</label>
+                <div class="col-md-9">
+                    <input type="number" formControlName="quantity" (keyup)="getTotalValue($event)" [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }" class="form-control" placeholder="Quantity">
+                    <div *ngIf="submitted && f.quantity.errors" class="error-text">
+                      <span *ngIf="f.quantity.errors.required" class="text-danger"> Quantity is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="textarea-input">Total</label>
+                <div class="col-md-9">
+                    <strong> = {{ total_amount }} ৳</strong>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Is Active</label>
+                <div class="col-md-9 col-form-label">
+                    <div class="form-check form-check-inline mr-1">
+                        <input class="form-check-input" formControlName="is_active" type="checkbox" id="is_active">
+                        <label class="form-check-label" for="is_active">Active</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="addCategoryModal.hide()">Close</button>
+        <button type="button" class="btn btn-info" (click)="onFormSubmit()">{{ btnSaveText }}</button>
+      </div>
+    </div>
+  </div>
+</div>

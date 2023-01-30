@@ -1,0 +1,230 @@
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <h5><i class="fa fa-list"></i> Disbursement List</h5>
+          <button class="btn btn-square btn-success btn-sm float-right btn-sm-custom" (click)="addCategoryModal.show()"><i class="fa fa-plus"></i> Make Payment</button>
+          <button class="btn btn-square btn-dark btn-sm float-right btn-sm-custom mr-2" (click)="backToLocation()"><i class="fa fa-arrow-left"></i> Back</button>
+          <ng-select [items]="filterProjectCategoryList" bindLabel="category" class="col-lg-2 form-control-sm float-right fs-top"
+            bindValue="budget_type_id" [(ngModel)]="filter_category" (change)="getTransactionList()" placeholder="Select Category">
+          </ng-select>
+          <ng-select [items]="projectList" bindLabel="name" class="col-lg-2 form-control-sm float-right fs-top"
+            bindValue="id" [(ngModel)]="filter_project" (change)="getTransactionFilterList()" placeholder="Select Project">
+          </ng-select>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Category</th>
+                <th>Vendor</th>
+                <th>Payment Amount</th>
+                <th>Payment Method</th>
+                <th>Date</th>
+                <th>Is Acitve</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of disburseTransactionList; let i = index;">
+                <td>{{ item.project_name }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.vendor_name ? item.vendor_name : '-' }}</td>
+                <td>{{ item.disbursed_amount | currency:'৳ ':'symbol':'0.0' }}</td>
+                <td>{{ item.payment_type}}</td>
+                <td>{{ item.created_at | date : 'medium'  }}</td>
+                <!--<td>{{ item.user_name }}</td>-->
+                <td>
+                    <span *ngIf="item.is_active" class="status bg-success">Active</span>
+                    <span *ngIf="!item.is_active" class="status bg-danger">Inactive</span>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm" (click)="seeDetails(item)"><i class="fa fa-eye"></i>&nbsp;Details</button>
+                </td>
+              </tr>
+              <tr *ngIf="disburseTransactionList.length <= 0">
+                <td colspan="8">No payment disbursed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer">
+            {{ disburseTransactionList.length }} Rows
+        </div>
+      </div>
+    </div>
+</div>
+<!--<block-ui></block-ui>-->
+
+<div bsModal #addCategoryModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-success modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ modalTitle }}</h4>
+        <button type="button" class="close" (click)="addCategoryModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="entryForm" class="form-horizontal">
+            <!--<div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Product Name</label>
+                <div class="col-md-9">
+                    <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" id="text-input" name="text-input" class="form-control" placeholder="Product Name">
+                    <div *ngIf="submitted && f.name.errors" class="error-text">
+                      <span *ngIf="f.name.errors.required" class="text-danger"> Name is required</span>
+                    </div>
+                </div>
+            </div>-->
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Project</label>
+                <div class="col-md-9">
+                    <ng-select [items]="projectList" bindLabel="name" (change)="onChangeProject($event)" 
+                     bindValue="id" formControlName="project_id" placeholder="Select Project"
+                      [ngClass]="{ 'is-invalid': submitted && f.project_id.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.project_id.errors" class="error-text">
+                      <span *ngIf="f.project_id.errors.required" class="text-danger"> Project is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Category</label>
+                <div class="col-md-9">
+                    <ng-select [items]="projectCategoryList" bindLabel="category" 
+                     bindValue="id" formControlName="breakdown_id" placeholder="Select Category"
+                      [ngClass]="{ 'is-invalid': submitted && f.breakdown_id.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.breakdown_id.errors" class="error-text">
+                      <span *ngIf="f.breakdown_id.errors.required" class="text-danger"> Category is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Vendor</label>
+                <div class="col-md-9">
+                    <ng-select [items]="vendorList" bindLabel="name" 
+                     bindValue="id" formControlName="vendor_id" placeholder="Select Vendor"
+                      [ngClass]="{ 'is-invalid': submitted && f.vendor_id.errors }" >
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                          <div> {{item.name}} - ({{item.contact_no}})</div>
+                      </ng-template>
+                     </ng-select>
+                     
+                    <div *ngIf="submitted && f.vendor_id.errors" class="error-text">
+                      <span *ngIf="f.vendor_id.errors.required" class="text-danger"> Vendor is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Disburse Amount</label>
+                <div class="col-md-9">
+                    <input type="number" formControlName="disbursed_amount" [ngClass]="{ 'is-invalid': submitted && f.disbursed_amount.errors }" class="form-control" placeholder="Disburse Amount">
+                    <div *ngIf="submitted && f.disbursed_amount.errors" class="error-text">
+                      <span *ngIf="f.disbursed_amount.errors.required" class="text-danger"> Disburse Amount is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="textarea-input">Purpose</label>
+                <div class="col-md-9">
+                    <textarea id="textarea-input" formControlName="purpose"  [ngClass]="{ 'is-invalid': submitted && f.purpose.errors }" name="textarea-input" rows="3" class="form-control" placeholder="Purpose.."></textarea>
+                    <div *ngIf="submitted && f.purpose.errors" class="error-text">
+                      <span *ngIf="f.purpose.errors.required" class="text-danger"> Purpose is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Payment Method</label>
+                <div class="col-md-9">
+                    <ng-select [items]="paymentMethod" bindLabel="name" 
+                        bindValue="id" formControlName="payment_type" placeholder="Payment Method"
+                        [ngClass]="{ 'is-invalid': submitted && f.payment_type.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.payment_type.errors" class="error-text">
+                      <span *ngIf="f.payment_type.errors.required" class="text-danger"> Payment Method is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="textarea-input">Payment Details</label>
+                <div class="col-md-9">
+                    <textarea id="textarea-input" formControlName="payment_details"  [ngClass]="{ 'is-invalid': submitted && f.payment_details.errors }" name="textarea-input" rows="3" class="form-control" placeholder="Payment Details.."></textarea>
+                    <div *ngIf="submitted && f.payment_details.errors" class="error-text">
+                      <span *ngIf="f.payment_details.errors.required" class="text-danger"> Payment Details is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Is Active</label>
+                <div class="col-md-9 col-form-label">
+                    <div class="form-check form-check-inline mr-1">
+                        <input class="form-check-input" formControlName="is_active" type="checkbox" id="is_active">
+                        <label class="form-check-label" for="is_active">Active</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="addCategoryModal.hide()">Close</button>
+        <button type="button" class="btn btn-success" (click)="onFormSubmit()">{{ btnSaveText }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #detailsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Transaction Details</h4>
+        <button type="button" class="close" (click)="detailsModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-striped table-sm" *ngIf="is_details_loaded">
+            <tbody>
+              <tr>
+                <td><strong>Project Name</strong></td> <td><strong>{{ transactionDetails.project_name }}</strong></td>
+              </tr>
+              <tr>
+                <td>Category</td> <td>{{ transactionDetails.category }}</td>
+              </tr>
+              <tr>
+                <td>Vendor</td> 
+                <td>
+                  <strong>{{ transactionDetails.vendor_name }}</strong><br/>
+                  {{ transactionDetails.vendor_contact_no }}
+                </td>
+              </tr>
+              <tr>
+                <td>Purpose</td> <td>{{ transactionDetails.purpose }}</td>
+              </tr>
+              <tr>
+                <td><strong>Amount</strong></td> <td><strong>{{ transactionDetails.disbursed_amount | currency:'৳ ':'symbol':'0.0' }}</strong></td>
+              </tr>
+              <tr>
+                <td>Payment Method</td> <td>{{ transactionDetails.payment_type }}</td>
+              </tr>
+              <tr>
+                <td>Payment Details</td> <td>{{ transactionDetails.payment_details }}</td>
+              </tr>
+              <tr>
+                <td>Payment Date</td> <td>{{ transactionDetails.created_at | date : 'medium' }}</td>
+              </tr>
+              <tr>
+                <td>Added By</td> <td>{{ transactionDetails.user_name }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="detailsModal.hide()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

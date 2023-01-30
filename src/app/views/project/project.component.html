@@ -1,0 +1,142 @@
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <h5><i class="fa fa-list"></i> Project List</h5>
+          <button class="btn btn-square btn-success btn-sm float-right btn-sm-custom" (click)="addCategoryModal.show()"><i class="fa fa-plus"></i> Add New Project</button>
+          <!--<ng-select [items]="itemTypeList" bindLabel="name" class="col-lg-2 form-control-sm float-right fs-top"
+            bindValue="id" [(ngModel)]="item_category" (change)="getItemList()" placeholder="Select Category">
+          </ng-select>-->
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>address</th>
+                <th>Contact Person</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>Is Acitve</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of projectList; let i = index;">
+                <td>{{ item.name }}</td>
+                <td>{{ item.address }}</td>
+                <td>{{ item.contact_person }}</td>
+                <td>{{ item.deadline | date:'mediumDate' }}</td>
+                <td>
+                    <span *ngIf="item.status === 'OnGoing'" class="status bg-success">{{ item.status }}</span>
+                    <span *ngIf="item.status === 'Cancelled'" class="status bg-danger">{{ item.status }}</span>
+                    <span *ngIf="item.status === 'Paused'" class="status bg-info">{{ item.status }}</span>
+                    <span *ngIf="item.status === 'Postponed'" class="status bg-warning">{{ item.status }}</span>
+                    <span *ngIf="item.status === 'Completed'" class="status bg-secondary">{{ item.status }}</span>
+                </td>
+                <td>
+                    <span *ngIf="item.is_active" class="status bg-success">Active</span>
+                    <span *ngIf="!item.is_active" class="status bg-danger">Inactive</span>
+                </td>
+                <td>
+                    <button class="btn btn-warning btn-sm" [routerLink]="['/project/project-breakdown',item.id]"><i class="fa fa-list"></i>&nbsp;Breakdown</button>
+                    <button class="btn btn-primary btn-sm" (click)="editItem(item)"><i class="fa fa-pencil"></i>&nbsp;Edit</button>
+                </td>
+              </tr>
+              <tr *ngIf="projectList.length <= 0">
+                <td colspan="4">No project added</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer">
+            {{ projectList.length }} Rows
+        </div>
+      </div>
+    </div>
+</div>
+<!--<block-ui></block-ui>-->
+
+<div bsModal #addCategoryModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-info modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ modalTitle }}</h4>
+        <button type="button" class="close" (click)="addCategoryModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="entryForm" class="form-horizontal">
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Project Name</label>
+                <div class="col-md-9">
+                    <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" id="text-input" name="text-input" class="form-control" placeholder="Product Name">
+                    <div *ngIf="submitted && f.name.errors" class="error-text">
+                      <span *ngIf="f.name.errors.required" class="text-danger"> Name is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="textarea-input">Address</label>
+                <div class="col-md-9">
+                    <textarea id="textarea-input" formControlName="address"  [ngClass]="{ 'is-invalid': submitted && f.address.errors }" name="textarea-input" rows="3" class="form-control" placeholder="Address.."></textarea>
+                    <div *ngIf="submitted && f.address.errors" class="error-text">
+                      <span *ngIf="f.address.errors.required" class="text-danger"> Address is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Contact Person</label>
+                <div class="col-md-9">
+                    <input type="text" formControlName="contact_person" [ngClass]="{ 'is-invalid': submitted && f.contact_person.errors }" id="text-input" name="text-input" class="form-control" placeholder="Contact Person">
+                    <div *ngIf="submitted && f.contact_person.errors" class="error-text">
+                      <span *ngIf="f.contact_person.errors.required" class="text-danger"> Contact Person is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="textarea-input">Remark</label>
+                <div class="col-md-9">
+                    <textarea id="textarea-input" formControlName="remarks"  [ngClass]="{ 'is-invalid': submitted && f.remarks.errors }" name="textarea-input" rows="3" class="form-control" placeholder="Remark.."></textarea>
+                    <div *ngIf="submitted && f.remarks.errors" class="error-text">
+                      <span *ngIf="f.remarks.errors.required" class="text-danger"> Name is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Deadline</label>
+                <div class="col-md-9">
+                    <input type="date" formControlName="deadline" [ngClass]="{ 'is-invalid': submitted && f.deadline.errors }" class="form-control" placeholder="Deadline">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Status</label>
+                <div class="col-md-9">
+                    <ng-select [items]="statusList" bindLabel="name" 
+                     bindValue="id" formControlName="status" placeholder="Select Status"
+                      [ngClass]="{ 'is-invalid': submitted && f.status.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.status.errors" class="error-text">
+                      <span *ngIf="f.status.errors.required" class="text-danger"> Status is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Is Active</label>
+                <div class="col-md-9 col-form-label">
+                    <div class="form-check form-check-inline mr-1">
+                        <input class="form-check-input" formControlName="is_active" type="checkbox" id="is_active">
+                        <label class="form-check-label" for="is_active">Active</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="addCategoryModal.hide()">Close</button>
+        <button type="button" class="btn btn-info" (click)="onFormSubmit()">{{ btnSaveText }}</button>
+      </div>
+    </div>
+  </div>
+</div>

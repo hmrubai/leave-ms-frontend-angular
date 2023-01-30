@@ -1,0 +1,37 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+.btn-sm-custom{
+    line-height: 1.8 !important;
+}
+
+.fs-top{
+    top: -6px !important
+}
+
+.link{
+    cursor: pointer;
+}
+
+.inline{
+    display: inline-block;
+}
+
+.card-header h5{
+    display: inline-block; 
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.status {
+    border-radius: 25px;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    font-size: 0.75rem;
+    line-height: 1;
+    position: relative;
+    padding: 6px 8px 6px 8px;
+    font-weight: 600;
+    min-width: 40px;
+    z-index: 9;
+}
