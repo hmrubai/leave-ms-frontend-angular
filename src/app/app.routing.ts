@@ -66,6 +66,11 @@ export const routes: Routes = [
       },
       {
         path: 'master-settings',
+        loadChildren: () => import('./views/master-settings/designation/designation.module').then(m => m.DesignationModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'master-settings',
         loadChildren: () => import('./views/master-settings/department/department.module').then(m => m.DepartmentModule),
         canActivate: [AuthGuard]
       },

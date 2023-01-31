@@ -41,7 +41,7 @@ export const navItems: INavData[] = [
             },
             {
                 name: 'Designation',
-                url: '/master-setting/budget-items',
+                url: '/master-settings/designation',
                 icon: 'icon-badge'
             },
         ]
