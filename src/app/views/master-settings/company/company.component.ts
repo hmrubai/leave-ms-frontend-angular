@@ -56,7 +56,7 @@ export class CompanyComponent implements OnInit {
             company_email: [null, [Validators.required]],
             hr_email: [null, [Validators.required]],
             leave_email: [null, [Validators.required]],
-            company_logo: [null, [Validators.required]],
+            company_logo: [null],
             employee_code_length: [null],
             company_prefix: [null],
             is_active: [true],
@@ -90,7 +90,7 @@ export class CompanyComponent implements OnInit {
     }
 
     getCompanyList() {
-        this._service.get('company-list').subscribe(res => {
+        this._service.get('admin/company-list').subscribe(res => {
             this.companyList = res.data;
         }, err => { }
         );
@@ -112,7 +112,6 @@ export class CompanyComponent implements OnInit {
         this.entryForm.controls['company_prefix'].setValue(item.company_prefix);
         this.entryForm.controls['is_active'].setValue(item.is_active);
         this.addCompanyModal.show();
-
     }
 
     onFormSubmit(){
@@ -141,7 +140,7 @@ export class CompanyComponent implements OnInit {
             formData.append('id', this.entryForm.value.id);
         }
 
-        this._service.post('company-save-or-update', formData).subscribe(
+        this._service.post('admin/company-save-or-update', formData).subscribe(
             data => {
                 this.blockUI.stop();
                 if (data.status) {

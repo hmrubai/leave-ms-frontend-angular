@@ -31,7 +31,7 @@ export const navItems: INavData[] = [
             },
             {
                 name: 'Branch',
-                url: '/master-setting/item-unit',
+                url: '/master-settings/branch',
                 icon: 'icon-organization'
             },
             {
