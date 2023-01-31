@@ -36,7 +36,7 @@ export const navItems: INavData[] = [
             },
             {
                 name: 'Department',
-                url: '/master-setting/vendor',
+                url: '/master-settings/department',
                 icon: 'icon-layers'
             },
             {
