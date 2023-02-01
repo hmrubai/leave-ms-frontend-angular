@@ -163,7 +163,7 @@ export class CompanyComponent implements OnInit {
         this.entryForm.reset();
         this.submitted = false;
         this.entryForm.controls['is_active'].setValue(true);
-        this.modalTitle = 'Add New Category';
+        this.modalTitle = 'Add New Company';
         this.btnSaveText = 'Save';
     }
 

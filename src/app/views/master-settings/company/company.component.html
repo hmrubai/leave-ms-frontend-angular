@@ -49,7 +49,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">{{ modalTitle }}</h4>
-        <button type="button" class="close" (click)="addCompanyModal.hide()" aria-label="Close">
+        <button type="button" class="close" (click)="modalHide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -148,7 +148,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="addCompanyModal.hide()">Close</button>
+        <button type="button" class="btn btn-secondary" (click)="modalHide()">Close</button>
         <button type="button" class="btn btn-info" (click)="onFormSubmit()">{{ btnSaveText }}</button>
       </div>
     </div>

@@ -48,7 +48,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">{{ modalTitle }}</h4>
-        <button type="button" class="close" (click)="addBranchModal.hide()" aria-label="Close">
+        <button type="button" class="close" (click)="modalHide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -57,7 +57,7 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Branch Name</label>
                 <div class="col-md-9">
-                    <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" id="text-input" name="text-input" class="form-control" placeholder="Department Name">
+                    <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" id="text-input" name="text-input" class="form-control" placeholder="Branch Name">
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                       <span *ngIf="f.name.errors.required" class="text-danger"> Name is required</span>
                     </div>
@@ -107,7 +107,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="addBranchModal.hide()">Close</button>
+        <button type="button" class="btn btn-secondary" (click)="modalHide()">Close</button>
         <button type="button" class="btn btn-info" (click)="onFormSubmit()">{{ btnSaveText }}</button>
       </div>
     </div>

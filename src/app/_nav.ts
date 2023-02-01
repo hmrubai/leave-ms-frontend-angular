@@ -44,6 +44,12 @@ export const navItems: INavData[] = [
                 url: '/master-settings/designation',
                 icon: 'icon-badge'
             },
+            {
+                name: 'Leave Policy',
+                url: '/master-settings/leave-policy',
+                icon: 'icon-book-open'
+            },
+            
         ]
     },
     // {
