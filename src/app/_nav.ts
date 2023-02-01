@@ -19,15 +19,15 @@ export const navItems: INavData[] = [
         url: '/master-settings',
         icon: 'icon-settings',
         children: [
-            // {
-            //   name: 'Dashboard Sample',
-            //   url: '/dashboard-sample',
-            //   icon: 'icon-home'
-            // },
             {
                 name: 'Company Information',
                 url: '/master-settings/company',
                 icon: 'icon-notebook'
+            },
+            {
+              name: 'Fiscal Year',
+              url: '/master-settings/fiscal-year',
+              icon: 'icon-event'
             },
             {
                 name: 'Branch',

@@ -75,10 +75,16 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'master-settings',
+        loadChildren: () => import('./views/master-settings/fiscal-year/fiscal-year.module').then(m => m.FiscalYearModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule),
         canActivate: [AuthGuard]
       }
+      
       /*{
         path: 'master-setting',
         loadChildren: () => import('./views/budget-category/budget-category.module').then(m => m.BudgetCategoryModule),
