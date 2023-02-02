@@ -49,6 +49,11 @@ export const navItems: INavData[] = [
                 url: '/master-settings/leave-policy',
                 icon: 'icon-book-open'
             },
+            {
+                name: 'Employment Type',
+                url: '/master-settings/employment-type',
+                icon: 'icon-grid'
+            },
             
         ]
     },
