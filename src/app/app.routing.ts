@@ -90,6 +90,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'master-settings',
+        loadChildren: () => import('./views/master-settings/leave-balance-settings/leave-balance-settings.module').then(m => m.LeaveBalanceSettingsModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule),
         canActivate: [AuthGuard]

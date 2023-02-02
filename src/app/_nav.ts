@@ -50,10 +50,16 @@ export const navItems: INavData[] = [
                 icon: 'icon-book-open'
             },
             {
+                name: 'Leave Balance Settings',
+                url: '/master-settings/leave-balance-settings',
+                icon: 'icon-book-open'
+            },
+            {
                 name: 'Employment Type',
                 url: '/master-settings/employment-type',
                 icon: 'icon-grid'
             },
+
             
         ]
     },
