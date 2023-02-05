@@ -45,19 +45,19 @@ export const navItems: INavData[] = [
                 icon: 'icon-badge'
             },
             {
+                name: 'Employment Type',
+                url: '/master-settings/employment-type',
+                icon: 'icon-grid'
+            },
+            {
                 name: 'Leave Policy',
                 url: '/master-settings/leave-policy',
                 icon: 'icon-book-open'
             },
             {
-                name: 'Leave Balance Settings',
+                name: 'Balance Settings',
                 url: '/master-settings/leave-balance-settings',
-                icon: 'icon-book-open'
-            },
-            {
-                name: 'Employment Type',
-                url: '/master-settings/employment-type',
-                icon: 'icon-grid'
+                icon: 'icon-chart'
             },
 
             
