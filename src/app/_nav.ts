@@ -50,6 +50,11 @@ export const navItems: INavData[] = [
                 icon: 'icon-grid'
             },
             {
+                name: 'Employee',
+                url: '/master-settings/employee',
+                icon: 'icon-user'
+            },
+            {
                 name: 'Leave Policy',
                 url: '/master-settings/leave-policy',
                 icon: 'icon-book-open'
@@ -59,7 +64,6 @@ export const navItems: INavData[] = [
                 url: '/master-settings/leave-balance-settings',
                 icon: 'icon-chart'
             },
-
             
         ]
     },
