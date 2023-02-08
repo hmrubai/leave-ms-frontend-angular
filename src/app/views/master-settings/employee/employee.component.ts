@@ -129,17 +129,17 @@ export class EmployeeComponent implements OnInit {
             branch_id: [null, [Validators.required]],
             present_address: [null],
             permanent_address: [null],
-            date_of_birth: [null],
+            date_of_birth: [null, [Validators.required]],
             joining_date: [null],
             blood_group: [null],
             marital_status: [null],
             gender: [null],
-            department_id: [null],
-            designation_id: [null],
-            employment_type_id: [null],
-            division_id: [null],
-            district_id: [null],
-            city_id: [null],
+            department_id: [null, [Validators.required]],
+            designation_id: [null, [Validators.required]],
+            employment_type_id: [null, [Validators.required]],
+            division_id: [null, [Validators.required]],
+            district_id: [null, [Validators.required]],
+            city_id: [null, [Validators.required]],
             area_id: [null],
             is_stuckoff: [null],
             stuckoff_date: [null],
@@ -358,32 +358,32 @@ export class EmployeeComponent implements OnInit {
         this.entryForm.controls['email'].enable();
 
         formData.append('name', this.entryForm.value.name.trim());
-        formData.append('father_name', this.entryForm.value.father_name ? this.entryForm.value.father_name.trim() : null);
-        formData.append('mother_name', this.entryForm.value.mother_name ? this.entryForm.value.mother_name.trim() : null);
-        formData.append('fathers_contact_number', this.entryForm.value.fathers_contact_number ? this.entryForm.value.fathers_contact_number.trim() : null);
-        formData.append('mothers_contact_number', this.entryForm.value.mothers_contact_number ? this.entryForm.value.mothers_contact_number.trim() : null);
+        formData.append('father_name', this.entryForm.value.father_name ? this.entryForm.value.father_name.trim() : '');
+        formData.append('mother_name', this.entryForm.value.mother_name ? this.entryForm.value.mother_name.trim() : '');
+        formData.append('fathers_contact_number', this.entryForm.value.fathers_contact_number ? this.entryForm.value.fathers_contact_number.trim() : '');
+        formData.append('mothers_contact_number', this.entryForm.value.mothers_contact_number ? this.entryForm.value.mothers_contact_number.trim() : '');
         formData.append('email', this.entryForm.value.email.trim());
         formData.append('employee_id', this.entryForm.value.employee_id);
-        formData.append('mobile', this.entryForm.value.mobile ? this.entryForm.value.mobile.trim() : null);
-        formData.append('nid', this.entryForm.value.nid ? this.entryForm.value.nid.trim() : null);
-        formData.append('present_address', this.entryForm.value.present_address ? this.entryForm.value.present_address.trim() : null);
-        formData.append('permanent_address', this.entryForm.value.permanent_address ? this.entryForm.value.permanent_address.trim() : null);
-        formData.append('office_contact_number', this.entryForm.value.office_contact_number ? this.entryForm.value.office_contact_number.trim() : null);
-        formData.append('finger_print_id', this.entryForm.value.finger_print_id ? this.entryForm.value.finger_print_id.trim() : null);
-        formData.append('personal_alt_contact_number', this.entryForm.value.personal_alt_contact_number ? this.entryForm.value.personal_alt_contact_number.trim() : null);
-        formData.append('personal_email', this.entryForm.value.personal_email ? this.entryForm.value.personal_email.trim() : null);
-        formData.append('passport_number', this.entryForm.value.passport_number ? this.entryForm.value.passport_number.trim() : null);
-        formData.append('spouse_name', this.entryForm.value.spouse_name ? this.entryForm.value.spouse_name.trim() : null);
-        formData.append('spouse_number', this.entryForm.value.spouse_number ? this.entryForm.value.spouse_number.trim() : null);
-        formData.append('referee_office', this.entryForm.value.referee_office ? this.entryForm.value.referee_office.trim() : null);
-        formData.append('referee_relative', this.entryForm.value.referee_relative ? this.entryForm.value.referee_relative.trim() : null);
-        formData.append('referee_contact_details', this.entryForm.value.referee_contact_details ? this.entryForm.value.referee_contact_details.trim() : null);
-        formData.append('key_skills', this.entryForm.value.key_skills ? this.entryForm.value.key_skills.trim() : null);
-        formData.append('highest_level_of_study', this.entryForm.value.highest_level_of_study ? this.entryForm.value.highest_level_of_study.trim() : null);
-        formData.append('e_tin', this.entryForm.value.e_tin ? this.entryForm.value.e_tin.trim() : null);
-        formData.append('applicable_tax_amount', this.entryForm.value.applicable_tax_amount ? this.entryForm.value.applicable_tax_amount.trim() : null);
-        formData.append('official_achievement', this.entryForm.value.official_achievement ? this.entryForm.value.official_achievement.trim() : null);
-        formData.append('remarks', this.entryForm.value.remarks ? this.entryForm.value.remarks.trim() : null);
+        formData.append('mobile', this.entryForm.value.mobile ? this.entryForm.value.mobile.trim() : '');
+        formData.append('nid', this.entryForm.value.nid ? this.entryForm.value.nid.trim() : '');
+        formData.append('present_address', this.entryForm.value.present_address ? this.entryForm.value.present_address.trim() : '');
+        formData.append('permanent_address', this.entryForm.value.permanent_address ? this.entryForm.value.permanent_address.trim() : '');
+        formData.append('office_contact_number', this.entryForm.value.office_contact_number ? this.entryForm.value.office_contact_number.trim() : '');
+        formData.append('finger_print_id', this.entryForm.value.finger_print_id ? this.entryForm.value.finger_print_id.trim() : '');
+        formData.append('personal_alt_contact_number', this.entryForm.value.personal_alt_contact_number ? this.entryForm.value.personal_alt_contact_number.trim() : '');
+        formData.append('personal_email', this.entryForm.value.personal_email ? this.entryForm.value.personal_email.trim() : '');
+        formData.append('passport_number', this.entryForm.value.passport_number ? this.entryForm.value.passport_number.trim() : '');
+        formData.append('spouse_name', this.entryForm.value.spouse_name ? this.entryForm.value.spouse_name.trim() : '');
+        formData.append('spouse_number', this.entryForm.value.spouse_number ? this.entryForm.value.spouse_number.trim() : '');
+        formData.append('referee_office', this.entryForm.value.referee_office ? this.entryForm.value.referee_office.trim() : '');
+        formData.append('referee_relative', this.entryForm.value.referee_relative ? this.entryForm.value.referee_relative.trim() : '');
+        formData.append('referee_contact_details', this.entryForm.value.referee_contact_details ? this.entryForm.value.referee_contact_details.trim() : '');
+        formData.append('key_skills', this.entryForm.value.key_skills ? this.entryForm.value.key_skills.trim() : '');
+        formData.append('highest_level_of_study', this.entryForm.value.highest_level_of_study ? this.entryForm.value.highest_level_of_study.trim() : '');
+        formData.append('e_tin', this.entryForm.value.e_tin ? this.entryForm.value.e_tin.trim() : '');
+        formData.append('applicable_tax_amount', this.entryForm.value.applicable_tax_amount ? this.entryForm.value.applicable_tax_amount.trim() : '');
+        formData.append('official_achievement', this.entryForm.value.official_achievement ? this.entryForm.value.official_achievement.trim() : '');
+        formData.append('remarks', this.entryForm.value.remarks ? this.entryForm.value.remarks.trim() : '');
         formData.append('date_of_birth', this.entryForm.value.date_of_birth);
         formData.append('joining_date', this.entryForm.value.joining_date);
         formData.append('blood_group', this.entryForm.value.blood_group);
