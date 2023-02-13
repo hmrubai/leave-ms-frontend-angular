@@ -73,7 +73,7 @@ export const navItems: INavData[] = [
     },
     {
         title: true,
-        name: 'Leave Settings'
+        name: 'Employee Leave'
     },
     {
         name: 'Balance',
@@ -81,7 +81,7 @@ export const navItems: INavData[] = [
         icon: 'icon-layers',
         children: [
             {
-                name: 'Employee Balance Setup',
+                name: 'Balance Setup',
                 url: '/leave/employee-leave-balance',
                 icon: 'icon-grid'
             }
