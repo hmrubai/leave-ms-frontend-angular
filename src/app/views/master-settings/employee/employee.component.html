@@ -158,6 +158,46 @@
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
+                    <label for="division_id" class="form-label">Division</label>
+                    <ng-select [items]="divisionList" bindLabel="name" 
+                        bindValue="id" formControlName="division_id" placeholder="Select Division" (change)="onChangeDivision($event)" 
+                        [ngClass]="{ 'is-invalid': submitted && f.division_id.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.division_id.errors" class="invalid-feedback">
+                        <span *ngIf="f.division_id.errors.required" class="text-danger"> Division is required</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3">
+                    <label for="district_id" class="form-label">District</label>
+                    <ng-select [items]="districtList" bindLabel="name" 
+                        bindValue="id" formControlName="district_id" placeholder="Select District" (change)="onChangeDistrict($event)" 
+                        [ngClass]="{ 'is-invalid': submitted && f.district_id.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.district_id.errors" class="invalid-feedback">
+                        <span *ngIf="f.district_id.errors.required" class="text-danger"> District is required</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3">
+                    <label for="city_id" class="form-label">City</label>
+                    <ng-select [items]="upazilaList" bindLabel="name" 
+                        bindValue="id" formControlName="city_id" placeholder="Select City" (change)="onChangeUpazila($event)" 
+                        [ngClass]="{ 'is-invalid': submitted && f.city_id.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.city_id.errors" class="invalid-feedback">
+                        <span *ngIf="f.city_id.errors.required" class="text-danger"> City is required</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3">
+                    <label for="area_id" class="form-label">Area</label>
+                    <ng-select [items]="unionList" bindLabel="name" 
+                        bindValue="id" formControlName="area_id" placeholder="Select Area"
+                        [ngClass]="{ 'is-invalid': submitted && f.area_id.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.area_id.errors" class="invalid-feedback">
+                        <span *ngIf="f.area_id.errors.required" class="text-danger"> Area is required</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3">
                     <label for="blood_group" class="form-label">Blood Group</label>
                     <ng-select [items]="bloodGroup" bindLabel="value" 
                         bindValue="id" formControlName="blood_group" placeholder="Select Blood Group" 
@@ -185,6 +225,16 @@
                      </ng-select>
                     <div *ngIf="submitted && f.gender.errors" class="invalid-feedback">
                         <span *ngIf="f.gender.errors.required" class="text-danger"> Gender is required</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3">
+                    <label for="user_type" class="form-label">User Type</label>
+                    <ng-select [items]="user_types" bindLabel="value" 
+                        bindValue="id" formControlName="user_type" placeholder="Select User Type" 
+                        [ngClass]="{ 'is-invalid': submitted && f.user_type.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.user_type.errors" class="invalid-feedback">
+                        <span *ngIf="f.user_type.errors.required" class="text-danger"> User Type is required</span>
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
@@ -307,7 +357,6 @@
                         <span *ngIf="f.key_skills.errors.required" class="text-danger"> Key Skills is required</span>
                     </div>
                 </div>
-
                 <div class="col-md-4 mt-3">
                     <label for="highest_level_of_study" class="form-label">Highest Level of Study</label>
                     <input type="text" formControlName="highest_level_of_study" [ngClass]="{ 'is-invalid': submitted && f.highest_level_of_study.errors }" class="form-control" id="highest_level_of_study"  placeholder="Highest Level of Study">
@@ -343,7 +392,7 @@
                         <span *ngIf="f.remarks.errors.required" class="text-danger"> Remarks is required</span>
                     </div>
                 </div>
-                <div class="form-group col-md-4 mt-5 row">
+                <div class="form-group col-md-4 mt-3 row">
                     <label class="col-md-5 col-form-label">Is Active</label>
                     <div class="col-md-7 col-form-label">
                         <div class="form-check form-check-inline mr-1">
@@ -352,9 +401,7 @@
                         </div>
                     </div>
                 </div>
-
-
-                <div class="form-group col-md-12 row">
+                <div class="form-group col-md-8 mt-3 row">
                     <label class="col-md-3 col-form-label" for="leave_email">Profile Image</label>
                     <div class="col-md-9">
                         <input type="file" formControlName="image" (change)="onSelectFile($event)" placeholder="Upload file" accept="image/x-png,image/jpeg" placeholder="Select file"/>

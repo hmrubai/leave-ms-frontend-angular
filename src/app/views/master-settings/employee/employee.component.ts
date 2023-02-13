@@ -9,6 +9,7 @@ import { CommonService } from '../../../_services/common.service';
 import { AuthenticationService } from '../../../_services/authentication.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import {ModalDirective} from 'ngx-bootstrap/modal';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-employee',
@@ -69,7 +70,7 @@ export class EmployeeComponent implements OnInit {
         },
         {
             id: "Divorced",
-            value: "Dnmarried"
+            value: "Divorced"
         }
         
     ]
@@ -86,6 +87,25 @@ export class EmployeeComponent implements OnInit {
         {
             id: "Transgender",
             value: "Transgender"
+        } 
+    ]
+
+    user_types = [
+        {
+            id: "Admin",
+            value: "Admin"
+        },
+        {
+            id: "Employee",
+            value: "Employee"
+        },
+        {
+            id: "ApprovalAuthority",
+            value: "ApprovalAuthority"
+        },
+        {
+            id: "Others",
+            value: "Others"
         } 
     ]
 
@@ -157,6 +177,7 @@ export class EmployeeComponent implements OnInit {
             referee_contact_details: [null],
             key_skills: [null],
             highest_level_of_study: [null],
+            user_type: ['Employee', [Validators.required] ],
             e_tin: [null],
             applicable_tax_amount: [null],
             official_achievement: [null],
@@ -225,6 +246,9 @@ export class EmployeeComponent implements OnInit {
 
     onChangeDivision(division){
         this.districtList = [];
+        this.entryForm.controls['district_id'].setValue(null);
+        this.entryForm.controls['city_id'].setValue(null);
+        this.entryForm.controls['area_id'].setValue(null);
         this._service.get('district-list/' + division.id).subscribe(res => {
             this.districtList = res.data;
         }, err => { }
@@ -233,6 +257,8 @@ export class EmployeeComponent implements OnInit {
 
     onChangeDistrict(district){
         this.upazilaList = [];
+        this.entryForm.controls['city_id'].setValue(null);
+        this.entryForm.controls['area_id'].setValue(null);
         this._service.get('upazila-list/' + district.id).subscribe(res => {
             this.upazilaList = res.data;
         }, err => { }
@@ -241,6 +267,7 @@ export class EmployeeComponent implements OnInit {
 
     onChangeUpazila(upazila){
         this.unionList = [];
+        this.entryForm.controls['area_id'].setValue(null);
         this._service.get('area-list/' + upazila.id).subscribe(res => {
             this.unionList = res.data;
         }, err => { }
@@ -296,8 +323,8 @@ export class EmployeeComponent implements OnInit {
         this.entryForm.controls['nid'].setValue(item.nid);
         this.entryForm.controls['present_address'].setValue(item.present_address);
         this.entryForm.controls['permanent_address'].setValue(item.permanent_address);
-        this.entryForm.controls['date_of_birth'].setValue(item.date_of_birth);
-        this.entryForm.controls['joining_date'].setValue(item.joining_date);
+        this.entryForm.controls['date_of_birth'].setValue(this.getDateFormatModal(item.date_of_birth));
+        this.entryForm.controls['joining_date'].setValue(this.getDateFormatModal(item.joining_date));
         this.entryForm.controls['blood_group'].setValue(item.blood_group);
         this.entryForm.controls['marital_status'].setValue(item.marital_status);
         this.entryForm.controls['gender'].setValue(item.gender);
@@ -340,6 +367,7 @@ export class EmployeeComponent implements OnInit {
         this.entryForm.controls['official_achievement'].setValue(item.official_achievement);
         this.entryForm.controls['remarks'].setValue(item.remarks);
         //this.entryForm.controls['image'].setValue(item.image);
+        this.entryForm.controls['user_type'].setValue(item.user_type);
         this.entryForm.controls['is_active'].setValue(item.is_active);
         this.addEmployeeModal.show();
     }
@@ -384,8 +412,8 @@ export class EmployeeComponent implements OnInit {
         formData.append('applicable_tax_amount', this.entryForm.value.applicable_tax_amount ? this.entryForm.value.applicable_tax_amount.trim() : '');
         formData.append('official_achievement', this.entryForm.value.official_achievement ? this.entryForm.value.official_achievement.trim() : '');
         formData.append('remarks', this.entryForm.value.remarks ? this.entryForm.value.remarks.trim() : '');
-        formData.append('date_of_birth', this.entryForm.value.date_of_birth);
-        formData.append('joining_date', this.entryForm.value.joining_date);
+        formData.append('date_of_birth', this.validateDateTimeFormat(this.entryForm.value.date_of_birth));
+        formData.append('joining_date', this.validateDateTimeFormat(this.entryForm.value.joining_date));
         formData.append('blood_group', this.entryForm.value.blood_group);
         formData.append('marital_status', this.entryForm.value.marital_status);
         formData.append('gender', this.entryForm.value.gender);
@@ -400,7 +428,10 @@ export class EmployeeComponent implements OnInit {
         formData.append('area_id', this.entryForm.value.area_id);
         formData.append('is_stuckoff', this.entryForm.value.is_stuckoff);
         formData.append('stuckoff_date', this.entryForm.value.stuckoff_date);
+        formData.append('user_type', this.entryForm.value.user_type);
         formData.append('is_active', this.entryForm.value.is_active);
+
+        console.log('Submit')
 
         this.entryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
         if(this.entryForm.value.id){
@@ -441,10 +472,23 @@ export class EmployeeComponent implements OnInit {
         }
     }
 
+    validateDateTimeFormat(value: Date) {
+        return moment(value).format('YYYY-MM-DD');
+    }
+
+    getDateFormatModal(value: Date) {
+        return moment(value).format('yyyy-MM-DD');
+    }
+
+    getDateFormat(value: Date) {
+        return moment(value).format('DD/MM/yyyy');
+    }
+
     modalHide() {
         this.addEmployeeModal.hide();
         this.entryForm.reset();
         this.submitted = false;
+        this.entryForm.controls['email'].enable();
         this.entryForm.controls['is_active'].setValue(true);
         this.modalTitle = 'Add New Employee';
         this.btnSaveText = 'Save';

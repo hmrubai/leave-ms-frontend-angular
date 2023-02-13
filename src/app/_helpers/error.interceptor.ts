@@ -1,14 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError , of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { Cookie } from 'ng2-cookies';
+import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../_services/authentication.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private authenticationService: AuthenticationService, public toastr : ToastrService) { }
+
+    isAuthincate: boolean = false;
+    public currentUserDetails: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+    constructor(
+        private authenticationService: AuthenticationService, 
+        public toastr : ToastrService,
+        private router: Router
+    ) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
@@ -20,11 +30,16 @@ export class ErrorInterceptor implements HttpInterceptor {
             //    } else if (err.status === 401) {
             //     this.toastr.error(err.error.message || err.error || err.statusText, 'Error!', { timeOut: 3000 });            
             // }
-            // if (err.status === 401) {
-            //     // auto logout if 401 response returned from api
-            //   // this.authenticationService.logout();
-            //  //   location.reload(true);
-            // }
+            if (err.status === 401) {
+                //auto logout if 401 response returned from api
+                this.authenticationService.logout(window.location.hostname);
+                this.isAuthincate = false;
+                Cookie.delete('.BBLEAVEMS.Cookie', '/', window.location.hostname);
+                this.toastr.warning("Unauthorized! Please do login again.", 'Attention!', { timeOut: 2000 });
+                this.currentUserDetails.next(null);
+                this.router.navigate(['/login']);
+                //location.reload();
+            }
 
             return throwError(errorMsg);
         }))
