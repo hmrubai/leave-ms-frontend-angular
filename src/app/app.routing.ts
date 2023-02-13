@@ -100,6 +100,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'leave',
+        loadChildren: () => import('./views/leave/employee-leave-balance/employee-leave-balance.module').then(m => m.EmployeeLeaveBalanceListModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule),
         canActivate: [AuthGuard]

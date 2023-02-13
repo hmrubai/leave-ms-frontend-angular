@@ -64,25 +64,29 @@ export const navItems: INavData[] = [
                 url: '/master-settings/leave-balance-settings',
                 icon: 'icon-chart'
             },
-            
+            // {
+            //   name: 'Employee Leave Balance',
+            //   url: '/employee-leave-balance',
+            //   icon: 'icon-chart'
+            // }
         ]
     },
-    // {
-    //     title: true,
-    //     name: 'Project Settings'
-    // },
-    // {
-    //     name: 'Project',
-    //     url: '/project',
-    //     icon: 'icon-layers',
-    //     children: [
-    //         {
-    //             name: 'Project Setup',
-    //             url: '/project/setup',
-    //             icon: 'icon-grid'
-    //         }
-    //     ]
-    // },
+    {
+        title: true,
+        name: 'Leave Settings'
+    },
+    {
+        name: 'Balance',
+        url: '/leave',
+        icon: 'icon-layers',
+        children: [
+            {
+                name: 'Employee Balance Setup',
+                url: '/leave/employee-leave-balance',
+                icon: 'icon-grid'
+            }
+        ]
+    },
     // {
     //     title: true,
     //     name: 'Transaction History'
