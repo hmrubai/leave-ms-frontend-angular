@@ -50,10 +50,8 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
         this.entryForm = this.formBuilder.group({
             id: [null],
             total_days: [null, [Validators.required]],
-            company_id: [null, [Validators.required]],
-            employment_type_id: [null, [Validators.required]],
-            leave_policy_id: [null, [Validators.required]],
-            is_active: [true],
+            availed_days: [null, [Validators.required]],
+            remaining_days: [null, [Validators.required]],
         });
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.getEmployeeList();
@@ -95,10 +93,8 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
 
         this.entryForm.controls['id'].setValue(item.id);
         this.entryForm.controls['total_days'].setValue(item.total_days);
-        this.entryForm.controls['company_id'].setValue(item.company_id);
-        this.entryForm.controls['employment_type_id'].setValue(item.employment_type_id);
-        this.entryForm.controls['leave_policy_id'].setValue(item.leave_policy_id);
-        this.entryForm.controls['is_active'].setValue(item.is_active);
+        this.entryForm.controls['availed_days'].setValue(item.availed_days);
+        this.entryForm.controls['remaining_days'].setValue(item.remaining_days);
         this.addEmployeeLeaveBalanceModal.show();
     }
 
@@ -108,15 +104,25 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
             return;
         }
 
+        let total_days = this.entryForm.value.total_days;
+        let availed_days = this.entryForm.value.availed_days;
+        let remaining_days = this.entryForm.value.remaining_days;
+        if(total_days < (availed_days + remaining_days) || total_days > (availed_days + remaining_days)){
+            this.toastr.warning("Please, enter correct value", 'Attention!', { timeOut: 2000 });
+            return;
+        }
+
         this.entryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
 
-        this._service.post('admin/leave-setting-save-or-update', this.entryForm.value).subscribe(
+        //admin/leave-balance-update
+
+        this._service.post('admin/leave-balance-update', this.entryForm.value).subscribe(
             data => {
                 this.blockUI.stop();
                 if (data.status) {
                     this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
                     this.modalHide();
-                    //this.getLeaveSettingList(this.employment_type_id);
+                    this.onChangeEmployee({id: this.employee_id});
                 } else {
                     this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
                 }
@@ -132,7 +138,7 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
         this.addEmployeeLeaveBalanceModal.hide();
         this.entryForm.reset();
         this.submitted = false;
-        this.entryForm.controls['is_active'].setValue(true);
+        // this.entryForm.controls['is_active'].setValue(true);
         this.modalTitle = 'Add New Leave Balance';
         this.btnSaveText = 'Save';
     }
