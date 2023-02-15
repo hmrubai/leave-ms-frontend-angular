@@ -73,6 +73,27 @@ export const navItems: INavData[] = [
     },
     {
         title: true,
+        name: 'Settings'
+    },
+    {
+        name: 'Calendar',
+        url: '/calendar',
+        icon: 'icon-calendar',
+        children: [
+            {
+                name: 'Day Type Setup',
+                url: '/calendar/day-type',
+                icon: 'icon-calendar'
+            },
+            {
+                name: 'Working Day Setup',
+                url: '/calendar/work-day-setup',
+                icon: 'icon-calendar'
+            }
+        ]
+    },
+    {
+        title: true,
         name: 'Employee Leave'
     },
     {

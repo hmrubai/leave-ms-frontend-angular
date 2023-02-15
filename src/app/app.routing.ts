@@ -105,6 +105,16 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'calendar',
+        loadChildren: () => import('./views/calendar/day-type/day-type.module').then(m => m.DayTypeModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'calendar',
+        loadChildren: () => import('./views/calendar/work-day-setup/work-day-setup.module').then(m => m.WorkDaySetupModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule),
         canActivate: [AuthGuard]
