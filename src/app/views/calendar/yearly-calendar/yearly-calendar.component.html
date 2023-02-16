@@ -106,10 +106,12 @@
         <form [formGroup]="generateCalendarForm" class="form-horizontal">
             <div class="row">
               <div class="col-md-12 mt-4 mb-4">
-                  <label for="year" class="form-label">Year</label>
-                  <input  type="number" [min]="2021" [max]="2099" step="1" value="2023" formControlName="year" [ngClass]="{ 'is-invalid': submitted && gcf.year.errors }" class="form-control" placeholder="Year">
-                  <div *ngIf="submitted && gcf.date.errors" class="invalid-feedback">
-                    <span *ngIf="gcf.year.errors.required" class="text-danger"> Year is required</span>
+                  <label for="academic_year" class="form-label">Year</label>
+                  <input type="number" formControlName="academic_year" [ngClass]="{ 'is-invalid': submitted && gcf.academic_year.errors }" class="form-control" placeholder="Year">
+                  <div *ngIf="submitted && gcf.academic_year.errors" class="invalid-feedback">
+                    <span *ngIf="gcf.academic_year.errors.min">Minimum required number is 2020.</span> 
+                    <span *ngIf="gcf.academic_year.errors.max">Minimum required number is 2099.</span> 
+                    <span *ngIf="gcf.academic_year.errors.required" class="text-danger"> Year is required</span>
                   </div>
               </div>
             </div>
@@ -117,7 +119,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="modalHide()">Close</button>
-        <button type="button" class="btn btn-info" (click)="onFormSubmit()">{{ btnSaveText }}</button>
+        <button type="button" class="btn btn-info" (click)="onSubmitCalendar()">{{ btnSaveText }}</button>
       </div>
     </div>
   </div>

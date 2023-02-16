@@ -23,7 +23,7 @@ export class YearlyCalendarComponent implements OnInit {
     submitted = false;
     returnUrl: string;
 
-    modalTitle = 'Add New Employment Type';
+    modalTitle = 'Add New Year';
     btnSaveText = 'Save';
 
     currentUser: any = null;
@@ -57,7 +57,7 @@ export class YearlyCalendarComponent implements OnInit {
 
         this.generateCalendarForm = this.formBuilder.group({
             id: [null],
-            year: [null, [Validators.required]]
+            academic_year: [2022, [Validators.required, Validators.max(2099), Validators.min(2020)]]
         });
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -70,7 +70,7 @@ export class YearlyCalendarComponent implements OnInit {
     }
 
     get gcf() {
-        return this.entryForm.controls;
+        return this.generateCalendarForm.controls;
     }
 
     getDayTypeList() {
@@ -81,9 +81,13 @@ export class YearlyCalendarComponent implements OnInit {
     }
 
     getcalendarList(){
+        this.blockUI.start('Loading Data...')
         this._service.get('admin/calender').subscribe(res => {
             this.calendarList = res.data;
-        }, err => { }
+            this.blockUI.stop();
+        }, err => { 
+            this.blockUI.stop();
+        }
         );
     }
 
@@ -138,29 +142,31 @@ export class YearlyCalendarComponent implements OnInit {
             return;
         }
 
-        // this._service.post('admin/update-calender', {}).subscribe(
-        //     data => {
-        //         this.blockUI.stop();
-        //         if (data.status) {
-        //             this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
-        //             this.modalHide();
-        //             this.getcalendarList();
-        //         } else {
-        //             this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
-        //         }
-        //     },
-        //     err => {
-        //         this.blockUI.stop();
-        //         this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
-        //     }
-        // );
+        this._service.post('admin/generate-calender', this.generateCalendarForm.value).subscribe(
+            data => {
+                this.blockUI.stop();
+                if (data.status) {
+                    this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
+                    this.modalHide();
+                    this.getcalendarList();
+                } else {
+                    this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
+                }
+            },
+            err => {
+                this.blockUI.stop();
+                this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
+            }
+        );
     }
 
     modalHide() {
         this.addYearlyCalendarModal.hide();
         this.entryForm.reset();
+        this.generateCalendarForm.reset();
+        this.addGenerateCalendarModal.hide();
         this.submitted = false;
-        this.modalTitle = 'Add Calendar';
+        this.modalTitle = 'Add New Year';
         this.btnSaveText = 'Save';
     }
 
