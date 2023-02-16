@@ -115,6 +115,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'calendar',
+        loadChildren: () => import('./views/calendar/yearly-calendar/yearly-calendar.module').then(m => m.YearlyCalendarModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule),
         canActivate: [AuthGuard]

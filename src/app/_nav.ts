@@ -83,11 +83,16 @@ export const navItems: INavData[] = [
             {
                 name: 'Day Type Setup',
                 url: '/calendar/day-type',
-                icon: 'icon-calendar'
+                icon: 'icon-settings'
             },
             {
                 name: 'Working Day Setup',
                 url: '/calendar/work-day-setup',
+                icon: 'icon-settings'
+            },
+            {
+                name: 'Calendar Setup',
+                url: '/calendar/yearly-calendar',
                 icon: 'icon-calendar'
             }
         ]

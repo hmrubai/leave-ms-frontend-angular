@@ -11,13 +11,15 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 
 @Component({
-    selector: 'app-work-day-setup',
-    templateUrl: 'work-day-setup.component.html',
-    styleUrls: ['work-day-setup.component.scss']
+    selector: 'app-yearly-calendar',
+    templateUrl: 'yearly-calendar.component.html',
+    styleUrls: ['yearly-calendar.component.scss']
 })
-export class WorkDaySetupComponent implements OnInit {
-    @ViewChild('addWorkDaySetupModal') public addWorkDaySetupModal: ModalDirective;
+export class YearlyCalendarComponent implements OnInit {
+    @ViewChild('addYearlyCalendarModal') public addYearlyCalendarModal: ModalDirective;
+    @ViewChild('addGenerateCalendarModal') public addGenerateCalendarModal: ModalDirective;
     entryForm: FormGroup;
+    generateCalendarForm: FormGroup;
     submitted = false;
     returnUrl: string;
 
@@ -26,20 +28,8 @@ export class WorkDaySetupComponent implements OnInit {
 
     currentUser: any = null;
 
-    companyList: Array<any> = [];
-    workDayList: Array<any> = [];
+    calendarList: Array<any> = [];
     dayTypeList: Array<any> = [];
-
-    edit_object = {
-        id: 0,
-        saturday: 0,
-        sunday: 0,
-        monday: 0,
-        tuesday: 0,
-        wednesday: 0,
-        thursday: 0,
-        friday: 0
-    }
     
 
     @BlockUI() blockUI: NgBlockUI;
@@ -60,37 +50,27 @@ export class WorkDaySetupComponent implements OnInit {
     ngOnInit() {
         this.entryForm = this.formBuilder.group({
             id: [null],
-            saturday: [null, [Validators.required]],
-            sunday: [null, [Validators.required]],
-            monday: [null, [Validators.required]],
-            tuesday: [null, [Validators.required]],
-            wednesday: [null, [Validators.required]],
-            thursday: [null, [Validators.required]],
-            friday: [null, [Validators.required]],
-            is_active: [true],
+            date: [null, [Validators.required]],
+            day_type_id: [null, [Validators.required]],
+            day_note: [null, [Validators.required]],
         });
+
+        this.generateCalendarForm = this.formBuilder.group({
+            id: [null],
+            year: [null, [Validators.required]]
+        });
+
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        this.getWorkDayList();
         this.getDayTypeList();
+        this.getcalendarList();
     }
 
     get f() {
         return this.entryForm.controls;
     }
 
-    getWorkDayList() {
-        this._service.get('admin/day-status-list').subscribe(res => {
-            this.workDayList = res.data;
-            this.edit_object.id = res.data.id;
-            this.edit_object.saturday = res.data.saturday;
-            this.edit_object.sunday = res.data.sunday;
-            this.edit_object.monday = res.data.monday;
-            this.edit_object.tuesday = res.data.tuesday;
-            this.edit_object.wednesday = res.data.wednesday;
-            this.edit_object.thursday = res.data.thursday;
-            this.edit_object.friday = res.data.friday;
-        }, err => { }
-        );
+    get gcf() {
+        return this.entryForm.controls;
     }
 
     getDayTypeList() {
@@ -100,22 +80,23 @@ export class WorkDaySetupComponent implements OnInit {
         );
     }
 
-    editItem(){
-        this.modalTitle = 'Update Day Status';
+    getcalendarList(){
+        this._service.get('admin/calender').subscribe(res => {
+            this.calendarList = res.data;
+        }, err => { }
+        );
+    }
+
+    editItem(item){
+        this.modalTitle = 'Update Date Status';
         this.btnSaveText = 'Update';
 
-        let item = this.edit_object;
-
         this.entryForm.controls['id'].setValue(item.id);
-        this.entryForm.controls['saturday'].setValue(item.saturday);
-        this.entryForm.controls['sunday'].setValue(item.sunday);
-        this.entryForm.controls['monday'].setValue(item.monday);
-        this.entryForm.controls['tuesday'].setValue(item.tuesday);
-        this.entryForm.controls['wednesday'].setValue(item.wednesday);
-        this.entryForm.controls['thursday'].setValue(item.thursday);
-        this.entryForm.controls['friday'].setValue(item.friday);
-        this.entryForm.controls['is_active'].setValue(true);
-        this.addWorkDaySetupModal.show();
+        this.entryForm.controls['date'].setValue(item.date);
+        this.entryForm.controls['date'].disable();
+        this.entryForm.controls['day_type_id'].setValue(item.day_type_id);
+        this.entryForm.controls['day_note'].setValue(item.day_note);
+        this.addYearlyCalendarModal.show();
     }
 
     onFormSubmit(){
@@ -124,17 +105,22 @@ export class WorkDaySetupComponent implements OnInit {
             return;
         }
 
-        console.log(this.entryForm.value);
-
         this.entryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
+        this.entryForm.controls['date'].enable();
 
-        this._service.post('admin/update-day-status', this.entryForm.value).subscribe(
+        let param = {
+            id: this.entryForm.value.id,
+            day_type_id: this.entryForm.value.day_type_id,
+            day_note: this.entryForm.value.day_note,
+        }
+
+        this._service.post('admin/update-calender', param).subscribe(
             data => {
                 this.blockUI.stop();
                 if (data.status) {
                     this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
                     this.modalHide();
-                    this.getWorkDayList();
+                    this.getcalendarList();
                 } else {
                     this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
                 }
@@ -146,12 +132,36 @@ export class WorkDaySetupComponent implements OnInit {
         );
     }
 
+    onSubmitCalendar(){
+        this.submitted = true;
+        if (this.generateCalendarForm.invalid) {
+            return;
+        }
+
+        // this._service.post('admin/update-calender', {}).subscribe(
+        //     data => {
+        //         this.blockUI.stop();
+        //         if (data.status) {
+        //             this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
+        //             this.modalHide();
+        //             this.getcalendarList();
+        //         } else {
+        //             this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
+        //         }
+        //     },
+        //     err => {
+        //         this.blockUI.stop();
+        //         this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
+        //     }
+        // );
+    }
+
     modalHide() {
-        this.addWorkDaySetupModal.hide();
+        this.addYearlyCalendarModal.hide();
         this.entryForm.reset();
         this.submitted = false;
-        this.entryForm.controls['is_active'].setValue(true);
-        this.modalTitle = 'Update Day Status';
+        this.modalTitle = 'Add Calendar';
         this.btnSaveText = 'Save';
     }
+
 }
