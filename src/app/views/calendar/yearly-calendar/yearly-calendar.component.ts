@@ -28,9 +28,11 @@ export class YearlyCalendarComponent implements OnInit {
 
     currentUser: any = null;
 
+    year_id = null;
+
     calendarList: Array<any> = [];
     dayTypeList: Array<any> = [];
-    
+    yearList: Array<any> = [];
 
     @BlockUI() blockUI: NgBlockUI;
 
@@ -63,6 +65,7 @@ export class YearlyCalendarComponent implements OnInit {
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.getDayTypeList();
         this.getcalendarList();
+        this.getYearList();
     }
 
     get f() {
@@ -80,15 +83,29 @@ export class YearlyCalendarComponent implements OnInit {
         );
     }
 
+    getYearList() {
+        this._service.get('admin/year-list').subscribe(res => {
+            this.yearList = res.data;
+        }, err => { }
+        );
+    }
+
     getcalendarList(){
-        this.blockUI.start('Loading Data...')
-        this._service.get('admin/calender').subscribe(res => {
+        this.blockUI.start('Loading Data...');
+        let param = {
+            year: this.year_id
+        }
+        this._service.get('admin/calender', param).subscribe(res => {
             this.calendarList = res.data;
             this.blockUI.stop();
         }, err => { 
             this.blockUI.stop();
         }
         );
+    }
+
+    onChangeYear(year){
+        this.getcalendarList();
     }
 
     editItem(item){
