@@ -8,7 +8,7 @@ import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { CommonService } from '../../../_services/common.service';
 import { AuthenticationService } from '../../../_services/authentication.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import {ModalDirective} from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'app-approval-work-flow-setup',
@@ -16,23 +16,58 @@ import {ModalDirective} from 'ngx-bootstrap/modal';
     styleUrls: ['approval-work-flow-setup.component.scss']
 })
 export class ApprovalWorkFlowSetupComponent implements OnInit {
-    @ViewChild('addYearlyCalendarModal') public addYearlyCalendarModal: ModalDirective;
-    @ViewChild('addGenerateCalendarModal') public addGenerateCalendarModal: ModalDirective;
+    @ViewChild('updateStepModal') public updateStepModal: ModalDirective;
+    @ViewChild('addStepModal') public addStepModal: ModalDirective;
     entryForm: FormGroup;
     generateCalendarForm: FormGroup;
     submitted = false;
     returnUrl: string;
 
-    modalTitle = 'Add New Year';
+    modalTitle = 'Add New Approval Flow';
     btnSaveText = 'Save';
 
     currentUser: any = null;
 
     year_id = null;
+    number_of_step = 0;
 
-    calendarList: Array<any> = [];
-    dayTypeList: Array<any> = [];
-    yearList: Array<any> = [];
+    steps = [
+        {
+            id: 1,
+            value: "1st"
+        },
+        {
+            id: 2,
+            value: "2nd"
+        },
+        {
+            id: 3,
+            value: "3rd"
+        }
+    ];
+
+    approvalFlowList: Array<any> = [];
+    employeeList: Array<any> = [];
+    approvalAuthorityList: Array<any> = [];
+    companyList: Array<any> = [];
+    branchList: Array<any> = [];
+    designationList: Array<any> = [];
+    departmentList: Array<any> = [];
+
+    company_id: any = null;
+    branch_id: any = null;
+    department_id: any = null;
+    designation_id: any = null;
+    employee_ids: any = [];
+    stpe = null;
+
+    first_step = null;
+    second_step = null;
+    third_step = null;
+
+    show_step = null;
+    show_employee = null;
+
 
     @BlockUI() blockUI: NgBlockUI;
 
@@ -52,9 +87,8 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
     ngOnInit() {
         this.entryForm = this.formBuilder.group({
             id: [null],
-            date: [null, [Validators.required]],
-            day_type_id: [null, [Validators.required]],
-            day_note: [null, [Validators.required]],
+            employee_id: [null, [Validators.required]],
+            approval_authority_id: [null, [Validators.required]],
         });
 
         this.generateCalendarForm = this.formBuilder.group({
@@ -63,9 +97,10 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
         });
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        // this.getDayTypeList();
-        // this.getcalendarList();
-        // this.getYearList();
+        this.getEmployeeList();
+        this.getCompanyList();
+        this.getApprovalAuthorityList();
+        this.getApprovalFlowList();
     }
 
     get f() {
@@ -76,72 +111,193 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
         return this.generateCalendarForm.controls;
     }
 
-    getDayTypeList() {
-        this._service.get('admin/day-type-list').subscribe(res => {
-            this.dayTypeList = res.data;
+    getApprovalFlowList() {
+        this.blockUI.start('Getting Data...')
+        this._service.get('admin/approval-flow-list').subscribe(res => {
+            this.approvalFlowList = res.data;
+            this.blockUI.stop();
+        }, err => {
+            this.blockUI.stop();
+        });
+    }
+
+    getEmployeeList() {
+        let params = {
+            company_id: this.company_id,
+            branch_id: this.branch_id,
+            department_id: this.department_id,
+            designation_id: this.designation_id
+        };
+
+        this.employee_ids = null;
+
+        this._service.get('admin/employee-filter-list', params).subscribe(res => {
+            this.employeeList = res.data;
         }, err => { }
         );
     }
 
-    getYearList() {
-        this._service.get('admin/year-list').subscribe(res => {
-            this.yearList = res.data;
+    getApprovalAuthorityList() {
+        this._service.get('admin/approval-authority-list').subscribe(res => {
+            this.approvalAuthorityList = res.data;
         }, err => { }
         );
     }
 
-    getcalendarList(){
-        this.blockUI.start('Loading Data...');
-        let param = {
-            year: this.year_id
-        }
-        this._service.get('admin/calender', param).subscribe(res => {
-            this.calendarList = res.data;
-            this.blockUI.stop();
-        }, err => { 
-            this.blockUI.stop();
-        }
+    getCompanyList() {
+        this._service.get('admin/company-list').subscribe(res => {
+            this.companyList = res.data;
+            this.getEmployeeList();
+        }, err => { }
         );
     }
 
-    onChangeYear(year){
-        this.getcalendarList();
+    onChangeCompany(company) {
+        console.log(company)
+        this.branch_id = null;
+        this._service.get('admin/branch-list-by-company-id/' + this.company_id).subscribe(res => {
+            this.branchList = res.data;
+            this.getEmployeeList();
+        }, err => { }
+        );
     }
 
-    editItem(item){
-        this.modalTitle = 'Update Date Status';
-        this.btnSaveText = 'Update';
+    onChangeBranch(branch) {
+        this.designationList = [];
+        this.departmentList = [];
 
-        this.entryForm.controls['id'].setValue(item.id);
-        this.entryForm.controls['date'].setValue(item.date);
-        this.entryForm.controls['date'].disable();
-        this.entryForm.controls['day_type_id'].setValue(item.day_type_id);
-        this.entryForm.controls['day_note'].setValue(item.day_note);
-        this.addYearlyCalendarModal.show();
+        this.department_id = null;
+        this.designation_id = null;
+
+        if (this.company_id && this.branch_id) {
+            this._service.get('admin/department-list-by-id/' + this.company_id + '/' + this.branch_id).subscribe(res => {
+                this.departmentList = res.data;
+            }, err => { }
+            );
+
+            this._service.get('admin/designation-list-by-id/' + this.company_id + '/' + this.branch_id).subscribe(res => {
+                this.designationList = res.data;
+            }, err => { }
+            );
+
+            this.getEmployeeList();
+        }
     }
 
-    onFormSubmit(){
-        this.submitted = true;
-        if (this.entryForm.invalid) {
+    onChangeDepartment(branch) {
+        this.designation_id = null;
+        this.getEmployeeList();
+    }
+
+    onChangeDesignation(designation) {
+        this.getEmployeeList();
+    }
+
+    onChangeStep(step) {
+        if(step){
+            this.number_of_step = step.id;
+            if(step.id == 1){
+                this.second_step = null;
+                this.third_step = null;
+            }
+            if(step.id == 2){
+                this.third_step = null;
+            }
+        }else{
+            this.number_of_step = 0;
+            this.first_step = null;
+            this.second_step = null;
+            this.third_step = null;
+        }
+    }
+
+
+    onSubmitFlow() {
+        if (this.employee_ids == null) {
+            this.toastr.warning('Please, Select Employee!', 'Attention!', { timeOut: 2000 });
             return;
         }
 
-        this.entryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
-        this.entryForm.controls['date'].enable();
-
-        let param = {
-            id: this.entryForm.value.id,
-            day_type_id: this.entryForm.value.day_type_id,
-            day_note: this.entryForm.value.day_note,
+        if (this.employee_ids.length <= 0) {
+            this.toastr.warning('Please, Select Employee!', 'Attention!', { timeOut: 2000 });
+            return;
         }
 
-        this._service.post('admin/update-calender', param).subscribe(
+        if (this.number_of_step <= 0) {
+            this.toastr.warning('Please, Select Step!', 'Attention!', { timeOut: 2000 });
+            return;
+        }
+
+        if(!this.first_step){
+            this.toastr.warning('Please, Select 1st Step Authority!', 'Attention!', { timeOut: 2000 });
+            return;
+        }
+
+        if(this.number_of_step >= 2 && !this.second_step){
+            this.toastr.warning('Please, Select 2nd Step Authority!', 'Attention!', { timeOut: 2000 });
+            return;
+        }
+
+        if(this.number_of_step >= 3 && !this.third_step){
+            this.toastr.warning('Please, Select 3rd Step Authority!', 'Attention!', { timeOut: 2000 });
+            return;
+        }
+
+        let params: any;
+        if(this.number_of_step == 1){
+            params = {
+                employee_ids: this.employee_ids,
+                steps: [
+                    {
+                        authority_id: this.first_step,
+                        step_count: 1
+                    }
+                ]
+            }
+        }
+        else if(this.number_of_step == 2){
+            params = {
+                employee_ids: this.employee_ids,
+                steps: [
+                    {
+                        authority_id: this.first_step,
+                        step_count: 1
+                    },
+                    {
+                        authority_id: this.second_step,
+                        step_count: 2
+                    }
+                ]
+            }
+        }
+        else if(this.number_of_step == 3){
+            params = {
+                employee_ids: this.employee_ids,
+                steps: [
+                    {
+                        authority_id: this.first_step,
+                        step_count: 1
+                    },
+                    {
+                        authority_id: this.second_step,
+                        step_count: 2
+                    },
+                    {
+                        authority_id: this.third_step,
+                        step_count: 3
+                    }
+                ]
+            }
+        }
+
+        this.blockUI.start('Saving...')
+        this._service.post('admin/add-approval-flow', params).subscribe(
             data => {
                 this.blockUI.stop();
                 if (data.status) {
                     this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
                     this.modalHide();
-                    this.getcalendarList();
+                    this.getApprovalFlowList();
                 } else {
                     this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
                 }
@@ -153,19 +309,32 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
         );
     }
 
-    onSubmitCalendar(){
+    editItem(item) {
+        this.modalTitle = 'Update Step';
+        this.btnSaveText = 'Update';
+
+        this.entryForm.controls['id'].setValue(item.id);
+        this.show_step = item.step;
+        this.show_employee = item.employee_name + ' - ' + item.employee_email;
+        this.entryForm.controls['employee_id'].setValue(item.employee_id);
+        this.entryForm.controls['approval_authority_id'].setValue(item.approval_authority_id);
+        this.updateStepModal.show();
+    }
+
+    onFormSubmitUpdateStep(){
         this.submitted = true;
-        if (this.generateCalendarForm.invalid) {
+        if (this.entryForm.invalid) {
             return;
         }
 
-        this._service.post('admin/generate-calender', this.generateCalendarForm.value).subscribe(
+        this.blockUI.start('Updating...')
+        this._service.post('admin/update-approval-flow', this.entryForm.value).subscribe(
             data => {
                 this.blockUI.stop();
                 if (data.status) {
                     this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
                     this.modalHide();
-                    this.getcalendarList();
+                    this.getApprovalFlowList();
                 } else {
                     this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
                 }
@@ -178,10 +347,10 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
     }
 
     modalHide() {
-        this.addYearlyCalendarModal.hide();
+        this.updateStepModal.hide();
         this.entryForm.reset();
         this.generateCalendarForm.reset();
-        this.addGenerateCalendarModal.hide();
+        this.addStepModal.hide();
         this.submitted = false;
         this.modalTitle = 'Add New Year';
         this.btnSaveText = 'Save';
