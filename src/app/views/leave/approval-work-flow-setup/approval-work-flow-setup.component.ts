@@ -59,7 +59,7 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
     department_id: any = null;
     designation_id: any = null;
     employee_ids: any = [];
-    stpe = null;
+    step = null;
 
     first_step = null;
     second_step = null;

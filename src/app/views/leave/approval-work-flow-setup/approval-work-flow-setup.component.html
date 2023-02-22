@@ -120,13 +120,16 @@
                   <label for="employee_ids" class="form-label">Employee(s)</label>
                   <ng-select [items]="employeeList" [selectOnTab]="true" [multiple]="true" bindLabel="name" 
                       bindValue="id" [(ngModel)]="employee_ids" placeholder="Select Employee">
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                          <span><strong>{{ item.name }} - {{item.mobile}} - {{item.email}}</strong></span>
+                      </ng-template>
                   </ng-select>
               </div>
 
               <div class="col-md-12 mt-3">
-                  <label for="stpe" class="form-label">Step(s)</label>
+                  <label for="steps" class="form-label">Step(s)</label>
                   <ng-select [items]="steps" (change)="onChangeStep($event)" bindLabel="value" 
-                      bindValue="id" [(ngModel)]="step" placeholder="Select Stpe">
+                      bindValue="id" [(ngModel)]="step" placeholder="Select Step">
                   </ng-select>
               </div>
 

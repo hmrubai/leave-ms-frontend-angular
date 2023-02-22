@@ -73,10 +73,10 @@ export const navItems: INavData[] = [
     },
     {
         title: true,
-        name: 'Settings'
+        name: 'Calendar'
     },
     {
-        name: 'Calendar',
+        name: 'Calendar Settings',
         url: '/calendar',
         icon: 'icon-calendar',
         children: [
@@ -99,10 +99,10 @@ export const navItems: INavData[] = [
     },
     {
         title: true,
-        name: 'Employee Leave'
+        name: 'Balance'
     },
     {
-        name: 'Leave Setup',
+        name: 'Balance Setup',
         url: '/leave',
         icon: 'icon-layers',
         children: [
@@ -113,6 +113,27 @@ export const navItems: INavData[] = [
             },
             {
                 name: 'Approval Flow Setup',
+                url: '/leave/approval-work-flow-setup',
+                icon: 'icon-grid'
+            }
+        ]
+    },
+    {
+        title: true,
+        name: 'Leave'
+    },
+    {
+        name: 'Leave Application',
+        url: '/leave',
+        icon: 'icon-layers',
+        children: [
+            {
+                name: 'Apply For Leave',
+                url: '/leave/employee-leave-balance',
+                icon: 'icon-grid'
+            },
+            {
+                name: 'Applied List',
                 url: '/leave/approval-work-flow-setup',
                 icon: 'icon-grid'
             }
