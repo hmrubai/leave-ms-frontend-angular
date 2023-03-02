@@ -110,6 +110,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'leave',
+        loadChildren: () => import('./views/leave/apply-for-leave/apply-for-leave.module').then(m => m.ApplyForLeaveModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'calendar',
         loadChildren: () => import('./views/calendar/day-type/day-type.module').then(m => m.DayTypeModule),
         canActivate: [AuthGuard]

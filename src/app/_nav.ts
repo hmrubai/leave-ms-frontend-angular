@@ -109,12 +109,12 @@ export const navItems: INavData[] = [
             {
                 name: 'Balance Setup',
                 url: '/leave/employee-leave-balance',
-                icon: 'icon-grid'
+                icon: 'icon-wallet'
             },
             {
                 name: 'Approval Flow Setup',
                 url: '/leave/approval-work-flow-setup',
-                icon: 'icon-grid'
+                icon: 'icon-organization'
             }
         ]
     },
@@ -125,18 +125,18 @@ export const navItems: INavData[] = [
     {
         name: 'Leave Application',
         url: '/leave',
-        icon: 'icon-layers',
+        icon: 'icon-directions',
         children: [
             {
                 name: 'Apply For Leave',
-                url: '/leave/employee-leave-balance',
-                icon: 'icon-grid'
+                url: '/leave/apply-for-leave',
+                icon: 'icon-share-alt'
             },
-            {
-                name: 'Applied List',
-                url: '/leave/approval-work-flow-setup',
-                icon: 'icon-grid'
-            }
+            // {
+            //     name: 'Applied List',
+            //     url: '/leave/approval-work-flow-setup',
+            //     icon: 'icon-book-open'
+            // }
         ]
     },
     // {

@@ -54,7 +54,7 @@ export class YearlyCalendarComponent implements OnInit {
             id: [null],
             date: [null, [Validators.required]],
             day_type_id: [null, [Validators.required]],
-            day_note: [null, [Validators.required]],
+            day_note: [null],
         });
 
         this.generateCalendarForm = this.formBuilder.group({
