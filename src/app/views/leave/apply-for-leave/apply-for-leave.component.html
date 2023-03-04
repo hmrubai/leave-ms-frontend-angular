@@ -34,11 +34,11 @@
                     <span *ngIf="item.leave_status == 'Rejected'" class="status bg-danger">{{ item.leave_status }}</span>
                 </td>
                 <td>
-                    <button class="btn btn-primary btn-sm" (click)="editItem(item)"><i class="fa fa-eye"></i>&nbsp;Details</button>
+                    <button class="btn btn-primary btn-sm" [routerLink]="['/leave/leave-details', item.id ]"><i class="fa fa-eye"></i>&nbsp;Details</button>
                 </td>
               </tr>
               <tr *ngIf="applicationList.length <= 0">
-                <td colspan="5">No Fiscal Year added</td>
+                <td colspan="5">No Leave Applied!</td>
               </tr>
             </tbody>
           </table>

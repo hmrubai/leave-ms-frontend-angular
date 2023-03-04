@@ -143,6 +143,7 @@ export class ApplyForLeaveComponent implements OnInit {
 
         if(!this.entryForm.value.leave_policy_id){
             this.toastr.warning('Please, select leave Type!', 'Attention!', { timeOut: 2000 });
+            this.blockUI.stop();
             return;
         }
 
