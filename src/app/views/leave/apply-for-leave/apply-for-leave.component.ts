@@ -22,8 +22,8 @@ export class ApplyForLeaveComponent implements OnInit {
     submitted = false;
     returnUrl: string;
 
-    modalTitle = 'Add New Fiscal Year';
-    btnSaveText = 'Save';
+    modalTitle = 'Apply For a Leave';
+    btnSaveText = 'Apply';
 
     day_part = [
         {
@@ -44,6 +44,10 @@ export class ApplyForLeaveComponent implements OnInit {
 
     companyList: Array<any> = [];
     leavePolicyList: Array<any> = [];
+    applicationList: Array<any> = [];
+
+    validity: any = null;
+    is_validty_checked = false;
 
     @BlockUI() blockUI: NgBlockUI;
 
@@ -74,7 +78,7 @@ export class ApplyForLeaveComponent implements OnInit {
         this.entryForm.controls['half_day'].disable();
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        //this.getCompanyList();
+        this.getApplicationList();
         this.getLeavePolicyList()
     }
 
@@ -96,16 +100,29 @@ export class ApplyForLeaveComponent implements OnInit {
         );
     }
 
+    getApplicationList() {
+        this.blockUI.start('Loading...');
+        this._service.get('leave/application-list').subscribe(res => {
+            this.applicationList = res.data;
+            this.blockUI.stop();
+        }, err => { 
+            this.blockUI.stop();
+        }
+        );
+    }
+
     changeHalfDay(){
         if(this.entryForm.value.is_half_day){
             this.entryForm.controls['half_day'].enable();
+            this.changeLeaveType();
         }else{
             this.entryForm.controls['half_day'].setValue('Not Applicable');
             this.entryForm.controls['half_day'].disable();
+            this.changeLeaveType();
         }
     }
 
-    changeLeaveType(leave_type){
+    changeLeaveType(){
         if(!this.entryForm.value.start_date || !this.entryForm.value.end_date){
             this.toastr.warning('Please, select Start Date & End Date!', 'Attention!', { timeOut: 2000 });
             this.entryForm.controls['leave_policy_id'].setValue(null);
@@ -114,8 +131,7 @@ export class ApplyForLeaveComponent implements OnInit {
         this.checkValidity();
     }
 
-    changeDate(date){
-        console.log(this.validateDateTimeFormat(date))
+    changeDate(){
         if(this.entryForm.value.start_date && this.entryForm.value.end_date && this.entryForm.value.leave_policy_id){
             this.checkValidity();
         }
@@ -141,6 +157,9 @@ export class ApplyForLeaveComponent implements OnInit {
             data => {
                 this.blockUI.stop();
                 if (data.status) {
+                    this.validity = data.data;
+                    this.is_validty_checked = true;
+
                     //this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
                     //this.modalHide();
                     //this.getFiscalYearList();
@@ -156,7 +175,7 @@ export class ApplyForLeaveComponent implements OnInit {
     }
 
     editItem(item){
-        this.modalTitle = 'Update Fiscal Year';
+        this.modalTitle = 'Update Leave';
         this.btnSaveText = 'Update';
 
         this.entryForm.controls['id'].setValue(item.id);
@@ -174,15 +193,31 @@ export class ApplyForLeaveComponent implements OnInit {
             return;
         }
 
-        this.entryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
+        this.blockUI.start('Submitting...');
 
-        this._service.post('admin/fiscal-year-save-or-update', this.entryForm.value).subscribe(
+        if(!this.entryForm.value.leave_policy_id){
+            this.toastr.warning('Please, select leave Type!', 'Attention!', { timeOut: 2000 });
+            return;
+        }
+
+        this.entryForm.controls['half_day'].enable();
+
+        let params = {
+            start_date: this.validateDateTimeFormat(this.entryForm.value.start_date),
+            end_date: this.validateDateTimeFormat(this.entryForm.value.end_date),
+            leave_policy_id: this.entryForm.value.leave_policy_id,
+            is_half_day: this.entryForm.value.is_half_day,
+            half_day: this.entryForm.value.half_day,
+            reason: this.entryForm.value.reason
+        }
+
+        this._service.post('leave/submit-application', params).subscribe(
             data => {
                 this.blockUI.stop();
                 if (data.status) {
                     this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
                     this.modalHide();
-                    //this.getFiscalYearList();
+                    this.getApplicationList();
                 } else {
                     this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
                 }
@@ -203,8 +238,8 @@ export class ApplyForLeaveComponent implements OnInit {
         this.entryForm.reset();
         this.submitted = false;
         this.entryForm.controls['is_half_day'].setValue(true);
-        this.modalTitle = 'Add New Fiscal Year';
-        this.btnSaveText = 'Save';
+        this.modalTitle = 'Apply For a Leave';
+        this.btnSaveText = 'Apply';
     }
 
 }

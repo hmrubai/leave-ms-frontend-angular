@@ -6,42 +6,50 @@
           <button class="btn btn-square btn-success btn-sm btn-sm-custom float-right" (click)="addApplyForLeaveModal.show()"><i class="fa fa-paper-plane"></i> Apply For a Leave</button>
         </div>
         <div class="card-body">
-          <!--<table class="table table-bordered">
+          <table class="table table-bordered">
             <thead>
               <tr>
-                <th>Fiscal Year</th>
+                <th>Leave Type</th>
                 <th>Start Date</th>
                 <th>End Date</th>
-                <th>Is Acitve</th>
+                <th>Applied For</th>
+                <th>Is Half Day</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of fiscalYearList; let i = index;">
-                <td>{{ item.fiscal_year }}</td>
+              <tr *ngFor="let item of applicationList; let i = index;">
+                <td>{{ item.leave_title }}</td>
                 <td>{{ item.start_date | date:'fullDate'}}</td>
                 <td>{{ item.end_date | date:'fullDate' }}</td>
+                <td>{{ item.total_applied_days }} Days</td>
                 <td>
-                    <span *ngIf="item.is_active" class="status bg-success">Active</span>
-                    <span *ngIf="!item.is_active" class="status bg-danger">Inactive</span>
+                    <span *ngIf="item.is_half_day" class="status bg-success">Yes ({{ item.half_day }})</span>
+                    <span *ngIf="!item.is_half_day" class="status bg-secondary">No</span>
                 </td>
                 <td>
-                    <button class="btn btn-primary btn-sm" (click)="editItem(item)"><i class="fa fa-pencil"></i>&nbsp;Edit</button>
+                    <span *ngIf="item.leave_status == 'Approved'" class="status bg-success">{{ item.leave_status }}</span>
+                    <span *ngIf="item.leave_status == 'Pending'" class="status bg-warning">{{ item.leave_status }}</span>
+                    <span *ngIf="item.leave_status == 'Rejected'" class="status bg-danger">{{ item.leave_status }}</span>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm" (click)="editItem(item)"><i class="fa fa-eye"></i>&nbsp;Details</button>
                 </td>
               </tr>
-              <tr *ngIf="fiscalYearList.length <= 0">
+              <tr *ngIf="applicationList.length <= 0">
                 <td colspan="5">No Fiscal Year added</td>
               </tr>
             </tbody>
-          </table>-->
+          </table>
         </div>
-        <!--<div class="card-footer">
-            {{ fiscalYearList.length }} Rows
-        </div>-->
+        <div class="card-footer">
+            {{ applicationList.length }} Rows
+        </div>
       </div>
     </div>
 </div>
-<!--<block-ui></block-ui>-->
+<block-ui></block-ui>
 
 <div bsModal #addApplyForLeaveModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-info modal-lg" role="document">
@@ -57,7 +65,7 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="start_date">Start Date</label>
                 <div class="col-md-9">
-                    <input type="date" formControlName="start_date" (change)="changeDate($event.target.valueAsDate)" [ngClass]="{ 'is-invalid': submitted && f.start_date.errors }" id="start_date" class="form-control" placeholder="Start Date">
+                    <input type="date" formControlName="start_date" (change)="changeDate()" [ngClass]="{ 'is-invalid': submitted && f.start_date.errors }" id="start_date" class="form-control" placeholder="Start Date">
                     <div *ngIf="submitted && f.start_date.errors" class="invalid-feedback">
                       <span *ngIf="f.start_date.errors.required" class="text-danger"> Start Date is required</span>
                     </div>
@@ -66,7 +74,7 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="end_date">End Date</label>
                 <div class="col-md-9">
-                    <input type="date" formControlName="end_date" (change)="changeDate($event.target.valueAsDate)" [ngClass]="{ 'is-invalid': submitted && f.end_date.errors }" id="end_date" class="form-control" placeholder="End Date">
+                    <input type="date" formControlName="end_date" (change)="changeDate()" [ngClass]="{ 'is-invalid': submitted && f.end_date.errors }" id="end_date" class="form-control" placeholder="End Date">
                     <div *ngIf="submitted && f.end_date.errors" class="invalid-feedback">
                       <span *ngIf="f.end_date.errors.required" class="text-danger"> End Date is required</span>
                     </div>
@@ -96,7 +104,7 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Leave Type</label>
                 <div class="col-md-9">
-                    <ng-select [items]="leavePolicyList" bindLabel="leave_title" (change)="changeLeaveType($event)"
+                    <ng-select [items]="leavePolicyList" bindLabel="leave_title" (change)="changeLeaveType()"
                      bindValue="id" formControlName="leave_policy_id" placeholder="Select Leave Type"
                       [ngClass]="{ 'is-invalid': submitted && f.leave_policy_id.errors }" >
                      </ng-select>
@@ -113,6 +121,20 @@
                       <span *ngIf="f.reason.errors.required" class="text-danger"> Reason is required</span>
                     </div>
                 </div>
+            </div>
+            <div class="row" *ngIf="is_validty_checked">
+              <div class="col-sm-3">
+                <span class="font-weight-bold">Applied For:</span>
+              </div>
+              <div class="col-sm-3">
+                <span class="font-weight-bold font-italic">{{ validity.total_applied_days }} Days</span>
+              </div>
+              <div class="col-sm-3">
+                <span class="font-weight-bold">Remamining:</span>
+              </div>
+              <div class="col-sm-3">
+                <span class="font-weight-bold font-italic">{{ validity.remaining_days }} Days</span>
+              </div>
             </div>
         </form>
       </div>
