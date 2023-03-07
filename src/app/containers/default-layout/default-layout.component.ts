@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Cookie } from 'ng2-cookies';
 import { ToastrService } from 'ngx-toastr';
 import { navItems } from '../../_nav';
@@ -13,11 +13,12 @@ import { environment } from '../../../environments/environment';
 export class DefaultLayoutComponent {
     public sidebarMinimized = false;
     public allNavItems = navItems;
-    //public navItems = navItems;
 
     public user_role = null;
 
     public currentUser: any = {};
+
+    reloadSubscription: any;
 
     profile_image = 'assets/img/avatars/profile.png'
 
@@ -43,15 +44,15 @@ export class DefaultLayoutComponent {
     CheckPermission() {
         this.allNavItems.forEach(menu => {
             if (!menu.title) {
-                if(menu.children){
+                if (menu.children) {
                     let new_child = [];
                     if (menu.children.length) {
                         menu.children.forEach((item, index) => {
                             let is_exist = false;
-                            if(item.role){
+                            if (item.role) {
                                 let role = item.role ? item.role.split(',') : null;
                                 let is_exist = role.includes(this.user_role);
-                                if(is_exist){
+                                if (is_exist) {
                                     new_child.push(item)
                                 }
                             }

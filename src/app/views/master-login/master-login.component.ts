@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -56,11 +56,12 @@ export class MasterLoginComponent implements OnInit {
 
         this.authService.login(this.LoginForm.value).subscribe(
             data => {
-
                 this.blockUI.stop();
                 if(data.status){
                     this.toastr.success('Logging Successfully', 'Success!', { timeOut: 2000 });
-                    this.router.navigate([this.returnUrl ? this.returnUrl : '/dashboard']);
+                    this.router.navigate(['/login']).then(() => {
+                        window.location.reload();
+                    });
                 }else{
                     this.toastr.error(data.message, 'Error!', { timeOut: 3000 });
                 }

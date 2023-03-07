@@ -143,11 +143,12 @@ export const navItems: INavData[] = [
                 icon: 'icon-share-alt',
                 role: 'Admin,Employee,ApprovalAuthority',
             },
-            // {
-            //     name: 'Applied List',
-            //     url: '/leave/approval-work-flow-setup',
-            //     icon: 'icon-book-open'
-            // }
+            {
+                name: 'Applied List',
+                url: '/leave/approval-pending-leave-list',
+                icon: 'icon-book-open',
+                role: 'ApprovalAuthority',
+            }
         ]
     },
 ];
