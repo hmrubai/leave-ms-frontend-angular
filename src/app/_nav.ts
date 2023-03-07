@@ -144,9 +144,9 @@ export const navItems: INavData[] = [
                 role: 'Admin,Employee,ApprovalAuthority',
             },
             {
-                name: 'Applied List',
+                name: 'Pending List',
                 url: '/leave/approval-pending-leave-list',
-                icon: 'icon-book-open',
+                icon: 'icon-hourglass',
                 role: 'ApprovalAuthority',
             }
         ]

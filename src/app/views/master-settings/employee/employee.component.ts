@@ -217,10 +217,13 @@ export class EmployeeComponent implements OnInit {
     }
 
     getEmployeeList() {
+        this.blockUI.start('Loading...')
         this._service.get('admin/employee-list').subscribe(res => {
             this.employeeList = res.data;
-        }, err => { }
-        );
+            this.blockUI.stop();
+        }, err => { 
+            this.blockUI.stop();
+        });
     }
 
     getCompanyList() {
@@ -238,10 +241,13 @@ export class EmployeeComponent implements OnInit {
     }
 
     getEmploymentList(){
+        this.blockUI.start('Loading...')
         this._service.get('admin/employment-type-list').subscribe(res => {
             this.employmentList = res.data;
-        }, err => { }
-        );
+            this.blockUI.stop();
+        }, err => {
+            this.blockUI.stop();
+        });
     }
 
     onChangeDivision(division){
@@ -293,15 +299,22 @@ export class EmployeeComponent implements OnInit {
         this.designationList = [];
         this.departmentList = [];
 
+        this.blockUI.start('Loading...')
         if(comapny_id && branch_id){
             this._service.get('admin/department-list-by-id/' + comapny_id + '/' + branch_id).subscribe(res => {
                 this.departmentList = res.data;
-            }, err => { }
+                this.blockUI.stop();
+            }, err => { 
+                this.blockUI.stop();
+            }
             );
 
             this._service.get('admin/designation-list-by-id/' + comapny_id + '/' + branch_id).subscribe(res => {
                 this.designationList = res.data;
-            }, err => { }
+                this.blockUI.stop();
+            }, err => { 
+                this.blockUI.stop();
+            }
             );
         }
     }
@@ -430,8 +443,6 @@ export class EmployeeComponent implements OnInit {
         formData.append('stuckoff_date', this.entryForm.value.stuckoff_date);
         formData.append('user_type', this.entryForm.value.user_type);
         formData.append('is_active', this.entryForm.value.is_active);
-
-        console.log('Submit')
 
         this.entryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
         if(this.entryForm.value.id){

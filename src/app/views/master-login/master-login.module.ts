@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
-// import { ChartsModule } from 'ng2-charts';
-// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-// import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import {SharedModule} from '../../core/shared.module';
+import { BlockUIModule } from 'ng-block-ui';
 
 import { MasterLoginComponent } from './master-login.component';
 import { MasterLoginRoutingModule } from './master-login-routing.module';
@@ -16,9 +14,7 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     SharedModule,
     MasterLoginRoutingModule,
-    // ChartsModule,
-    // BsDropdownModule,
-    // ButtonsModule.forRoot(),
+    BlockUIModule
   ],
   declarations: [ MasterLoginComponent ]
 })

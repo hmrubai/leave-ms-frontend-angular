@@ -125,6 +125,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'leave',
+        loadChildren: () => import('./views/leave/approval-leave-details/approval-leave-details.module').then(m => m.ApprovalLeaveDetailsModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'calendar',
         loadChildren: () => import('./views/calendar/day-type/day-type.module').then(m => m.DayTypeModule),
         canActivate: [AuthGuard]

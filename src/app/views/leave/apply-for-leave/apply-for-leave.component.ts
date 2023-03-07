@@ -180,8 +180,6 @@ export class ApplyForLeaveComponent implements OnInit {
         this.btnSaveText = 'Update';
 
         this.entryForm.controls['id'].setValue(item.id);
-        // this.entryForm.controls['fiscal_year'].setValue(item.fiscal_year);
-        // this.entryForm.controls['company_id'].setValue(item.company_id);
         this.entryForm.controls['start_date'].setValue(item.start_date);
         this.entryForm.controls['end_date'].setValue(item.end_date);
         this.entryForm.controls['is_half_day'].setValue(item.is_half_day);
@@ -238,7 +236,9 @@ export class ApplyForLeaveComponent implements OnInit {
         this.addApplyForLeaveModal.hide();
         this.entryForm.reset();
         this.submitted = false;
-        this.entryForm.controls['is_half_day'].setValue(true);
+        this.entryForm.controls['is_half_day'].setValue(false);
+        this.entryForm.controls['half_day'].setValue('Not Applicable');
+        this.entryForm.controls['half_day'].disable();
         this.modalTitle = 'Apply For a Leave';
         this.btnSaveText = 'Apply';
     }

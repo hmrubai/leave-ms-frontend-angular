@@ -78,7 +78,7 @@ export class ApprovalPendingLeaveListComponent implements OnInit {
         this.entryForm.controls['half_day'].disable();
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        //this.getApplicationList();
+        this.getApplicationList();
         //this.getLeavePolicyList()
     }
 
@@ -101,8 +101,9 @@ export class ApprovalPendingLeaveListComponent implements OnInit {
     }
 
     getApplicationList() {
+        //approval/leave/application-list
         this.blockUI.start('Loading...');
-        this._service.get('leave/application-list').subscribe(res => {
+        this._service.get('approval/leave/application-list').subscribe(res => {
             this.applicationList = res.data;
             this.blockUI.stop();
         }, err => { 

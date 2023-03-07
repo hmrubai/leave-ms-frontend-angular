@@ -10,13 +10,14 @@
 
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="card border-top-primary border-top-3 mb-3">
+                    <div class="card border-top-info border-top-3 mb-3">
                         <div class="card-header card-title"><strong>Employee Information</strong></div>
                         <div class="card-body text-dark">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <h5 class="card-title">Profile Details</h5>
-                                    <img src="{{ profile_image }}" class="image-div" alt="">
+                                    <h5 class="text-center mb-2"><i class="fa fa-user"></i> Personal Details</h5>
+                                    <img src="{{ profile_image }}" class="image-div mb-2" alt="">
+
                                 </div>
                                 <div class="col-sm-8 table-responsive">
                                     <table class="table table-bordered" *ngIf="is_loaded">
@@ -41,14 +42,14 @@
                                             <td>{{ leaveDetails.employee.mobile }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Blood Group</td>
-                                            <td>{{ leaveDetails.employee.blood_group }}</td>
-                                        </tr>
-                                        <tr>
                                             <td>Joining Date</td>
                                             <td>{{ leaveDetails.employee.joining_date | date:'fullDate' }}</td>
                                         </tr>
                                     </table>
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <button type="button" *ngIf="is_approval_permit" class="btn btn-success approve-button mb-1">Approve</button>
+                                    <button type="button" *ngIf="is_approval_permit" class="btn btn-danger reject-button mb-1">Reject</button>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +133,7 @@
                                                 </td>
                                                 <td>{{ item.step ? item.step : '-' }}</td>
                                                 <td>
-                                                    <span *ngIf="item.step_flag == 'Active'" class="status bg-info">{{ item.step_flag }}</span>
+                                                    <span *ngIf="item.step_flag == 'Active'" class="status bg-primary">{{ item.step_flag }}</span>
                                                     <span *ngIf="item.step_flag == 'Completed'" class="status bg-success">{{ item.step_flag }}</span>
                                                     <span *ngIf="item.step_flag == 'Pending'" class="status bg-warning">{{ item.step_flag }}</span>
                                                 </td>

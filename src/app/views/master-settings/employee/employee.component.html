@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-lg-12">
       <div class="card">
-        <div class="card-header bg-secondary">
+        <div class="card-header bg-primary">
           <h5><i class="fa fa-list"></i> Employee Information</h5>
           <button class="btn btn-square btn-success btn-sm btn-sm-custom float-right" (click)="addEmployeeModal.show()"><i class="fa fa-plus"></i> Add New Employee</button>
         </div>
@@ -45,7 +45,7 @@
       </div>
     </div>
 </div>
-<!--<block-ui></block-ui>-->
+<block-ui></block-ui>
 
 <div bsModal #addEmployeeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-info modal-lg" role="document">
@@ -280,7 +280,7 @@
                 <div class="col-md-4 mt-3">
                     <label for="designation_id" class="form-label">Designation</label>
                     <ng-select [items]="designationList" bindLabel="title" 
-                        bindValue="id" formControlName="designation_id" placeholder="Select Branch" 
+                        bindValue="id" formControlName="designation_id" placeholder="Select Designation" 
                         [ngClass]="{ 'is-invalid': submitted && f.designation_id.errors }" >
                      </ng-select>
                     <div *ngIf="submitted && f.designation_id.errors" class="invalid-feedback">

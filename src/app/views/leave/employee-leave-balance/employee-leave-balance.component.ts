@@ -67,15 +67,15 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
         }else{
             this.employee_id = 0;
         }
-        
         this.leaveBalanceList = [];
         if(this.employee_id){
+            this.blockUI.start('Loading...');
             this._service.get('admin/leave-balance-list/' + this.employee_id).subscribe(res => {
                 this.leaveBalanceList = res.data.balance_list;
-            }, err => { }
-            );
-        }else{
-            
+                this.blockUI.stop();
+            }, err => { 
+                this.blockUI.stop();
+            });
         }
     }
 
@@ -112,8 +112,6 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
         }
 
         this.entryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
-
-        //admin/leave-balance-update
 
         this._service.post('admin/leave-balance-update', this.entryForm.value).subscribe(
             data => {

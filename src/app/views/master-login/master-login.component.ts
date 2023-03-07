@@ -56,10 +56,10 @@ export class MasterLoginComponent implements OnInit {
 
         this.authService.login(this.LoginForm.value).subscribe(
             data => {
-                this.blockUI.stop();
                 if(data.status){
                     this.toastr.success('Logging Successfully', 'Success!', { timeOut: 2000 });
                     this.router.navigate(['/login']).then(() => {
+                        this.blockUI.stop();
                         window.location.reload();
                     });
                 }else{

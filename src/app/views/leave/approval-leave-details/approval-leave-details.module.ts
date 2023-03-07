@@ -3,8 +3,8 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BlockUIModule } from 'ng-block-ui';
 import {SharedModule} from '../../../core/shared.module';
 
-import { LeaveDetailsComponent } from './leave-details.component';
-import { LeaveDetailsRoutingModule } from './leave-details-routing.module';
+import { ApprovalLeaveDetailsComponent } from './approval-leave-details.component';
+import { ApprovalLeaveDetailsRoutingModule } from './approval-leave-details-routing.module';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
@@ -13,9 +13,9 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    LeaveDetailsRoutingModule,
+    ApprovalLeaveDetailsRoutingModule,
     BlockUIModule
   ],
-  declarations: [ LeaveDetailsComponent ]
+  declarations: [ ApprovalLeaveDetailsComponent ]
 })
-export class LeaveDetailsModule { }
+export class ApprovalLeaveDetailsModule { }
