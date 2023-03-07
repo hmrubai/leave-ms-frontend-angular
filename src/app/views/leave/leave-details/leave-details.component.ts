@@ -71,8 +71,6 @@ export class LeaveDetailsComponent implements OnInit {
             is_active: [true],
         });
 
-        console.log(this.leave_application_id)
-
         this.uploadForm = this.formBuilder.group({
             image_file: ['']
         });

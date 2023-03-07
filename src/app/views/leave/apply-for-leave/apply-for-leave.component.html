@@ -21,8 +21,8 @@
             <tbody>
               <tr *ngFor="let item of applicationList; let i = index;">
                 <td>{{ item.leave_title }}</td>
-                <td>{{ item.start_date | date:'fullDate'}}</td>
-                <td>{{ item.end_date | date:'fullDate' }}</td>
+                <td>{{ item.start_date | date:'dd/MM/y'}}</td>
+                <td>{{ item.end_date | date:'dd/MM/y' }}</td>
                 <td>{{ item.total_applied_days }} Days</td>
                 <td>
                     <span *ngIf="item.is_half_day" class="status bg-success">Yes ({{ item.half_day }})</span>

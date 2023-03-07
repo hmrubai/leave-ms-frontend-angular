@@ -55,7 +55,6 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
         });
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.getEmployeeList();
-        console.log('Me from Balance')
     }
 
     get f() {
