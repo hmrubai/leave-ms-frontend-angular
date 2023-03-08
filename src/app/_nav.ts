@@ -101,6 +101,12 @@ export const navItems: INavData[] = [
                 url: '/calendar/yearly-calendar',
                 icon: 'icon-calendar',
                 role: 'Admin,ApprovalAuthority'
+            },
+            {
+                name: 'Academic Calendar',
+                url: '/calendar/my-calendar',
+                icon: 'icon-calendar',
+                role: 'Admin,Employee,ApprovalAuthority'
             }
         ]
     },
@@ -113,6 +119,12 @@ export const navItems: INavData[] = [
         url: '/leave',
         icon: 'icon-layers',
         children: [
+            {
+                name: 'My Leave Balance',
+                url: '/leave/my-leave-balance',
+                icon: 'icon-wallet',
+                role: 'Admin,Employee,ApprovalAuthority'
+            },
             {
                 name: 'Balance Setup',
                 url: '/leave/employee-leave-balance',
@@ -143,7 +155,7 @@ export const navItems: INavData[] = [
                 role: 'Admin,Employee,ApprovalAuthority',
             },
             {
-                name: 'Pending List',
+                name: 'Pending for Approval',
                 url: '/leave/approval-pending-leave-list',
                 icon: 'icon-hourglass',
                 role: 'ApprovalAuthority',
@@ -151,7 +163,7 @@ export const navItems: INavData[] = [
             {
                 name: 'Approved List',
                 url: '/leave/approval-approved-leave-list',
-                icon: 'icon-hourglass',
+                icon: 'icon-pin',
                 role: 'ApprovalAuthority',
             }
         ]

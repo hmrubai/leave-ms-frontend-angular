@@ -64,6 +64,7 @@ export class MasterLoginComponent implements OnInit {
                     });
                 }else{
                     this.toastr.error(data.message, 'Error!', { timeOut: 3000 });
+                    this.blockUI.stop();
                 }
             },
             error => {
@@ -71,6 +72,8 @@ export class MasterLoginComponent implements OnInit {
                 if (error.status === 400) {
                     this.toastr.error('Unauthorized request found', 'Error!', { timeOut: 3000 });
                 } else if (error.status === 401) {
+                    this.toastr.error('Invalid Email Or Password', 'Error!', { timeOut: 3000 });
+                } else if (error.status === 409) {
                     this.toastr.error('Invalid Email Or Password', 'Error!', { timeOut: 3000 });
                 }
             }

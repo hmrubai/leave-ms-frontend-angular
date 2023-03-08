@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { ChartsModule } from 'ng2-charts';
+import { NgSelectModule } from '@ng-select/ng-select';
+import {SharedModule} from '../../../core/shared.module';
 import { BlockUIModule } from 'ng-block-ui';
-import {SharedModule} from '../../core/shared.module';
 
-import { DashboardComponent } from './dashboard.component';
-import { DashboardRoutingModule } from './dashboard-routing.module';
+import { MyCalendarComponent } from './my-calendar.component';
+import { MyCalendarRoutingModule } from './my-calendar-routing.module';
 import { CommonModule } from '@angular/common';
 import { NgxFullCalendarModule } from 'ngx-fullcalendar';
 
@@ -13,14 +13,13 @@ import { NgxFullCalendarModule } from 'ngx-fullcalendar';
   imports: [
     CommonModule,
     FormsModule,
+    NgSelectModule,
     ReactiveFormsModule,
     SharedModule,
-    DashboardRoutingModule,
-    ChartsModule,
+    MyCalendarRoutingModule,
     BlockUIModule,
-    // ButtonsModule.forRoot(),
     NgxFullCalendarModule
   ],
-  declarations: [ DashboardComponent ]
+  declarations: [ MyCalendarComponent ]
 })
-export class DashboardModule { }
+export class MyCalendarModule { }

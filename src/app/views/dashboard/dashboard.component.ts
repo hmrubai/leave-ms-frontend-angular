@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +8,7 @@ import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { CommonService } from '../../_services/common.service';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { FullCalendarOptions, EventObject, FullCalendarComponent } from 'ngx-fullcalendar';
 
 @Component({
     selector: 'app-main-dashboard',
@@ -19,7 +20,16 @@ export class DashboardComponent implements OnInit {
     submitted = false;
     returnUrl: string;
 
+    options: FullCalendarOptions;
+    events: EventObject[];
+    @ViewChild('theCalendar') theCalendar: FullCalendarComponent;
+
+    dashboard: any = null;
     currentUser: any = null;
+    leaveBalanceList: Array<any> = [];
+    applicationList: Array<any> = [];
+    is_loaded = false;
+    is_calender_loaded = false;
 
     @BlockUI() blockUI: NgBlockUI;
 
@@ -37,16 +47,55 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this.is_calender_loaded = true;
+        this.options = {
+            defaultDate: new Date(),
+            editable: true,    
+        };
+        
         this.LoginForm = this.formBuilder.group({
             email: [null, [Validators.required, Validators.email]],
             password: [null, [Validators.required]],
         });
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        
+
+        this.getDashboardSummary();
     }
 
     get f() {
         return this.LoginForm.controls;
+    }
+
+    getDashboardSummary(){
+        this.blockUI.start('Loading...');
+        this._service.get('dashboard-summary').subscribe(res => {
+            this.dashboard = res.data;
+            this.leaveBalanceList = res.data.balance_list;
+            this.applicationList = res.data.leave_list;
+
+            this.applicationList.forEach(item => {
+                let event_data = { id: item.id, title: item.leave_title, allDay: true, start: item.start_date, end: item.end_date, backgroundColor: '#20a8d8', borderColor: '#20a8d8', textColor: '#fff' };
+                this.theCalendar.calendar.addEvent(event_data);
+            });
+            res.data.weekend_holiday.forEach(day => {
+                let note = '';
+                if(day.day_note){
+                    note = ' | ' + day.day_note
+                    console.log(note)
+                }
+                let event_data = { id: 'cd' + day.id, title: day.day_type_title + note, allDay: true, start: day.date, end: day.date, backgroundColor: '#ffc107', borderColor: '#ffc107', textColor: '#000' };
+                this.theCalendar.calendar.addEvent(event_data);
+            });
+
+            this.theCalendar.calendar.render();
+            this.is_calender_loaded = true;
+
+            this.is_loaded = true;
+            this.blockUI.stop();
+        }, err => { 
+            this.blockUI.stop();
+        });
     }
 
     // lineChart1

@@ -106,6 +106,11 @@ export const routes: Routes = [
       },
       {
         path: 'leave',
+        loadChildren: () => import('./views/leave/my-leave-balance/my-leave-balance.module').then(m => m.MyLeaveBalanceListModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'leave',
         loadChildren: () => import('./views/leave/approval-work-flow-setup/approval-work-flow-setup.module').then(m => m.ApprovalWorkFlowSetupModule),
         canActivate: [AuthGuard]
       },
@@ -143,6 +148,11 @@ export const routes: Routes = [
       {
         path: 'calendar',
         loadChildren: () => import('./views/calendar/work-day-setup/work-day-setup.module').then(m => m.WorkDaySetupModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'calendar',
+        loadChildren: () => import('./views/calendar/my-calendar/my-calendar.module').then(m => m.MyCalendarModule),
         canActivate: [AuthGuard]
       },
       {
