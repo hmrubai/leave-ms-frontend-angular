@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -10,6 +10,7 @@ import { AuthenticationService } from '../../../_services/authentication.service
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'app-approval-leave-details',
@@ -17,15 +18,19 @@ import { Location } from '@angular/common';
     styleUrls: ['approval-leave-details.component.scss']
 })
 export class ApprovalLeaveDetailsComponent implements OnInit {
-    @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
+    @ViewChild('approvalModal') public approvalModal: ModalDirective;
+    modalRef?: BsModalRef;
+    modalConfig = {
+        class: 'modal-dialog-centered modal-sm'
+    }
     entryForm: FormGroup;
     uploadForm: FormGroup;
     submitted = false;
     returnUrl: string;
     leave_application_id;
 
-    modalTitle = 'Add New Category';
-    btnSaveText = 'Save';  
+    modalTitle = 'Do you want to approve?';
+    btnSaveText = 'Approve';  
     user_role = null;  
 
     urls = [];
@@ -49,7 +54,8 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
         private toastr: ToastrService,
         private route: ActivatedRoute,
         private router: Router,
-        private location: Location
+        private location: Location,
+        private modalService: BsModalService
     ) {
         if (!this.authService.isAuthenticated()) {
             this.router.navigate(['/login']);
@@ -138,22 +144,44 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
         );
     }
 
-    editItem(item){
-        this.modalTitle = 'Update Company';
-        this.btnSaveText = 'Update';
+    openApproveModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template, this.modalConfig);
+    }
 
-        this.entryForm.controls['id'].setValue(item.id);
-        this.entryForm.controls['name'].setValue(item.name);
-        this.entryForm.controls['address'].setValue(item.address);
-        this.entryForm.controls['contact_no'].setValue(item.contact_no);
-        this.entryForm.controls['company_email'].setValue(item.company_email);
-        this.entryForm.controls['hr_email'].setValue(item.hr_email);
-        this.entryForm.controls['leave_email'].setValue(item.leave_email);
-        //this.entryForm.controls['company_logo'].setValue(item.company_logo);
-        this.entryForm.controls['employee_code_length'].setValue(item.employee_code_length);
-        this.entryForm.controls['company_prefix'].setValue(item.company_prefix);
-        this.entryForm.controls['is_active'].setValue(item.is_active);
-        this.addCompanyModal.show();
+    decline(){
+        this.modalRef?.hide();
+    }
+
+    approveApplication(){
+        console.log("Approved")
+
+        let params = {
+            leave_application_id: this.leave_application_id
+        }
+
+        this.blockUI.start('Approving...')
+        this._service.post('leave/approve-leave', params).subscribe(
+            data => {
+                this.blockUI.stop();
+                if (data.status) {
+                    this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
+                    this.modalClose();
+                    this.router.navigate(['/leave/approval-approved-leave-list'])
+                    //this.getLeaveDetails();
+                } else {
+                    this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
+                }
+            },
+            err => {
+                this.blockUI.stop();
+                this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
+            }
+        );
+        this.modalRef?.hide();
+    }
+
+    modalClose(){
+        this.modalRef?.hide();
     }
 
     onFormSubmit(){
@@ -205,7 +233,7 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
     }
 
     modalHide() {
-        this.addCompanyModal.hide();
+        this.approvalModal.hide();
         this.entryForm.reset();
         this.submitted = false;
         this.entryForm.controls['is_active'].setValue(true);

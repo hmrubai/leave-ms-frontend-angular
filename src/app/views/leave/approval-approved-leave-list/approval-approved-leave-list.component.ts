@@ -12,11 +12,11 @@ import {ModalDirective} from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
 
 @Component({
-    selector: 'app-approval-pending-leave-list',
-    templateUrl: 'approval-pending-leave-list.component.html',
-    styleUrls: ['approval-pending-leave-list.component.scss']
+    selector: 'app-approval-approved-leave-list',
+    templateUrl: 'approval-approved-leave-list.component.html',
+    styleUrls: ['approval-approved-leave-list.component.scss']
 })
-export class ApprovalPendingLeaveListComponent implements OnInit {
+export class ApprovalApprovedLeaveListComponent implements OnInit {
     @ViewChild('addApplyForLeaveModal') public addApplyForLeaveModal: ModalDirective;
     entryForm: FormGroup;
     submitted = false;
@@ -101,8 +101,9 @@ export class ApprovalPendingLeaveListComponent implements OnInit {
     }
 
     getApplicationList() {
+        //approval/leave/application-list
         this.blockUI.start('Loading...');
-        this._service.get('approval/pending/application-list').subscribe(res => {
+        this._service.get('approval/approved/application-list').subscribe(res => {
             this.applicationList = res.data;
             this.blockUI.stop();
         }, err => { 

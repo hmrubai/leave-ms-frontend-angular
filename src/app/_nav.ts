@@ -127,7 +127,6 @@ export const navItems: INavData[] = [
             }
         ]
     },
-    //Admin,Employee,ApprovalAuthority
     {
         title: true,
         name: 'Leave'
@@ -138,7 +137,7 @@ export const navItems: INavData[] = [
         icon: 'icon-directions',
         children: [
             {
-                name: 'Apply For Leave',
+                name: 'My Leave Applications',
                 url: '/leave/apply-for-leave',
                 icon: 'icon-share-alt',
                 role: 'Admin,Employee,ApprovalAuthority',
@@ -146,6 +145,12 @@ export const navItems: INavData[] = [
             {
                 name: 'Pending List',
                 url: '/leave/approval-pending-leave-list',
+                icon: 'icon-hourglass',
+                role: 'ApprovalAuthority',
+            },
+            {
+                name: 'Approved List',
+                url: '/leave/approval-approved-leave-list',
                 icon: 'icon-hourglass',
                 role: 'ApprovalAuthority',
             }
