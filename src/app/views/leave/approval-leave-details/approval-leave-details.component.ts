@@ -148,10 +148,6 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
         this.modalRef = this.modalService.show(template, this.modalConfig);
     }
 
-    decline(){
-        this.modalRef?.hide();
-    }
-
     approveApplication(){
         console.log("Approved")
 
@@ -177,6 +173,42 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
                 this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
             }
         );
+        this.modalRef?.hide();
+    }
+
+    openRejectModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template, this.modalConfig);
+    }
+
+    rejectApplication(){
+        console.log("Reject")
+
+        let params = {
+            leave_application_id: this.leave_application_id
+        }
+
+        this.blockUI.start('Rejecting...')
+        this._service.post('leave/reject-leave', params).subscribe(
+            data => {
+                this.blockUI.stop();
+                if (data.status) {
+                    this.toastr.error(data.message, 'Success!', { timeOut: 2000 });
+                    this.modalClose();
+                    this.router.navigate(['/leave/approval-approved-leave-list'])
+                    //this.getLeaveDetails();
+                } else {
+                    this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
+                }
+            },
+            err => {
+                this.blockUI.stop();
+                this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
+            }
+        );
+        this.modalRef?.hide();
+    }
+
+    decline(){
         this.modalRef?.hide();
     }
 

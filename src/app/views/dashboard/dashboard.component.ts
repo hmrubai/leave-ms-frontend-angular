@@ -75,8 +75,14 @@ export class DashboardComponent implements OnInit {
             this.applicationList = res.data.leave_list;
 
             this.applicationList.forEach(item => {
-                let event_data = { id: item.id, title: item.leave_title, allDay: true, start: item.start_date, end: item.end_date, backgroundColor: '#20a8d8', borderColor: '#20a8d8', textColor: '#fff' };
-                this.theCalendar.calendar.addEvent(event_data);
+                if(item.leave_status == "Approved"){
+                    let event_data = { id: item.id, title: item.leave_title, allDay: true, start: item.start_date, end: item.end_date, backgroundColor: '#20a8d8', borderColor: '#20a8d8', textColor: '#fff' };
+                    this.theCalendar.calendar.addEvent(event_data);
+                }
+                if(item.leave_status == "Rejected"){
+                    let event_data = { id: item.id, title: item.leave_title, allDay: true, start: item.start_date, end: item.end_date, backgroundColor: '#f86c6b', borderColor: '#f86c6b', textColor: '#fff' };
+                    this.theCalendar.calendar.addEvent(event_data);
+                }
             });
             res.data.weekend_holiday.forEach(day => {
                 let note = '';
