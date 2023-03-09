@@ -1,9 +1,9 @@
 export const environment = {
   production: true,
   // Live
-  apiUrl: 'http://api-leavems.bacbonschool.com/api/',
-  baseUrl: 'http://api-leavems.bacbonschool.com/api/',
-  imageURL: 'http://api-leavems.bacbonschool.com/',
+  apiUrl: 'https://api-leavems.bacbonschool.com/api/',
+  baseUrl: 'https://api-leavems.bacbonschool.com/api/',
+  imageURL: 'https://api-leavems.bacbonschool.com/',
   
   // Local
   // apiUrl: 'http://localhost:8000/api/',

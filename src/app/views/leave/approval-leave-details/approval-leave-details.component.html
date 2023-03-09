@@ -42,6 +42,10 @@
                                             <td>{{ leaveDetails.employee.mobile }}</td>
                                         </tr>
                                         <tr>
+                                            <td>Blood Group</td>
+                                            <td>{{ leaveDetails.employee.blood_group }}</td>
+                                        </tr>
+                                        <tr>
                                             <td>Joining Date</td>
                                             <td>{{ leaveDetails.employee.joining_date | date:'fullDate' }}</td>
                                         </tr>
@@ -92,6 +96,10 @@
                                         <tr>
                                             <td>Reason</td>
                                             <td><strong>{{ leaveDetails.leave.leave_reason }}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Responsibility Carried By</td>
+                                            <td><strong>{{ leaveDetails.leave.responsibility_carried_by }}</strong></td>
                                         </tr>
                                         <tr>
                                             <td>Applied Date</td>

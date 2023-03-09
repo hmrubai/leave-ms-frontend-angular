@@ -35,3 +35,9 @@
     min-width: 40px;
     z-index: 9;
 }
+
+.app-header .navbar-toggler {
+    min-width: 50px;
+    padding: 0.25rem 0;
+    display: none !important;
+}

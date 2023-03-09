@@ -7,6 +7,12 @@
             bindValue="year" [(ngModel)]="year_id" (change)="onChangeYear($event)" placeholder="Select Year">
           </ng-select>-->
           <button class="btn btn-square btn-success btn-sm btn-sm-custom float-right" (click)="addStepModal.show()"><i class="fa fa-plus"></i> Add Flow</button>
+          <ng-select [items]="employeeList" bindLabel="name" class="col-lg-2 form-control-sm float-right fs-top"
+            bindValue="id" [(ngModel)]="employee_id" (change)="onChangeEmployee($event)" placeholder="Select Employee">
+                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span><strong>{{ item.name }} - {{item.email}}</strong></span>
+                </ng-template>
+          </ng-select>
         </div>
         <div class="card-body">
           <table class="table table-bordered">

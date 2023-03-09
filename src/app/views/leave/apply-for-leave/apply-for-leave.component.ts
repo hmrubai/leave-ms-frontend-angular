@@ -71,6 +71,7 @@ export class ApplyForLeaveComponent implements OnInit {
             start_date: [null, [Validators.required]],
             end_date: [null, [Validators.required]],
             reason: [null, [Validators.required]],
+            responsibility_carried_by: [null],
             is_half_day: [false],
             half_day: ['Not Applicable'],
         });
@@ -207,7 +208,8 @@ export class ApplyForLeaveComponent implements OnInit {
             leave_policy_id: this.entryForm.value.leave_policy_id,
             is_half_day: this.entryForm.value.is_half_day,
             half_day: this.entryForm.value.half_day,
-            reason: this.entryForm.value.reason
+            reason: this.entryForm.value.reason,
+            responsibility_carried_by: this.entryForm.value.responsibility_carried_by
         }
 
         this._service.post('leave/submit-application', params).subscribe(

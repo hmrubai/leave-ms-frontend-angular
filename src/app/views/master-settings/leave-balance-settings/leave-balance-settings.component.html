@@ -24,7 +24,6 @@
                 <td>{{ item.employment_type }}</td>
                 <td>{{ item.leave_title }} ({{ item.leave_short_code }})</td>
                 <td>{{ item.total_days }}</td>
-                <td>{{ item.company_name ? item.company_name : '-' }}</td>
                 <td>
                     <span *ngIf="item.is_active" class="status bg-success">Active</span>
                     <span *ngIf="!item.is_active" class="status bg-danger">Inactive</span>

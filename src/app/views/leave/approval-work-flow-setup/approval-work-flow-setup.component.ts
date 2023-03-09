@@ -61,6 +61,8 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
     employee_ids: any = [];
     step = null;
 
+    employee_id = null;
+
     first_step = null;
     second_step = null;
     third_step = null;
@@ -113,12 +115,37 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
 
     getApprovalFlowList() {
         this.blockUI.start('Getting Data...')
-        this._service.get('admin/approval-flow-list').subscribe(res => {
+
+        let params = {
+            employee_id: 0
+        }
+        this._service.get('admin/approval-flow-list', params).subscribe(res => {
             this.approvalFlowList = res.data;
             this.blockUI.stop();
         }, err => {
             this.blockUI.stop();
         });
+    }
+
+    onChangeEmployee(employee){
+        if(employee){
+            this.employee_id = employee.id;
+        }else{
+            this.employee_id = 0;
+        }
+        this.approvalFlowList = [];
+        if(this.employee_id){
+            let params = {
+                employee_id: this.employee_id
+            }
+            this.blockUI.start('Getting Data...');
+            this._service.get('admin/approval-flow-list', params).subscribe(res => {
+                this.approvalFlowList = res.data;
+                this.blockUI.stop();
+            }, err => { 
+                this.blockUI.stop();
+            });
+        }
     }
 
     getEmployeeList() {
