@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit {
 
             this.applicationList.forEach(item => {
                 if(item.leave_status == "Approved"){
-                    let event_data = { id: item.id, title: item.leave_title, allDay: true, start: item.start_date, end: item.end_date, backgroundColor: '#20a8d8', borderColor: '#20a8d8', textColor: '#fff' };
+                    let event_data = { id: item.id, title: item.leave_title, allDay: true, start: item.start_date, end: item.end_date, backgroundColor: '#4caf50', borderColor: '#4caf50', textColor: '#fff' };
                     this.theCalendar.calendar.addEvent(event_data);
                 }
                 if(item.leave_status == "Rejected"){
@@ -88,10 +88,12 @@ export class DashboardComponent implements OnInit {
                 let note = '';
                 if(day.day_note){
                     note = ' | ' + day.day_note
-                    console.log(note)
+                    let event_data = { id: 'cd' + day.id, title: day.day_type_title + note, allDay: true, start: day.date, end: day.date, backgroundColor: '#00bcd4', borderColor: '#00bcd4', textColor: '#fff' };
+                    this.theCalendar.calendar.addEvent(event_data);
+                }else{
+                    let event_data = { id: 'cd' + day.id, title: day.day_type_title, allDay: true, start: day.date, end: day.date, backgroundColor: '#ffc107', borderColor: '#ffc107', textColor: '#000' };
+                    this.theCalendar.calendar.addEvent(event_data);
                 }
-                let event_data = { id: 'cd' + day.id, title: day.day_type_title + note, allDay: true, start: day.date, end: day.date, backgroundColor: '#ffc107', borderColor: '#ffc107', textColor: '#000' };
-                this.theCalendar.calendar.addEvent(event_data);
             });
 
             this.theCalendar.calendar.render();

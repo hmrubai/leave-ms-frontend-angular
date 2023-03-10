@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-
+import { environment } from '../../../../environments/environment';
 import { CommonService } from '../../../_services/common.service';
 import { AuthenticationService } from '../../../_services/authentication.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
@@ -24,7 +24,9 @@ export class EmployeeComponent implements OnInit {
     returnUrl: string;
 
     modalTitle = 'Add New Employee';
-    btnSaveText = 'Save';    
+    btnSaveText = 'Save'; 
+    profile_image = "assets/img/avatars/profile.png";
+    view_profile_image = "assets/img/avatars/profile.png";
 
     urls = [];
     files = [];
@@ -157,9 +159,9 @@ export class EmployeeComponent implements OnInit {
             department_id: [null, [Validators.required]],
             designation_id: [null, [Validators.required]],
             employment_type_id: [null, [Validators.required]],
-            division_id: [null, [Validators.required]],
-            district_id: [null, [Validators.required]],
-            city_id: [null, [Validators.required]],
+            division_id: [null],
+            district_id: [null],
+            city_id: [null],
             area_id: [null],
             is_stuckoff: [null],
             stuckoff_date: [null],
@@ -220,6 +222,15 @@ export class EmployeeComponent implements OnInit {
         this.blockUI.start('Loading...')
         this._service.get('admin/employee-list').subscribe(res => {
             this.employeeList = res.data;
+
+            res.data.forEach(item => {
+                if(item.image){
+                    item.profile_image = environment.imageURL + item.image;
+                }else{
+                    item.profile_image = this.profile_image;
+                }
+            });
+            console.log(this.employeeList)
             this.blockUI.stop();
         }, err => { 
             this.blockUI.stop();
@@ -244,6 +255,9 @@ export class EmployeeComponent implements OnInit {
         this.blockUI.start('Loading...')
         this._service.get('admin/employment-type-list').subscribe(res => {
             this.employmentList = res.data;
+
+
+
             this.blockUI.stop();
         }, err => {
             this.blockUI.stop();
@@ -382,6 +396,11 @@ export class EmployeeComponent implements OnInit {
         //this.entryForm.controls['image'].setValue(item.image);
         this.entryForm.controls['user_type'].setValue(item.user_type);
         this.entryForm.controls['is_active'].setValue(item.is_active);
+        if(item.image){
+            if(item.image){
+                this.view_profile_image = environment.imageURL + item.image;
+            }
+        }
         this.addEmployeeModal.show();
     }
     
