@@ -397,9 +397,9 @@ export class EmployeeComponent implements OnInit {
         this.entryForm.controls['user_type'].setValue(item.user_type);
         this.entryForm.controls['is_active'].setValue(item.is_active);
         if(item.image){
-            if(item.image){
-                this.view_profile_image = environment.imageURL + item.image;
-            }
+            this.view_profile_image = environment.imageURL + item.image;
+        }else{
+            this.view_profile_image = "assets/img/avatars/profile.png";
         }
         this.addEmployeeModal.show();
     }
@@ -517,6 +517,8 @@ export class EmployeeComponent implements OnInit {
     modalHide() {
         this.addEmployeeModal.hide();
         this.entryForm.reset();
+        this.uploadForm.reset();
+        this.view_profile_image = "assets/img/avatars/profile.png";
         this.submitted = false;
         this.entryForm.controls['email'].enable();
         this.entryForm.controls['is_active'].setValue(true);
