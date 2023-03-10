@@ -29,10 +29,61 @@ export class YearlyCalendarComponent implements OnInit {
     currentUser: any = null;
 
     year_id = null;
+    month_in_number = null;
 
     calendarList: Array<any> = [];
     dayTypeList: Array<any> = [];
     yearList: Array<any> = [];
+    monthList = [
+        {
+            id: 1,
+            name: "January"
+        },
+        {
+            id: 2,
+            name: "February"
+        },
+        {
+            id: 3,
+            name: "March"
+        },
+        {
+            id: 4,
+            name: "April"
+        },
+        {
+            id: 5,
+            name: "May"
+        },
+        {
+            id: 6,
+            name: "June"
+        },
+        {
+            id: 7,
+            name: "July"
+        },
+        {
+            id: 8,
+            name: "August"
+        },
+        {
+            id: 9,
+            name: "September"
+        },
+        {
+            id: 10,
+            name: "October"
+        },
+        {
+            id: 11,
+            name: "November"
+        },
+        {
+            id: 12,
+            name: "December"
+        }
+    ];
 
     @BlockUI() blockUI: NgBlockUI;
 
@@ -59,7 +110,7 @@ export class YearlyCalendarComponent implements OnInit {
 
         this.generateCalendarForm = this.formBuilder.group({
             id: [null],
-            academic_year: [2022, [Validators.required, Validators.max(2099), Validators.min(2020)]]
+            academic_year: [2024, [Validators.required, Validators.max(2099), Validators.min(2020)]]
         });
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -93,7 +144,8 @@ export class YearlyCalendarComponent implements OnInit {
     getcalendarList(){
         this.blockUI.start('Loading Data...');
         let param = {
-            year: this.year_id
+            year: this.year_id,
+            month_in_number:  this.month_in_number
         }
         this._service.get('admin/calender', param).subscribe(res => {
             this.calendarList = res.data;

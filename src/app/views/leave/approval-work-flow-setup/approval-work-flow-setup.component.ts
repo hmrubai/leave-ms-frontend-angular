@@ -134,18 +134,17 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
             this.employee_id = 0;
         }
         this.approvalFlowList = [];
-        if(this.employee_id){
-            let params = {
-                employee_id: this.employee_id
-            }
-            this.blockUI.start('Getting Data...');
-            this._service.get('admin/approval-flow-list', params).subscribe(res => {
-                this.approvalFlowList = res.data;
-                this.blockUI.stop();
-            }, err => { 
-                this.blockUI.stop();
-            });
+        let params = {
+            employee_id: this.employee_id
         }
+        this.blockUI.start('Getting Data...');
+        this._service.get('admin/approval-flow-list', params).subscribe(res => {
+            this.approvalFlowList = res.data;
+            this.blockUI.stop();
+        }, err => { 
+            this.blockUI.stop();
+        });
+        
     }
 
     getEmployeeList() {

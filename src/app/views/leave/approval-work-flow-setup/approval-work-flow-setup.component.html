@@ -3,9 +3,6 @@
       <div class="card">
         <div class="card-header bg-primary">
           <h5><i class="fa fa-users"></i> Leave Work Flow Setup</h5>
-          <!--<ng-select [items]="yearList" bindLabel="year" class="col-lg-2 form-control-sm float-right fs-top"
-            bindValue="year" [(ngModel)]="year_id" (change)="onChangeYear($event)" placeholder="Select Year">
-          </ng-select>-->
           <button class="btn btn-square btn-success btn-sm btn-sm-custom float-right" (click)="addStepModal.show()"><i class="fa fa-plus"></i> Add Flow</button>
           <ng-select [items]="employeeList" bindLabel="name" class="col-lg-2 form-control-sm float-right fs-top"
             bindValue="id" [(ngModel)]="employee_id" (change)="onChangeEmployee($event)" placeholder="Select Employee">

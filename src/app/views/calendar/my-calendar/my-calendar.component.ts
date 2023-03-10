@@ -65,16 +65,16 @@ export class MyCalendarComponent implements OnInit {
             remaining_days: [null, [Validators.required]],
         });
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        this.getDashboardSummary();
+        this.getCalendarSummary();
     }
 
     get f() {
         return this.entryForm.controls;
     }
 
-    getDashboardSummary(){
+    getCalendarSummary(){
         this.blockUI.start('Loading...');
-        this._service.get('dashboard-summary').subscribe(res => {
+        this._service.get('my/calendar-list').subscribe(res => {
             this.applicationList = res.data.leave_list;
 
             this.applicationList.forEach(item => {

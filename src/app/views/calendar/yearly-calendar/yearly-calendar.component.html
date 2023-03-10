@@ -3,13 +3,13 @@
       <div class="card">
         <div class="card-header bg-primary">
           <h5><i class="fa fa-list"></i> Official Calendar</h5>
-          <ng-select [items]="yearList" bindLabel="year" class="col-lg-2 form-control-sm float-right fs-top"
-            bindValue="year" [(ngModel)]="year_id" (change)="onChangeYear($event)" placeholder="Select Year">
-                <!--<ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                    <span><strong>{{ item.year }}</strong></span>
-                </ng-template>-->
-          </ng-select>
           <button class="btn btn-square btn-success btn-sm btn-sm-custom float-right" (click)="addGenerateCalendarModal.show()"><i class="fa fa-plus"></i> Generate Calendar</button>
+          <ng-select [items]="monthList" bindLabel="month_in_number" class="col-lg-2 form-control-sm float-right fs-top"
+            bindValue="id" bindLabel="name"  [(ngModel)]="month_in_number" (change)="onChangeYear($event)" placeholder="Select Month">
+          </ng-select>
+          <ng-select [items]="yearList"  bindLabel="year"  class="col-lg-2 form-control-sm float-right fs-top"
+            bindValue="year" [(ngModel)]="year_id" (change)="onChangeYear($event)" placeholder="Select Year">
+          </ng-select>
         </div>
         <div class="card-body">
           <table class="table table-bordered">

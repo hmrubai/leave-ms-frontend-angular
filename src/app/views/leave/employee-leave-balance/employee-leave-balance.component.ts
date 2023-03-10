@@ -17,8 +17,14 @@ import {ModalDirective} from 'ngx-bootstrap/modal';
 })
 export class EmployeeLeaveBalanceListComponent implements OnInit {
     @ViewChild('addEmployeeLeaveBalanceModal') public addEmployeeLeaveBalanceModal: ModalDirective;
+    @ViewChild('addNewLeaveBalanceModal') public addNewLeaveBalanceModal: ModalDirective;
+    @ViewChild('addBalanceModal') public addBalanceModal: ModalDirective;
+    
     entryForm: FormGroup;
+    addBalanceForm: FormGroup;
+
     submitted = false;
+    submitted_bal = true;
     returnUrl: string;
 
     modalTitle = 'Add New Leave Balance';
@@ -29,6 +35,7 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
 
     employeeList: Array<any> = [];
     leaveBalanceList: Array<any> = [];
+    employmentList: Array<any> = [];
     
 
     @BlockUI() blockUI: NgBlockUI;
@@ -53,12 +60,28 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
             availed_days: [null, [Validators.required]],
             remaining_days: [null, [Validators.required]],
         });
+
+        this.addBalanceForm = this.formBuilder.group({
+            id: [null],
+            employee_id: [null, [Validators.required]],
+            employment_type_id: [null, [Validators.required]]
+        });
+
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.getEmployeeList();
+        this.getEmploymentList();
     }
 
     get f() {
         return this.entryForm.controls;
+    }
+
+    get bf() {
+        return this.addBalanceForm.controls;
+    }
+
+    get alf() {
+        return this.addBalanceForm.controls;
     }
 
     onChangeEmployee(employee){
@@ -84,6 +107,16 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
             this.employeeList = res.data;
         }, err => { }
         );
+    }
+
+    getEmploymentList(){
+        this.blockUI.start('Loading...')
+        this._service.get('admin/employment-type-list').subscribe(res => {
+            this.employmentList = res.data;
+            this.blockUI.stop();
+        }, err => {
+            this.blockUI.stop();
+        });
     }
 
     editItem(item){
@@ -131,11 +164,40 @@ export class EmployeeLeaveBalanceListComponent implements OnInit {
         );
     }
 
+    onAddBalanceFormSubmit(){
+        this.submitted = true;
+        if (this.addBalanceForm.invalid) {
+            return;
+        }
+
+        console.log('Add Balance Submit')
+
+        this.addBalanceForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
+
+        this._service.post('admin/leave-setting-manually', this.addBalanceForm.value).subscribe(
+            data => {
+                this.blockUI.stop();
+                if (data.status) {
+                    this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
+                    this.modalHide();
+                    this.onChangeEmployee({id: this.employee_id});
+                } else {
+                    this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
+                }
+            },
+            err => {
+                this.blockUI.stop();
+                this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
+            }
+        );
+    }
+
     modalHide() {
         this.addEmployeeLeaveBalanceModal.hide();
+        this.addBalanceModal.hide();
         this.entryForm.reset();
+        this.addBalanceForm.reset();
         this.submitted = false;
-        // this.entryForm.controls['is_active'].setValue(true);
         this.modalTitle = 'Add New Leave Balance';
         this.btnSaveText = 'Save';
     }
