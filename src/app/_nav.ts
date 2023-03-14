@@ -72,7 +72,13 @@ export const navItems: INavData[] = [
                 url: '/master-settings/leave-balance-settings',
                 icon: 'icon-chart',
                 role: 'Admin,ApprovalAuthority'
-            }
+            },
+            // {
+            //     name: 'Organogram',
+            //     url: '/master-settings/organogram',
+            //     icon: 'icon-organization',
+            //     role: 'Admin,Employee,ApprovalAuthority'
+            // }
         ]
     },
     {

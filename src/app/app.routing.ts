@@ -100,6 +100,16 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'master-settings',
+        loadChildren: () => import('./views/master-settings/organograms/organograms.module').then(m => m.OrganogramsModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'master-settings',
+        loadChildren: () => import('./views/master-settings/change-password/change-password.module').then(m => m.ChangePasswordModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'leave',
         loadChildren: () => import('./views/leave/employee-leave-balance/employee-leave-balance.module').then(m => m.EmployeeLeaveBalanceListModule),
         canActivate: [AuthGuard]
