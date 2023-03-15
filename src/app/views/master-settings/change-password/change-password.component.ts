@@ -51,40 +51,12 @@ export class ChangePasswordComponent implements OnInit {
         }, {
             validator: MustMatch('new_password', 'confirm_password')
         });
+
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        this.getCompanyList();
-        //this.getChangePasswordList()
     }
 
     get f() {
         return this.passwordForm.controls;
-    }
-
-    getCompanyList() {
-        this._service.get('admin/company-list').subscribe(res => {
-            this.companyList = res.data;
-        }, err => { }
-        );
-    }
-
-    // getChangePasswordList() {
-    //     this._service.get('admin/change-password-list').subscribe(res => {
-    //         this.ChangePasswordList = res.data;
-    //     }, err => { }
-    //     );
-    // }
-
-    editItem(item){
-        this.modalTitle = 'Update Fiscal Year';
-        this.btnSaveText = 'Update';
-
-        this.passwordForm.controls['id'].setValue(item.id);
-        this.passwordForm.controls['fiscal_year'].setValue(item.fiscal_year);
-        this.passwordForm.controls['company_id'].setValue(item.company_id);
-        this.passwordForm.controls['start_date'].setValue(item.start_date);
-        this.passwordForm.controls['end_date'].setValue(item.end_date);
-        this.passwordForm.controls['is_active'].setValue(item.is_active);
-        this.addChangePasswordModal.show();
     }
 
     onFormSubmit(){

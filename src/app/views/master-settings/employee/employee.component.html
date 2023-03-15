@@ -34,6 +34,7 @@
                     <span *ngIf="!item.is_active" class="status bg-danger">Inactive</span>
                 </td>
                 <td>
+                    <button class="btn btn-warning btn-sm" (click)="openChangePasswordModal(item)"><i class="fa fa-lock"></i>&nbsp;Password Reset</button>
                     <button class="btn btn-primary btn-sm" (click)="editItem(item)"><i class="fa fa-pencil"></i>&nbsp;Edit</button>
                 </td>
               </tr>
@@ -64,42 +65,42 @@
         <form [formGroup]="entryForm" class="form-horizontal">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="name" class="form-label">Name</label>
+                    <label for="name" class="form-label">Name <span class="text-danger font-weight-bold">*</span></label>
                     <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" class="form-control" id="name"  placeholder="Name">
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                         <span *ngIf="f.name.errors.required" class="text-danger"> Name is required</span>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label for="email" class="form-label">Email</label>
+                    <label for="email" class="form-label required">Email <span class="text-danger font-weight-bold">*</span></label>
                     <input type="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" class="form-control" id="email"  placeholder="Email">
                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                         <span *ngIf="f.email.errors.required" class="text-danger"> Email is required</span>
                     </div>
                 </div>
                 <div class="col-md-6 mt-3">
-                    <label for="mobile" class="form-label">Mobile</label>
+                    <label for="mobile" class="form-label">Mobile <span class="text-danger font-weight-bold">*</span></label>
                     <input type="text" formControlName="mobile" [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }" class="form-control" id="mobile"  placeholder="Mobile">
                     <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
                         <span *ngIf="f.mobile.errors.required" class="text-danger"> Mobile is required</span>
                     </div>
                 </div>
                 <div class="col-md-6 mt-3">
-                    <label for="employee_id" class="form-label">Employee ID</label>
+                    <label for="employee_id" class="form-label">Employee ID <span class="text-danger font-weight-bold">*</span></label>
                     <input type="text" formControlName="employee_id" [ngClass]="{ 'is-invalid': submitted && f.employee_id.errors }" class="form-control" id="employee_id"  placeholder="Employee ID">
                     <div *ngIf="submitted && f.employee_id.errors" class="invalid-feedback">
                         <span *ngIf="f.employee_id.errors.required" class="text-danger"> NEmployee IDame is required</span>
                     </div>
                 </div>
                 <div class="col-md-6 mt-3">
-                    <label for="father_name" class="form-label">Father's Name</label>
+                    <label for="father_name" class="form-label">Father's Name <span class="text-danger font-weight-bold">*</span></label>
                     <input type="text" formControlName="father_name" [ngClass]="{ 'is-invalid': submitted && f.father_name.errors }" class="form-control" id="father_name"  placeholder="Father's Name">
                     <div *ngIf="submitted && f.father_name.errors" class="invalid-feedback">
                         <span *ngIf="f.father_name.errors.required" class="text-danger"> Father's Name is required</span>
                     </div>
                 </div>
                 <div class="col-md-6 mt-3">
-                    <label for="mother_name" class="form-label">Mother's Name</label>
+                    <label for="mother_name" class="form-label">Mother's Name <span class="text-danger font-weight-bold">*</span></label>
                     <input type="text" formControlName="mother_name" [ngClass]="{ 'is-invalid': submitted && f.mother_name.errors }" class="form-control" id="mother_name"  placeholder="Mother's Name">
                     <div *ngIf="submitted && f.mother_name.errors" class="invalid-feedback">
                         <span *ngIf="f.mother_name.errors.required" class="text-danger"> Mother's Name is required</span>
@@ -120,7 +121,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 mt-3">
-                    <label for="nid" class="form-label">NID</label>
+                    <label for="nid" class="form-label">NID <span class="text-danger font-weight-bold">*</span></label>
                     <input type="text" formControlName="nid" [ngClass]="{ 'is-invalid': submitted && f.nid.errors }" class="form-control" id="nid"  placeholder="NID">
                     <div *ngIf="submitted && f.nid.errors" class="invalid-feedback">
                         <span *ngIf="f.nid.errors.required" class="text-danger"> NID is required</span>
@@ -134,14 +135,14 @@
                     </div>
                 </div>
                 <div class="col-md-6 mt-3">
-                    <label for="date_of_birth" class="form-label">Date Of Birth</label>
+                    <label for="date_of_birth" class="form-label">Date Of Birth <span class="text-danger font-weight-bold">*</span></label>
                     <input type="date" formControlName="date_of_birth" [ngClass]="{ 'is-invalid': submitted && f.date_of_birth.errors }" class="form-control" id="date_of_birth"  placeholder="Date Of Birth">
                     <div *ngIf="submitted && f.date_of_birth.errors" class="invalid-feedback">
                         <span *ngIf="f.date_of_birth.errors.required" class="text-danger"> Date Of Birth is required</span>
                     </div>
                 </div>
                 <div class="col-md-6 mt-3">
-                    <label for="joining_date" class="form-label">Joining Date</label>
+                    <label for="joining_date" class="form-label">Joining Date <span class="text-danger font-weight-bold">*</span></label>
                     <input type="date" formControlName="joining_date" [ngClass]="{ 'is-invalid': submitted && f.joining_date.errors }" class="form-control" id="joining_date"  placeholder="Joining Date">
                     <div *ngIf="submitted && f.joining_date.errors" class="invalid-feedback">
                         <span *ngIf="f.joining_date.errors.required" class="text-danger"> Joining Date is required</span>
@@ -222,7 +223,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
-                    <label for="gender" class="form-label">Gender</label>
+                    <label for="gender" class="form-label">Gender <span class="text-danger font-weight-bold">*</span></label>
                     <ng-select [items]="gender" bindLabel="value" 
                         bindValue="id" formControlName="gender" placeholder="Select Gender" 
                         [ngClass]="{ 'is-invalid': submitted && f.gender.errors }" >
@@ -232,7 +233,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
-                    <label for="user_type" class="form-label">User Type</label>
+                    <label for="user_type" class="form-label">User Type <span class="text-danger font-weight-bold">*</span></label>
                     <ng-select [items]="user_types" bindLabel="value" 
                         bindValue="id" formControlName="user_type" placeholder="Select User Type" 
                         [ngClass]="{ 'is-invalid': submitted && f.user_type.errors }" >
@@ -242,7 +243,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
-                    <label for="company_id" class="form-label">Company</label>
+                    <label for="company_id" class="form-label">Company <span class="text-danger font-weight-bold">*</span></label>
                     <ng-select [items]="companyList" bindLabel="name" 
                         bindValue="id" formControlName="company_id" placeholder="Select Company" (change)="onChangeCompany($event)" 
                         [ngClass]="{ 'is-invalid': submitted && f.company_id.errors }" >
@@ -252,7 +253,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
-                    <label for="branch_id" class="form-label">Branch</label>
+                    <label for="branch_id" class="form-label">Branch <span class="text-danger font-weight-bold">*</span></label>
                     <ng-select [items]="branchList" bindLabel="name" 
                         bindValue="id" formControlName="branch_id" placeholder="Select Branch" (change)="onChangeBranchOrCompany()"
                         [ngClass]="{ 'is-invalid': submitted && f.branch_id.errors }" >
@@ -262,7 +263,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
-                    <label for="employment_type_id" class="form-label">Employment Type</label>
+                    <label for="employment_type_id" class="form-label">Employment Type <span class="text-danger font-weight-bold">*</span></label>
                     <ng-select [items]="employmentList" bindLabel="type" 
                         bindValue="id" formControlName="employment_type_id" placeholder="Select Employment Type" 
                         [ngClass]="{ 'is-invalid': submitted && f.employment_type_id.errors }" >
@@ -272,7 +273,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
-                    <label for="department_id" class="form-label">Department</label>
+                    <label for="department_id" class="form-label">Department <span class="text-danger font-weight-bold">*</span></label>
                     <ng-select [items]="departmentList" bindLabel="name" 
                         bindValue="id" formControlName="department_id" placeholder="Select Department" 
                         [ngClass]="{ 'is-invalid': submitted && f.department_id.errors }" >
@@ -282,7 +283,14 @@
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
-                    <label for="designation_id" class="form-label">Designation</label>
+                    <label for="wing" class="form-label">Wing</label>
+                    <input type="text" formControlName="wing" [ngClass]="{ 'is-invalid': submitted && f.wing.errors }" class="form-control" id="wing"  placeholder="Wing">
+                    <div *ngIf="submitted && f.wing.errors" class="invalid-feedback">
+                        <span *ngIf="f.wing.errors.required" class="text-danger"> Wing is required</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3">
+                    <label for="designation_id" class="form-label">Designation <span class="text-danger font-weight-bold">*</span></label>
                     <ng-select [items]="designationList" bindLabel="title" 
                         bindValue="id" formControlName="designation_id" placeholder="Select Designation" 
                         [ngClass]="{ 'is-invalid': submitted && f.designation_id.errors }" >
@@ -292,7 +300,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
-                    <label for="finger_print_id" class="form-label">Finger Print ID</label>
+                    <label for="finger_print_id" class="form-label">Finger Print ID <span class="text-danger font-weight-bold">*</span></label>
                     <input type="text" formControlName="finger_print_id" [ngClass]="{ 'is-invalid': submitted && f.finger_print_id.errors }" class="form-control" id="finger_print_id"  placeholder="Finger Print ID">
                     <div *ngIf="submitted && f.finger_print_id.errors" class="invalid-feedback">
                         <span *ngIf="f.finger_print_id.errors.required" class="text-danger"> Finger Print ID is required</span>
@@ -423,6 +431,36 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="modalHide()">Close</button>
         <button type="button" class="btn btn-info" (click)="onFormSubmit()">{{ btnSaveText }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #addChangePasswordModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-warning" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ modalTitle }}</h4>
+        <button type="button" class="close" (click)="modalHide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="passwordResetForm" class="form-horizontal">
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Password  <span class="text-danger font-weight-bold">*</span></label>
+                <div class="col-md-9">
+                    <input type="password" formControlName="new_password" [ngClass]="{ 'is-invalid': submitted && rf.new_password.errors }" id="text-input" class="form-control" placeholder="New Password">
+                    <div *ngIf="submitted && rf.new_password.errors" class="invalid-feedback">
+                      <span *ngIf="rf.new_password.errors.required" class="text-danger"> New Password is required</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalHide()">Close</button>
+        <button type="button" class="btn btn-warning" (click)="onResetFormSubmit()">{{ btnSaveText }}</button>
       </div>
     </div>
   </div>

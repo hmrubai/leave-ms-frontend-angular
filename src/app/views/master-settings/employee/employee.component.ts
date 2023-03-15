@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, ViewChild, TemplateRef  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
 import { CommonService } from '../../../_services/common.service';
 import { AuthenticationService } from '../../../_services/authentication.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import {ModalDirective} from 'ngx-bootstrap/modal';
+import {ModalDirective, BsModalService, BsModalRef} from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
 
 @Component({
@@ -18,7 +18,13 @@ import * as moment from 'moment';
 })
 export class EmployeeComponent implements OnInit {
     @ViewChild('addEmployeeModal') public addEmployeeModal: ModalDirective;
+    @ViewChild('addChangePasswordModal') public addChangePasswordModal: ModalDirective;
+    modalRef?: BsModalRef;
+    modalConfig = {
+        class: 'modal-dialog-centered modal-sm'
+    }
     entryForm: FormGroup;
+    passwordResetForm: FormGroup;
     uploadForm: FormGroup;
     submitted = false;
     returnUrl: string;
@@ -130,7 +136,8 @@ export class EmployeeComponent implements OnInit {
         private authService: AuthenticationService,
         private toastr: ToastrService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private modalService: BsModalService
     ) {
         if (!this.authService.isAuthenticated()) {
             this.router.navigate(['/login']);
@@ -158,6 +165,7 @@ export class EmployeeComponent implements OnInit {
             gender: [null],
             department_id: [null, [Validators.required]],
             designation_id: [null, [Validators.required]],
+            wing: [null],
             employment_type_id: [null, [Validators.required]],
             division_id: [null],
             district_id: [null],
@@ -188,6 +196,11 @@ export class EmployeeComponent implements OnInit {
             image: [null]
         });
 
+        this.passwordResetForm = this.formBuilder.group({
+            user_id: [null, [Validators.required]],
+            new_password: [null, [Validators.required]]
+        });
+
         this.uploadForm = this.formBuilder.group({
             image_file: ['']
         });
@@ -201,6 +214,10 @@ export class EmployeeComponent implements OnInit {
 
     get f() {
         return this.entryForm.controls;
+    }
+
+    get rf() {
+        return this.passwordResetForm.controls;
     }
 
     onSelectFile(event) {
@@ -230,7 +247,7 @@ export class EmployeeComponent implements OnInit {
                     item.profile_image = this.profile_image;
                 }
             });
-            console.log(this.employeeList)
+            //console.log(this.employeeList)
             this.blockUI.stop();
         }, err => { 
             this.blockUI.stop();
@@ -363,6 +380,7 @@ export class EmployeeComponent implements OnInit {
 
         this.entryForm.controls['department_id'].setValue(item.department_id);
         this.entryForm.controls['designation_id'].setValue(item.designation_id);
+        this.entryForm.controls['wing'].setValue(item.wing);
         this.entryForm.controls['employment_type_id'].setValue(item.employment_type_id);
         this.entryForm.controls['division_id'].setValue(item.division_id);
         this.onChangeDivision({id: item.division_id});
@@ -453,6 +471,7 @@ export class EmployeeComponent implements OnInit {
         formData.append('branch_id', this.entryForm.value.branch_id);
         formData.append('department_id', this.entryForm.value.department_id);
         formData.append('designation_id', this.entryForm.value.designation_id);
+        formData.append('wing', this.entryForm.value.wing);
         formData.append('employment_type_id', this.entryForm.value.employment_type_id);
         formData.append('division_id', this.entryForm.value.division_id);
         formData.append('district_id', this.entryForm.value.district_id);
@@ -502,6 +521,43 @@ export class EmployeeComponent implements OnInit {
         }
     }
 
+    openChangePasswordModal(employee) {
+        this.modalTitle = 'Password Reset';
+        this.btnSaveText = "Update Password";
+        this.passwordResetForm.controls['user_id'].setValue(employee.id);
+        this.addChangePasswordModal.show();
+    }
+
+    onResetFormSubmit(){
+        this.submitted = true;
+        if (this.passwordResetForm.invalid) {
+            return;
+        }
+        let params = {
+            user_id: this.passwordResetForm.value.user_id,
+            new_password: this.passwordResetForm.value.new_password
+        };
+
+        this.blockUI.start('Updating...')
+        this._service.post('auth/update-password', params).subscribe(
+            data => {
+                this.blockUI.stop();
+                if (data.status) {
+                    this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
+                    this.modalHide();
+                    this.getEmployeeList();
+                } else {
+                    this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
+                }
+            },
+            err => {
+                this.blockUI.stop();
+                this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
+            }
+        );
+
+    }
+
     validateDateTimeFormat(value: Date) {
         return moment(value).format('YYYY-MM-DD');
     }
@@ -518,6 +574,8 @@ export class EmployeeComponent implements OnInit {
         this.addEmployeeModal.hide();
         this.entryForm.reset();
         this.uploadForm.reset();
+        this.passwordResetForm.reset();
+        this.addChangePasswordModal.hide();
         this.view_profile_image = "assets/img/avatars/profile.png";
         this.submitted = false;
         this.entryForm.controls['email'].enable();
