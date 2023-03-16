@@ -27,7 +27,7 @@
                 <td>{{ item.name }}</td>
                 <td>{{ item.employee_code }}</td>
                 <td>{{ item.email }}</td>
-                <td>{{ item.designation ? item.designation : '-' }}</td>
+                <td>{{ item.designation ? item.designation : '-' }} <span *ngIf="item.wing">({{ item.wing }})</span></td>
                 <td>{{ item.department ? item.department : '-' }}</td>
                 <td>
                     <span *ngIf="item.is_active" class="status bg-success">Active</span>

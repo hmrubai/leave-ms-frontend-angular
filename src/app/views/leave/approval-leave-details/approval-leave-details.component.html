@@ -27,7 +27,7 @@
                                         </tr>
                                         <tr>
                                             <td>Designation</td>
-                                            <td>{{ leaveDetails.employee.designation }}</td>
+                                            <td>{{ leaveDetails.employee.designation }} <span *ngIf="item.wing">({{ leaveDetails.employee.wing }})</span></td>
                                         </tr>
                                         <tr>
                                             <td>Department</td>
