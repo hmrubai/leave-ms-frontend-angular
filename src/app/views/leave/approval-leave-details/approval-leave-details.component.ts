@@ -23,6 +23,9 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
     modalConfig = {
         class: 'modal-dialog-centered modal-sm'
     }
+    modalConfigMd = {
+        class: 'modal-dialog-centered modal-md'
+    }
     entryForm: FormGroup;
     uploadForm: FormGroup;
     submitted = false;
@@ -31,7 +34,8 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
 
     modalTitle = 'Do you want to approve?';
     btnSaveText = 'Approve';  
-    user_role = null;  
+    user_role = null; 
+    rejection_cause = null; 
 
     urls = [];
     files = [];
@@ -177,14 +181,13 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
     }
 
     openRejectModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template, this.modalConfig);
+        this.modalRef = this.modalService.show(template, this.modalConfigMd);
     }
 
     rejectApplication(){
-        console.log("Reject")
-
         let params = {
-            leave_application_id: this.leave_application_id
+            leave_application_id: this.leave_application_id,
+            rejection_cause: this.rejection_cause
         }
 
         this.blockUI.start('Rejecting...')

@@ -26,7 +26,7 @@
                                         </tr>
                                         <tr>
                                             <td>Designation</td>
-                                            <td>{{ leaveDetails.employee.designation }} <span *ngIf="item.wing">({{ leaveDetails.employee.wing }})</span></td>
+                                            <td>{{ leaveDetails.employee.designation }} <span *ngIf="leaveDetails.employee.wing">({{ leaveDetails.employee.wing }})</span></td>
                                         </tr>
                                         <tr>
                                             <td>Department</td>
@@ -95,6 +95,10 @@
                                         <tr>
                                             <td>Reason</td>
                                             <td><strong>{{ leaveDetails.leave.leave_reason }}</strong></td>
+                                        </tr>
+                                        <tr *ngIf="leaveDetails.leave.leave_status == 'Rejected'">
+                                            <td>Rejection Cause</td>
+                                            <td><strong>{{ leaveDetails.leave.rejection_cause }}</strong></td>
                                         </tr>
                                         <tr>
                                             <td>Responsibility Carried By</td>

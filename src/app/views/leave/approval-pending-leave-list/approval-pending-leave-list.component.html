@@ -9,6 +9,7 @@
           <table class="table table-bordered">
             <thead>
               <tr>
+                <th>Applicant</th>
                 <th>Leave Type</th>
                 <th>Start Date</th>
                 <th>End Date</th>
@@ -20,6 +21,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of applicationList; let i = index;">
+                <td>{{ item.employee_name }}</td>
                 <td>{{ item.leave_title }}</td>
                 <td>{{ item.start_date | date:'dd/MM/y'}}</td>
                 <td>{{ item.end_date | date:'dd/MM/y' }}</td>

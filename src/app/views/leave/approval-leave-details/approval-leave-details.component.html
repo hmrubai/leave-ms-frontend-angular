@@ -27,7 +27,7 @@
                                         </tr>
                                         <tr>
                                             <td>Designation</td>
-                                            <td>{{ leaveDetails.employee.designation }} <span *ngIf="item.wing">({{ leaveDetails.employee.wing }})</span></td>
+                                            <td>{{ leaveDetails.employee.designation }} <span *ngIf="leaveDetails.employee.wing">({{ leaveDetails.employee.wing }})</span></td>
                                         </tr>
                                         <tr>
                                             <td>Department</td>
@@ -96,6 +96,10 @@
                                         <tr>
                                             <td>Reason</td>
                                             <td><strong>{{ leaveDetails.leave.leave_reason }}</strong></td>
+                                        </tr>
+                                        <tr *ngIf="leaveDetails.leave.leave_status == 'Rejected'">
+                                            <td>Rejection Cause</td>
+                                            <td><strong>{{ leaveDetails.leave.rejection_cause }}</strong></td>
                                         </tr>
                                         <tr>
                                             <td>Responsibility Carried By</td>
@@ -208,6 +212,13 @@
 <ng-template #rejectTemplate>
   <div class="modal-body text-center">
     <h5 class="mb-4">Do you want to reject?</h5>
+    <div class="form-group row">
+        <label class="col-md-12 col-form-label" for="Rejection"><strong>Rejection Cause</strong></label>
+        <div class="col-md-12">
+            <textarea  [(ngModel)]="rejection_cause" id="Rejection" class="form-control" placeholder="Rejection Cause" cols="30" rows="3"></textarea>
+            <!--<input type="text" [(ngModel)]="rejection_cause" id="Rejection" class="form-control" placeholder="Rejection Cause">-->
+        </div>
+    </div>
     <button type="button" class="btn btn-danger mb-3" (click)="rejectApplication()" >Reject</button>
     <button type="button" class="btn btn-secondary mb-3" (click)="decline()" >Close</button>
   </div>
