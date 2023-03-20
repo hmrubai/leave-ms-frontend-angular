@@ -40,14 +40,14 @@
                 </td>
                 <td>{{ item.designation ? item.designation : '-' }}<span *ngIf="item.wing">({{ item.wing_name }})</span>, {{ item.department ? item.department : '-' }}</td>
                 <td>
-                    <button class="btn btn-warning btn-sm" (click)="openChangePasswordModal(item)"><i class="fa fa-lock"></i>&nbsp;Password Reset</button>
-                    <button class="btn btn-danger btn-sm" (click)="openChangePasswordModal(item)"><i class="fa fa-power-off"></i>&nbsp;Offboarding</button>
-                    
+                    <button class="btn btn-success btn-sm" (click)="openDetailsModal(item)"><i class="fa fa-eye"></i>&nbsp;</button>
                     <button class="btn btn-primary btn-sm" (click)="editItem(item)"><i class="fa fa-pencil"></i>&nbsp;Edit</button>
+                    <button class="btn btn-warning btn-sm" (click)="openChangePasswordModal(item)"><i class="fa fa-lock"></i>&nbsp;Password Reset</button>
+                    <button class="btn btn-danger btn-sm" (click)="openOffboardModal(item, offboardTemplate)"><i class="fa fa-power-off"></i>&nbsp;Offboarding</button>
                 </td>
               </tr>
               <tr *ngIf="employeeList.length <= 0">
-                <td colspan="5">No Employee added</td>
+                <td colspan="5">No employee found!</td>
               </tr>
             </tbody>
           </table>
@@ -476,6 +476,77 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="modalHide()">Close</button>
         <button type="button" class="btn btn-warning" (click)="onResetFormSubmit()">{{ btnSaveText }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #offboardTemplate>
+  <div class="modal-body bg-danger text-center">
+    <h5 class="mb-4">Do you want to offboard this employee?</h5>
+    <div class="form-group row">
+        <label class="col-md-12 text-dark mt-1" for="OffboardingDate"><strong> <blockquote class="blockquote">{{ offboard_employee.name }} </blockquote></strong></label>
+        <label class="col-md-12 col-form-label" for="OffboardingDate"><strong>Offboarding Date</strong></label>
+        <div class="col-md-12">
+            <input type="date" [(ngModel)]="offboarding_date" id="OffboardingDate" class="form-control" placeholder="Offboarding Date">
+        </div>
+    </div>
+    <button type="button" class="btn btn-warning mb-3" (click)="offboardSubmission()" >Offboard</button>
+    <button type="button" class="btn btn-secondary mb-3" (click)="closeModal()" >Close</button>
+  </div>
+</ng-template>
+
+<div bsModal #employeeDetailsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-info modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ modalTitle }}</h4>
+        <button type="button" class="close" (click)="modalHide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row" *ngIf="is_details">
+            <div class="col-sm-4">
+                <!--<h5 class="text-center mb-2"><i class="fa fa-user"></i> Personal Details</h5>-->
+                <img src="{{ employee_details.profile_image }}" class="profile-image-avater mt-3" alt="">
+            </div>
+            <div class="col-sm-8 table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Applicant's Name</th>
+                        <th>{{ employee_details.name }}</th>
+                    </tr>
+                    <tr>
+                        <td>Designation</td>
+                        <td><strong>{{ employee_details.designation }} <span *ngIf="employee_details.wing">({{ employee_details.wing }})</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td>Department</td>
+                        <td><strong>{{ employee_details.department }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><strong>{{ employee_details.email }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Mobile</td>
+                        <td><strong>{{ employee_details.mobile }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Blood Group</td>
+                        <td><strong>{{ employee_details.blood_group }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Joining Date</td>
+                        <td><strong>{{ employee_details.joining_date | date:'fullDate' }}</strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalHide()">Close</button>
       </div>
     </div>
   </div>

@@ -103,6 +103,11 @@ export const routes: Routes = [
       },
       {
         path: 'master-settings',
+        loadChildren: () => import('./views/master-settings/offboarded-employee/offboarded-employee.module').then(m => m.OffboardedEmployeeModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'master-settings',
         loadChildren: () => import('./views/master-settings/organograms/organograms.module').then(m => m.OrganogramsModule),
         canActivate: [AuthGuard]
       },

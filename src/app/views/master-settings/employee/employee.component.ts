@@ -18,10 +18,17 @@ import * as moment from 'moment';
 })
 export class EmployeeComponent implements OnInit {
     @ViewChild('addEmployeeModal') public addEmployeeModal: ModalDirective;
+    @ViewChild('employeeDetailsModal') public employeeDetailsModal: ModalDirective;
     @ViewChild('addChangePasswordModal') public addChangePasswordModal: ModalDirective;
     modalRef?: BsModalRef;
     modalConfig = {
         class: 'modal-dialog-centered modal-sm'
+    }
+    modalConfigMd = {
+        class: 'modal-dialog-centered modal-md'
+    }
+    modalConfigLg = {
+        class: 'modal-dialog-centered modal-lg'
     }
     entryForm: FormGroup;
     passwordResetForm: FormGroup;
@@ -131,6 +138,11 @@ export class EmployeeComponent implements OnInit {
     districtList: Array<any> = [];
     upazilaList: Array<any> = [];
     unionList: Array<any> = [];
+
+    offboarding_date = null;
+    offboard_employee: any = null;
+    employee_details: any = null;
+    is_details = false;
 
     @BlockUI() blockUI: NgBlockUI;
 
@@ -253,7 +265,6 @@ export class EmployeeComponent implements OnInit {
                 }
             });
             this.allEmployeeList = this.employeeList;
-            //console.log(this.employeeList)
             this.blockUI.stop();
         }, err => { 
             this.blockUI.stop();
@@ -261,7 +272,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     searchField(search){
-        if(search.length >= 3){
+        if(search.length){
             let newList = [];
             this.employeeList.forEach(employee => {
                 let search_text = search.toLowerCase();
@@ -284,10 +295,7 @@ export class EmployeeComponent implements OnInit {
                     newList.push(employee);
                 }
             });
-
-            if(newList.length){
-                this.employeeList = newList;
-            }
+            this.employeeList = newList;
         }else{
             this.employeeList = this.allEmployeeList;
         }
@@ -470,6 +478,14 @@ export class EmployeeComponent implements OnInit {
         }
         this.addEmployeeModal.show();
     }
+
+    openDetailsModal(item){
+        this.modalTitle = 'Employee Details';
+        this.employee_details = item;
+        this.is_details = true;
+        this.employeeDetailsModal.show();
+
+    }
     
     onFormSubmit(){
         this.submitted = true;
@@ -608,6 +624,41 @@ export class EmployeeComponent implements OnInit {
 
     }
 
+    openOffboardModal(employee, template: TemplateRef<any>) {
+        this.offboard_employee = employee;
+        this.modalRef = this.modalService.show(template, this.modalConfigMd);
+    }
+
+    offboardSubmission(){
+        if(!this.offboarding_date){
+            this.toastr.error("Please, enter offboarding date!", 'Attention!', { timeOut: 2000 });
+            return;
+        }
+
+        let params = {
+            employee_id: this.offboard_employee.id,
+            offboarding_date: this.validateDateTimeFormat(this.offboarding_date)
+        }
+
+        this.blockUI.start('Offboarding...')
+        this._service.post('admin/make-employee-offboarded', params).subscribe(
+            data => {
+                this.blockUI.stop();
+                if (data.status) {
+                    this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
+                    this.closeModal();
+                    this.getEmployeeList();
+                } else {
+                    this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
+                }
+            },
+            err => {
+                this.blockUI.stop();
+                this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
+            }
+        );
+    }
+
     validateDateTimeFormat(value: Date) {
         return moment(value).format('YYYY-MM-DD');
     }
@@ -620,8 +671,14 @@ export class EmployeeComponent implements OnInit {
         return moment(value).format('DD/MM/yyyy');
     }
 
+    closeModal(){
+        this.modalRef?.hide();
+        this.offboard_employee = {};
+    }
+
     modalHide() {
         this.addEmployeeModal.hide();
+        this.employeeDetailsModal.hide();
         this.entryForm.reset();
         this.uploadForm.reset();
         this.passwordResetForm.reset();
@@ -632,6 +689,7 @@ export class EmployeeComponent implements OnInit {
         this.entryForm.controls['is_active'].setValue(true);
         this.modalTitle = 'Add New Employee';
         this.btnSaveText = 'Save';
+        this.employee_details = {};
     }
 
 }

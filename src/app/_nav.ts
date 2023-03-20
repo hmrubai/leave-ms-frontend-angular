@@ -68,6 +68,12 @@ export const navItems: INavData[] = [
                 role: 'Admin,ApprovalAuthority'
             },
             {
+                name: 'Offboarded Employee',
+                url: '/master-settings/offboarded-employee',
+                icon: 'icon-user',
+                role: 'Admin,ApprovalAuthority'
+            },
+            {
                 name: 'Leave Policy',
                 url: '/master-settings/leave-policy',
                 icon: 'icon-book-open',
