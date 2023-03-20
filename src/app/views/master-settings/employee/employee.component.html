@@ -27,7 +27,7 @@
                 <td>{{ item.name }}</td>
                 <td>{{ item.employee_code }}</td>
                 <td>{{ item.email }}</td>
-                <td>{{ item.designation ? item.designation : '-' }} <span *ngIf="item.wing">({{ item.wing }})</span></td>
+                <td>{{ item.designation ? item.designation : '-' }} <span *ngIf="item.wing">({{ item.wing_name }})</span></td>
                 <td>{{ item.department ? item.department : '-' }}</td>
                 <td>
                     <span *ngIf="item.is_active" class="status bg-success">Active</span>
@@ -284,10 +284,17 @@
                 </div>
                 <div class="col-md-4 mt-3">
                     <label for="wing" class="form-label">Wing</label>
-                    <input type="text" formControlName="wing" [ngClass]="{ 'is-invalid': submitted && f.wing.errors }" class="form-control" id="wing"  placeholder="Wing">
+                    <ng-select [items]="wingList" bindLabel="name" 
+                        bindValue="id" formControlName="wing_id" placeholder="Select Wing" 
+                        [ngClass]="{ 'is-invalid': submitted && f.wing_id.errors }" >
+                     </ng-select>
+                    <div *ngIf="submitted && f.wing_id.errors" class="invalid-feedback">
+                        <span *ngIf="f.wing_id.errors.required" class="text-danger"> Wing is required</span>
+                    </div>
+                    <!--<input type="text" formControlName="wing" [ngClass]="{ 'is-invalid': submitted && f.wing.errors }" class="form-control" id="wing"  placeholder="Wing">
                     <div *ngIf="submitted && f.wing.errors" class="invalid-feedback">
                         <span *ngIf="f.wing.errors.required" class="text-danger"> Wing is required</span>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="col-md-4 mt-3">
                     <label for="designation_id" class="form-label">Designation <span class="text-danger font-weight-bold">*</span></label>

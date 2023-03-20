@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { BlockUIModule } from 'ng-block-ui';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {SharedModule} from '../../../core/shared.module';
-import { ChangePasswordComponent } from './change-password.component';
-import { ChangePasswordRoutingModule } from './change-password-routing.module';
+import { BlockUIModule } from 'ng-block-ui';
+import { WingComponent } from './wing.component';
+import { WingRoutingModule } from './wing-routing.module';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { CommonModule } from '@angular/common';
     NgSelectModule,
     ReactiveFormsModule,
     SharedModule,
-    ChangePasswordRoutingModule,
+    WingRoutingModule,
     BlockUIModule
   ],
-  declarations: [ ChangePasswordComponent ]
+  declarations: [ WingComponent ]
 })
-export class ChangePasswordModule { }
+export class WingModule { }

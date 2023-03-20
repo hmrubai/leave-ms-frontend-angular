@@ -121,6 +121,7 @@ export class EmployeeComponent implements OnInit {
     companyList: Array<any> = [];
     branchList: Array<any> = [];
     designationList: Array<any> = [];
+    wingList: Array<any> = [];
     departmentList: Array<any> = [];
     employmentList: Array<any> = [];
     divisionList: Array<any> = [];
@@ -165,7 +166,8 @@ export class EmployeeComponent implements OnInit {
             gender: [null],
             department_id: [null, [Validators.required]],
             designation_id: [null, [Validators.required]],
-            wing: [null],
+            //wing: [null],
+            wing_id: [null],
             employment_type_id: [null, [Validators.required]],
             division_id: [null],
             district_id: [null],
@@ -329,6 +331,7 @@ export class EmployeeComponent implements OnInit {
 
         this.designationList = [];
         this.departmentList = [];
+        this.wingList = [];
 
         this.blockUI.start('Loading...')
         if(comapny_id && branch_id){
@@ -342,6 +345,14 @@ export class EmployeeComponent implements OnInit {
 
             this._service.get('admin/designation-list-by-id/' + comapny_id + '/' + branch_id).subscribe(res => {
                 this.designationList = res.data;
+                this.blockUI.stop();
+            }, err => { 
+                this.blockUI.stop();
+            }
+            );
+
+            this._service.get('admin/wing-list-by-id/' + comapny_id + '/' + branch_id).subscribe(res => {
+                this.wingList = res.data;
                 this.blockUI.stop();
             }, err => { 
                 this.blockUI.stop();
@@ -380,7 +391,8 @@ export class EmployeeComponent implements OnInit {
 
         this.entryForm.controls['department_id'].setValue(item.department_id);
         this.entryForm.controls['designation_id'].setValue(item.designation_id);
-        this.entryForm.controls['wing'].setValue(item.wing);
+        this.entryForm.controls['wing_id'].setValue(item.wing_id);
+
         this.entryForm.controls['employment_type_id'].setValue(item.employment_type_id);
         this.entryForm.controls['division_id'].setValue(item.division_id);
         this.onChangeDivision({id: item.division_id});
@@ -471,7 +483,8 @@ export class EmployeeComponent implements OnInit {
         formData.append('branch_id', this.entryForm.value.branch_id);
         formData.append('department_id', this.entryForm.value.department_id);
         formData.append('designation_id', this.entryForm.value.designation_id);
-        formData.append('wing', this.entryForm.value.wing);
+        //formData.append('wing', this.entryForm.value.wing);
+        formData.append('wing_id', this.entryForm.value.wing_id);
         formData.append('employment_type_id', this.entryForm.value.employment_type_id);
         formData.append('division_id', this.entryForm.value.division_id);
         formData.append('district_id', this.entryForm.value.district_id);

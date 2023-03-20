@@ -50,6 +50,12 @@ export const navItems: INavData[] = [
                 role: 'Admin,ApprovalAuthority'
             },
             {
+                name: 'Wing',
+                url: '/master-settings/wing',
+                icon: 'icon-badge',
+                role: 'Admin,ApprovalAuthority'
+            },
+            {
                 name: 'Employment Type',
                 url: '/master-settings/employment-type',
                 icon: 'icon-grid',

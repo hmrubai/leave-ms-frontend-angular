@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
-// import { ChartsModule } from 'ng2-charts';
-// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-// import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {SharedModule} from '../../../core/shared.module';
-
+import { BlockUIModule } from 'ng-block-ui';
 import { LeavePolicyComponent } from './leave-policy.component';
 import { LeavePolicyRoutingModule } from './leave-policy-routing.module';
 import { CommonModule } from '@angular/common';
@@ -17,7 +14,8 @@ import { CommonModule } from '@angular/common';
     NgSelectModule,
     ReactiveFormsModule,
     SharedModule,
-    LeavePolicyRoutingModule
+    LeavePolicyRoutingModule,
+    BlockUIModule
   ],
   declarations: [ LeavePolicyComponent ]
 })
