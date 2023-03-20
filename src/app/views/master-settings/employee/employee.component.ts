@@ -34,6 +34,8 @@ export class EmployeeComponent implements OnInit {
     profile_image = "assets/img/avatars/profile.png";
     view_profile_image = "assets/img/avatars/profile.png";
 
+    search_field = null;
+
     urls = [];
     files = [];
 
@@ -118,6 +120,7 @@ export class EmployeeComponent implements OnInit {
     ]
 
     employeeList: Array<any> = [];
+    allEmployeeList: Array<any> = [];
     companyList: Array<any> = [];
     branchList: Array<any> = [];
     designationList: Array<any> = [];
@@ -249,11 +252,45 @@ export class EmployeeComponent implements OnInit {
                     item.profile_image = this.profile_image;
                 }
             });
+            this.allEmployeeList = this.employeeList;
             //console.log(this.employeeList)
             this.blockUI.stop();
         }, err => { 
             this.blockUI.stop();
         });
+    }
+
+    searchField(search){
+        if(search.length >= 3){
+            let newList = [];
+            this.employeeList.forEach(employee => {
+                let search_text = search.toLowerCase();
+                let employee_name = employee.name.toLowerCase();
+                let employee_code = employee.employee_code.toLowerCase();
+                let employee_mobile = employee.mobile.toLowerCase();
+
+                let is_exist = false;
+                if(employee_name.indexOf(search_text) !== -1){
+                    is_exist = true;
+                }
+                if(employee_code.indexOf(search_text) !== -1){
+                    is_exist = true;
+                }
+                if(employee_mobile.indexOf(search_text) !== -1){
+                    is_exist = true;
+                }
+
+                if(is_exist){
+                    newList.push(employee);
+                }
+            });
+
+            if(newList.length){
+                this.employeeList = newList;
+            }
+        }else{
+            this.employeeList = this.allEmployeeList;
+        }
     }
 
     getCompanyList() {
