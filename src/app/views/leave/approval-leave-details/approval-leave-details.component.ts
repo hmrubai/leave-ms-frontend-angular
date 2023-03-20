@@ -46,6 +46,7 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
 
     companyList: Array<any> = [];
     leaveDetails: Array<any> = [];
+    leave_count_on_this_day = 0;
     is_loaded = false;
     is_approval_permit = false;
 
@@ -129,6 +130,7 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
         this.blockUI.start('Fetching...')
         this._service.get('leave/application-details-by-id/' + this.leave_application_id).subscribe(res => {
             this.leaveDetails = res.data;
+            this.leave_count_on_this_day = res.data.leave_count_on_this_day;
             if(res.data.employee.image){
                 this.profile_image = environment.imageURL + res.data.employee.image;
             }
@@ -140,7 +142,6 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
             });
 
             this.is_loaded = true;
-            console.log(this.is_approval_permit)
             this.blockUI.stop();
         }, err => { 
             this.blockUI.stop();
