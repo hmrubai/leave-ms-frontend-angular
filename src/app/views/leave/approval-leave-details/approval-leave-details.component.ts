@@ -19,6 +19,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class ApprovalLeaveDetailsComponent implements OnInit {
     @ViewChild('approvalModal') public approvalModal: ModalDirective;
+    @ViewChild('viewExplanationModal') public viewExplanationModal: ModalDirective;
     modalRef?: BsModalRef;
     modalConfig = {
         class: 'modal-dialog-centered modal-sm'
@@ -46,6 +47,8 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
 
     companyList: Array<any> = [];
     leaveDetails: Array<any> = [];
+    explanationList: Array<any> = [];
+
     leave_count_on_this_day = 0;
     is_loaded = false;
     is_approval_permit = false;
@@ -210,6 +213,18 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
             }
         );
         this.modalRef?.hide();
+    }
+
+    viewExplanation(cutting_explanation){
+        this.explanationList = [];
+        this.explanationList = cutting_explanation;
+        this.modalTitle = 'Leave Cutting Explanation';
+        this.btnSaveText = 'Save';
+        this.viewExplanationModal.show();
+    }
+
+    explanationModalHide(){
+        this.viewExplanationModal.hide();
     }
 
     decline(){

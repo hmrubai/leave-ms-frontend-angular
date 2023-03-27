@@ -17,6 +17,7 @@ import {ModalDirective} from 'ngx-bootstrap/modal';
 })
 export class MyLeaveBalanceListComponent implements OnInit {
     @ViewChild('addEmployeeLeaveBalanceModal') public addEmployeeLeaveBalanceModal: ModalDirective;
+    @ViewChild('viewExplanationModal') public viewExplanationModal: ModalDirective;
     entryForm: FormGroup;
     submitted = false;
     returnUrl: string;
@@ -29,7 +30,7 @@ export class MyLeaveBalanceListComponent implements OnInit {
 
     employeeList: Array<any> = [];
     leaveBalanceList: Array<any> = [];
-    
+    explanationList: Array<any> = [];
 
     @BlockUI() blockUI: NgBlockUI;
 
@@ -78,6 +79,18 @@ export class MyLeaveBalanceListComponent implements OnInit {
         // this.entryForm.controls['is_active'].setValue(true);
         this.modalTitle = 'Add New Leave Balance';
         this.btnSaveText = 'Save';
+    }
+
+    viewExplanation(cutting_explanation){
+        this.explanationList = [];
+        this.explanationList = cutting_explanation;
+        this.modalTitle = 'Leave Cutting Explanation';
+        this.btnSaveText = 'Save';
+        this.viewExplanationModal.show();
+    }
+
+    explanationModalHide(){
+        this.viewExplanationModal.hide();
     }
 
 }

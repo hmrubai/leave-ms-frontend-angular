@@ -18,6 +18,7 @@ import { Location } from '@angular/common';
 })
 export class LeaveDetailsComponent implements OnInit {
     @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
+    @ViewChild('viewExplanationModal') public viewExplanationModal: ModalDirective;
     entryForm: FormGroup;
     uploadForm: FormGroup;
     submitted = false;
@@ -36,6 +37,8 @@ export class LeaveDetailsComponent implements OnInit {
 
     companyList: Array<any> = [];
     leaveDetails: Array<any> = [];
+    explanationList: Array<any> = [];
+
     is_loaded = false;
 
     @BlockUI() blockUI: NgBlockUI;
@@ -136,6 +139,18 @@ export class LeaveDetailsComponent implements OnInit {
         this.entryForm.controls['company_prefix'].setValue(item.company_prefix);
         this.entryForm.controls['is_active'].setValue(item.is_active);
         this.addCompanyModal.show();
+    }
+
+    viewExplanation(cutting_explanation){
+        this.explanationList = [];
+        this.explanationList = cutting_explanation;
+        this.modalTitle = 'Leave Cutting Explanation';
+        this.btnSaveText = 'Save';
+        this.viewExplanationModal.show();
+    }
+
+    explanationModalHide(){
+        this.viewExplanationModal.hide();
     }
 
     onFormSubmit(){
