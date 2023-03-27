@@ -17,9 +17,12 @@ import * as moment from 'moment';
     styleUrls: ['employee.component.scss']
 })
 export class EmployeeComponent implements OnInit {
+    @ViewChild('addEmployeeLeaveBalanceModal') public addEmployeeLeaveBalanceModal: ModalDirective;
     @ViewChild('addEmployeeModal') public addEmployeeModal: ModalDirective;
     @ViewChild('employeeDetailsModal') public employeeDetailsModal: ModalDirective;
     @ViewChild('addChangePasswordModal') public addChangePasswordModal: ModalDirective;
+    @ViewChild('viewExplanationModal') public viewExplanationModal: ModalDirective;
+
     modalRef?: BsModalRef;
     modalConfig = {
         class: 'modal-dialog-centered modal-sm'
@@ -30,6 +33,7 @@ export class EmployeeComponent implements OnInit {
     modalConfigLg = {
         class: 'modal-dialog-centered modal-lg'
     }
+    balanceEntryForm: FormGroup;
     entryForm: FormGroup;
     passwordResetForm: FormGroup;
     uploadForm: FormGroup;
@@ -42,6 +46,7 @@ export class EmployeeComponent implements OnInit {
     view_profile_image = "assets/img/avatars/profile.png";
 
     search_field = null;
+    is_balance_loaded = false;
 
     urls = [];
     files = [];
@@ -138,6 +143,8 @@ export class EmployeeComponent implements OnInit {
     districtList: Array<any> = [];
     upazilaList: Array<any> = [];
     unionList: Array<any> = [];
+    leaveBalanceList: Array<any> = [];
+    explanationList: Array<any> = [];
 
     offboarding_date = null;
     offboard_employee: any = null;
@@ -213,6 +220,13 @@ export class EmployeeComponent implements OnInit {
             image: [null]
         });
 
+        this.balanceEntryForm = this.formBuilder.group({
+            id: [null],
+            total_cutting_days: [null, [Validators.required]],
+            remaining_days: [null, [Validators.required]],
+            note: [null, [Validators.required]],
+        });
+
         this.passwordResetForm = this.formBuilder.group({
             user_id: [null, [Validators.required]],
             new_password: [null, [Validators.required]]
@@ -235,6 +249,9 @@ export class EmployeeComponent implements OnInit {
 
     get rf() {
         return this.passwordResetForm.controls;
+    }
+    get lf() {
+        return this.balanceEntryForm.controls;
     }
 
     onSelectFile(event) {
@@ -483,8 +500,73 @@ export class EmployeeComponent implements OnInit {
         this.modalTitle = 'Employee Details';
         this.employee_details = item;
         this.is_details = true;
+        this.getEmployeeLeaveBalance(item.id)
         this.employeeDetailsModal.show();
+    }
 
+    getEmployeeLeaveBalance(id){
+        this.leaveBalanceList = [];
+        this._service.get('admin/leave-balance-list/' + id).subscribe(res => {
+            this.leaveBalanceList = res.data.balance_list;
+            this.is_balance_loaded = true;
+        }, err => { }
+        );
+    }
+
+    editLeaveBalanceItem(item){
+        this.modalTitle = 'Cut Leave Balance';
+        this.btnSaveText = 'Cut';
+        this.balanceEntryForm.controls['id'].setValue(item.id);
+        this.balanceEntryForm.controls['total_cutting_days'].setValue(1);
+        this.balanceEntryForm.controls['remaining_days'].setValue(item.remaining_days);
+        this.addEmployeeLeaveBalanceModal.show();
+    }
+
+    viewExplanation(cutting_explanation){
+        this.explanationList = [];
+        this.explanationList = cutting_explanation;
+        this.modalTitle = 'Leave Cutting Explanation';
+        this.btnSaveText = 'Save';
+        this.viewExplanationModal.show();
+    }
+
+    explanationModalHide(){
+        this.viewExplanationModal.hide();
+    }
+
+    onLeaveBalanceFormSubmit(){
+        this.submitted = true;
+        if (this.balanceEntryForm.invalid) {
+            return;
+        }
+
+        let total_cutting_days = this.balanceEntryForm.value.total_cutting_days;
+        let availed_days = this.balanceEntryForm.value.availed_days;
+        let remaining_days = this.balanceEntryForm.value.remaining_days;
+        if(total_cutting_days > remaining_days){
+            this.toastr.warning("Please, enter correct value", 'Attention!', { timeOut: 2000 });
+            return;
+        }
+
+        console.log(this.balanceEntryForm.value)
+
+        this.balanceEntryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
+
+        this._service.post('admin/cut-leave-balance', this.balanceEntryForm.value).subscribe(
+            data => {
+                this.blockUI.stop();
+                if (data.status) {
+                    this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
+                    this.modalHide();
+                } else {
+                    this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
+                }
+            },
+            err => {
+                this.blockUI.stop();
+                this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
+            }
+        );
     }
     
     onFormSubmit(){
@@ -683,6 +765,8 @@ export class EmployeeComponent implements OnInit {
         this.uploadForm.reset();
         this.passwordResetForm.reset();
         this.addChangePasswordModal.hide();
+        this.addEmployeeLeaveBalanceModal.hide();
+        this.balanceEntryForm.reset();
         this.view_profile_image = "assets/img/avatars/profile.png";
         this.submitted = false;
         this.entryForm.controls['email'].enable();

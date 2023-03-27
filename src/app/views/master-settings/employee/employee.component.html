@@ -40,9 +40,9 @@
                 </td>
                 <td>{{ item.designation ? item.designation : '-' }}<span *ngIf="item.wing">({{ item.wing_name }})</span>, {{ item.department ? item.department : '-' }}</td>
                 <td>
-                    <button class="btn btn-success btn-sm" (click)="openDetailsModal(item)"><i class="fa fa-eye"></i>&nbsp;</button>
-                    <button class="btn btn-primary btn-sm" (click)="editItem(item)"><i class="fa fa-pencil"></i>&nbsp;Edit</button>
-                    <button class="btn btn-warning btn-sm" (click)="openChangePasswordModal(item)"><i class="fa fa-lock"></i>&nbsp;Password Reset</button>
+                    <button class="btn btn-success btn-sm mr-1" (click)="openDetailsModal(item)"><i class="fa fa-eye"></i>&nbsp;</button>
+                    <button class="btn btn-primary btn-sm mr-1" (click)="editItem(item)"><i class="fa fa-pencil"></i>&nbsp;Edit</button>
+                    <button class="btn btn-warning btn-sm mr-1" (click)="openChangePasswordModal(item)"><i class="fa fa-lock"></i>&nbsp;Password Reset</button>
                     <button class="btn btn-danger btn-sm" (click)="openOffboardModal(item, offboardTemplate)"><i class="fa fa-power-off"></i>&nbsp;Offboarding</button>
                 </td>
               </tr>
@@ -514,7 +514,7 @@
             <div class="col-sm-8 table-responsive">
                 <table class="table table-bordered">
                     <tr>
-                        <th>Applicant's Name</th>
+                        <th>Name</th>
                         <th>{{ employee_details.name }}</th>
                     </tr>
                     <tr>
@@ -543,10 +543,117 @@
                     </tr>
                 </table>
             </div>
+            <div class="col-sm-12 table-responsive" *ngIf="is_balance_loaded">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-info"><strong> <i class="fa fa-list"></i> Leave Balance</strong></li>
+                </ul>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Leave Type</th>
+                            <th>Total Days</th>
+                            <th>Avail Days</th>
+                            <th>Remmaining</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of leaveBalanceList; let i = index;">
+                            <td>{{ item.leave_title }} ({{ item.leave_short_code }})</td>
+                            <td>{{ item.total_days }}</td>
+                            <td>{{ item.availed_days ? item.availed_days : '-' }}</td>
+                            <td>{{ item.remaining_days ? item.remaining_days : '-' }}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm mr-1" (click)="editLeaveBalanceItem(item)"><i class="fa fa-cut"></i> Cut</button>
+                                <button class="btn btn-info btn-sm" *ngIf="item.has_cutting_history"(click)="viewExplanation(item.cutting_explanation)"><i class="fa fa-list"></i></button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="leaveBalanceList.length <= 0">
+                            <td colspan="5">No Leave Balance added</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="modalHide()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #addEmployeeLeaveBalanceModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-info" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ modalTitle }}</h4>
+        <button type="button" class="close" (click)="modalHide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="balanceEntryForm" class="form-horizontal">
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="total_cutting_days">Total Days</label>
+                <div class="col-md-9">
+                    <input type="number" formControlName="total_cutting_days" [ngClass]="{ 'is-invalid': submitted && lf.total_cutting_days.errors }" id="total_cutting_days" class="form-control" placeholder="Total Cutting Days">
+                    <div *ngIf="submitted && lf.total_cutting_days.errors" class="invalid-feedback">
+                      <span *ngIf="lf.total_cutting_days.errors.required" class="text-danger"> Total Cutting Days is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="cutting_note">Note</label>
+                <div class="col-md-9">
+                    <input type="text" formControlName="note" [ngClass]="{ 'is-invalid': submitted && lf.note.errors }" id="cutting_note" name="cutting_note" class="form-control" placeholder="Notes">
+                    <div *ngIf="submitted && lf.note.errors" class="invalid-feedback">
+                      <span *ngIf="lf.note.errors.required" class="text-danger"> Note is required</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalHide()">Close</button>
+        <button type="button" class="btn btn-info" (click)="onLeaveBalanceFormSubmit()">{{ btnSaveText }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #viewExplanationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-warning" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ modalTitle }}</h4>
+        <button type="button" class="close" (click)="explanationModalHide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-warning"><strong> <i class="fa fa-cut"></i> Cutting List</strong></li>
+            </ul>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Note</th>
+                        <th>Day(s)</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of explanationList; let i = index;">
+                        <td>{{ item.note }}</td>
+                        <td>{{ item.total_cutting_days }}</td>
+                        <td>{{ item.created_at | date:'fullDate' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="explanationModalHide()">Close</button>
       </div>
     </div>
   </div>
