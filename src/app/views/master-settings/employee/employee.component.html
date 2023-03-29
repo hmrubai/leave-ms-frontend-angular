@@ -584,7 +584,7 @@
 </div>
 
 <div bsModal #addEmployeeLeaveBalanceModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-info" role="document">
+  <div class="modal-dialog modal-primary" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">{{ modalTitle }}</h4>
@@ -606,7 +606,7 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="cutting_note">Note</label>
                 <div class="col-md-9">
-                    <input type="text" formControlName="note" [ngClass]="{ 'is-invalid': submitted && lf.note.errors }" id="cutting_note" name="cutting_note" class="form-control" placeholder="Notes">
+                    <input type="text" formControlName="note" [ngClass]="{ 'is-invalid': submitted && lf.note.errors }" id="cutting_note" name="cutting_note" class="form-control" placeholder="Enter Notes">
                     <div *ngIf="submitted && lf.note.errors" class="invalid-feedback">
                       <span *ngIf="lf.note.errors.required" class="text-danger"> Note is required</span>
                     </div>
