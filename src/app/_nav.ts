@@ -23,67 +23,67 @@ export const navItems: INavData[] = [
                 name: 'Company Information',
                 url: '/master-settings/company',
                 icon: 'icon-notebook',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
               name: 'Fiscal Year',
               url: '/master-settings/fiscal-year',
               icon: 'icon-event',
-              role: 'Admin,ApprovalAuthority'
+              role: 'Admin'
             },
             {
                 name: 'Branch',
                 url: '/master-settings/branch',
                 icon: 'icon-organization',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Department',
                 url: '/master-settings/department',
                 icon: 'icon-layers',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Designation',
                 url: '/master-settings/designation',
                 icon: 'icon-badge',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Wing',
                 url: '/master-settings/wing',
                 icon: 'icon-badge',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Employment Type',
                 url: '/master-settings/employment-type',
                 icon: 'icon-grid',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Employee',
                 url: '/master-settings/employee',
                 icon: 'icon-user',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Offboarded Employee',
                 url: '/master-settings/offboarded-employee',
                 icon: 'icon-user',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Leave Policy',
                 url: '/master-settings/leave-policy',
                 icon: 'icon-book-open',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Balance Settings',
                 url: '/master-settings/leave-balance-settings',
                 icon: 'icon-chart',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             // {
             //     name: 'Organogram',
@@ -106,19 +106,19 @@ export const navItems: INavData[] = [
                 name: 'Day Type Setup',
                 url: '/calendar/day-type',
                 icon: 'icon-settings',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Working Day Setup',
                 url: '/calendar/work-day-setup',
                 icon: 'icon-settings',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Calendar Setup',
                 url: '/calendar/yearly-calendar',
                 icon: 'icon-calendar',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Academic Calendar',
@@ -147,13 +147,13 @@ export const navItems: INavData[] = [
                 name: 'Balance Setup',
                 url: '/leave/employee-leave-balance',
                 icon: 'icon-wallet',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             },
             {
                 name: 'Approval Flow Setup',
                 url: '/leave/approval-work-flow-setup',
                 icon: 'icon-organization',
-                role: 'Admin,ApprovalAuthority'
+                role: 'Admin'
             }
         ]
     },
@@ -176,13 +176,13 @@ export const navItems: INavData[] = [
                 name: 'Pending for Approval',
                 url: '/leave/approval-pending-leave-list',
                 icon: 'icon-hourglass',
-                role: 'ApprovalAuthority',
+                role: 'Admin,ApprovalAuthority',
             },
             {
                 name: 'Approved List',
                 url: '/leave/approval-approved-leave-list',
                 icon: 'icon-pin',
-                role: 'ApprovalAuthority',
+                role: 'Admin,ApprovalAuthority',
             }
         ]
     },

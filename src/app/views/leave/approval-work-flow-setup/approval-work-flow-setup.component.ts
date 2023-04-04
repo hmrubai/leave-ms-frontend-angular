@@ -102,7 +102,7 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
         this.getEmployeeList();
         this.getCompanyList();
         this.getApprovalAuthorityList();
-        this.getApprovalFlowList();
+        //this.getApprovalFlowList();
     }
 
     get f() {
@@ -114,17 +114,20 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
     }
 
     getApprovalFlowList() {
-        this.blockUI.start('Getting Data...')
+        
 
         let params = {
             employee_id: 0
         }
-        this._service.get('admin/approval-flow-list', params).subscribe(res => {
-            this.approvalFlowList = res.data;
-            this.blockUI.stop();
-        }, err => {
-            this.blockUI.stop();
-        });
+        if(this.employee_id){
+            this.blockUI.start('Getting Data...')
+            this._service.get('admin/approval-flow-list', params).subscribe(res => {
+                this.approvalFlowList = res.data;
+                this.blockUI.stop();
+            }, err => {
+                this.blockUI.stop();
+            });
+        }
     }
 
     onChangeEmployee(employee){
@@ -137,14 +140,15 @@ export class ApprovalWorkFlowSetupComponent implements OnInit {
         let params = {
             employee_id: this.employee_id
         }
-        this.blockUI.start('Getting Data...');
-        this._service.get('admin/approval-flow-list', params).subscribe(res => {
-            this.approvalFlowList = res.data;
-            this.blockUI.stop();
-        }, err => { 
-            this.blockUI.stop();
-        });
-        
+        if(this.employee_id){
+            this.blockUI.start('Getting Data...')
+            this._service.get('admin/approval-flow-list', params).subscribe(res => {
+                this.approvalFlowList = res.data;
+                this.blockUI.stop();
+            }, err => {
+                this.blockUI.stop();
+            });
+        }
     }
 
     getEmployeeList() {

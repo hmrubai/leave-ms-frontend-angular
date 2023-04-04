@@ -26,10 +26,14 @@ export class DashboardComponent implements OnInit {
 
     dashboard: any = null;
     currentUser: any = null;
+    public user_role = null;
+
     leaveBalanceList: Array<any> = [];
     applicationList: Array<any> = [];
+    subordinateApplicationList: Array<any> = [];
     is_loaded = false;
     is_calender_loaded = false;
+    is_list_loaded = true;
 
     @BlockUI() blockUI: NgBlockUI;
 
@@ -44,6 +48,9 @@ export class DashboardComponent implements OnInit {
         if (!this.authService.isAuthenticated()) {
             this.router.navigate(['/login']);
         }
+
+        this.currentUser = this.authService.currentUserDetails.value;
+        this.user_role = this.currentUser.user_type;
     }
 
     ngOnInit() {
@@ -61,6 +68,10 @@ export class DashboardComponent implements OnInit {
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
         this.getDashboardSummary();
+
+        if(this.user_role != 'Employee'){
+            this.getSubordinateApplicationList();
+        } 
     }
 
     get f() {
@@ -104,6 +115,19 @@ export class DashboardComponent implements OnInit {
         }, err => { 
             this.blockUI.stop();
         });
+    }
+
+
+    getSubordinateApplicationList() {
+        //this.blockUI.start('Loading...');
+        this._service.get('approval/pending/application-list').subscribe(res => {
+            this.subordinateApplicationList = res.data;
+            this.is_list_loaded = true;
+            this.blockUI.stop();
+        }, err => { 
+            this.blockUI.stop();
+        }
+        );
     }
 
     // lineChart1

@@ -250,6 +250,7 @@ export class EmployeeComponent implements OnInit {
     get rf() {
         return this.passwordResetForm.controls;
     }
+    
     get lf() {
         return this.balanceEntryForm.controls;
     }

@@ -72,7 +72,7 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
         this.currentUser = this.authService.currentUserDetails.value;
         this.user_role = this.currentUser.user_type;
 
-        if(this.user_role != 'ApprovalAuthority'){
+        if(this.user_role == 'Employee'){
             this.toastr.error('You are not the authorized person to access this page!', 'Attention!', { timeOut: 3000 });
             this.router.navigate(['/dashboard']);
         }
