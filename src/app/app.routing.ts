@@ -146,7 +146,16 @@ export const routes: Routes = [
         loadChildren: () => import('./views/leave/approval-approved-leave-list/approval-approved-leave-list.module').then(m => m.ApprovalApprovedLeaveListModule),
         canActivate: [AuthGuard]
       },
-      
+      {
+        path: 'leave',
+        loadChildren: () => import('./views/leave/approval-rejected-leave-list/approval-rejected-leave-list.module').then(m => m.ApprovalRejectedLeaveListModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'leave',
+        loadChildren: () => import('./views/leave/admin-all-leave-list/admin-all-leave-list.module').then(m => m.AdminAllLeaveListModule),
+        canActivate: [AuthGuard]
+      },
       {
         path: 'leave',
         loadChildren: () => import('./views/leave/leave-details/leave-details.module').then(m => m.LeaveDetailsModule),
