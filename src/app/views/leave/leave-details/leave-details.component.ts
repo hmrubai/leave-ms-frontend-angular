@@ -54,6 +54,8 @@ export class LeaveDetailsComponent implements OnInit {
     ) {
         if (!this.authService.isAuthenticated()) {
             this.router.navigate(['/login']);
+        }else{
+            this.currentUser = this.authService.currentUserDetails.value;
         }
 
         this.leave_application_id = this.route.snapshot.paramMap.get("leave_application_id");
@@ -112,6 +114,18 @@ export class LeaveDetailsComponent implements OnInit {
         this.blockUI.start('Fetching...')
         this._service.get('leave/application-details-by-id/' + this.leave_application_id).subscribe(res => {
             this.leaveDetails = res.data;
+            let employee_id = res.data.employee.id;
+
+            if(!employee_id){
+                this.toastr.error('What are you looking for? We are tracking your activities!', 'Attention!', { timeOut: 3000 });
+                this.router.navigate(['/leave/apply-for-leave']);
+            }
+
+            if(employee_id != this.currentUser.id){
+                this.toastr.error('You are not able to check others\' leave details', 'Attention!', { timeOut: 3000 });
+                this.router.navigate(['/leave/apply-for-leave']);
+            }
+
             if(res.data.employee.image){
                 this.profile_image = environment.imageURL + res.data.employee.image;
             }
