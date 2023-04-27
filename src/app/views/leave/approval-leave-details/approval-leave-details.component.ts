@@ -170,7 +170,8 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
                 if (data.status) {
                     this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
                     this.modalClose();
-                    this.router.navigate(['/leave/approval-approved-leave-list'])
+                    this.router.navigate(['/dashboard']);
+                    //this.router.navigate(['/leave/approval-approved-leave-list'])
                     //this.getLeaveDetails();
                 } else {
                     this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
@@ -201,7 +202,8 @@ export class ApprovalLeaveDetailsComponent implements OnInit {
                 if (data.status) {
                     this.toastr.error(data.message, 'Success!', { timeOut: 2000 });
                     this.modalClose();
-                    this.router.navigate(['/leave/approval-approved-leave-list'])
+                    this.router.navigate(['/dashboard']);
+                    //this.router.navigate(['/leave/approval-approved-leave-list'])
                     //this.getLeaveDetails();
                 } else {
                     this.toastr.error(data.message, 'Error!', { timeOut: 2000 });

@@ -31,9 +31,11 @@ export class DashboardComponent implements OnInit {
     leaveBalanceList: Array<any> = [];
     applicationList: Array<any> = [];
     subordinateApplicationList: Array<any> = [];
+    subordinateSummary: Array<any> = [];
     is_loaded = false;
     is_calender_loaded = false;
-    is_list_loaded = true;
+    is_list_loaded = false;
+    is_subordinate_summary_loaded = false;
 
     @BlockUI() blockUI: NgBlockUI;
 
@@ -71,6 +73,7 @@ export class DashboardComponent implements OnInit {
 
         if(this.user_role != 'Employee'){
             this.getSubordinateApplicationList();
+            this.getSubordinateSummary();
         } 
     }
 
@@ -117,12 +120,24 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-
     getSubordinateApplicationList() {
         //this.blockUI.start('Loading...');
         this._service.get('approval/pending/application-list').subscribe(res => {
             this.subordinateApplicationList = res.data;
             this.is_list_loaded = true;
+            this.blockUI.stop();
+        }, err => { 
+            this.blockUI.stop();
+        }
+        );
+    }
+
+    getSubordinateSummary() {
+        //this.blockUI.start('Loading...');
+        this._service.get('approval-dashboard-summary').subscribe(res => {
+            this.subordinateSummary = res.data;
+            console.log(res.data)
+            this.is_subordinate_summary_loaded = true;
             this.blockUI.stop();
         }, err => { 
             this.blockUI.stop();
