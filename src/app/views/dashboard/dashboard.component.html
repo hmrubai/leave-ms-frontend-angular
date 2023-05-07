@@ -102,7 +102,7 @@
     <div class="col-lg-12" *ngIf="user_role != 'Employee'">
       <div class="card border-top-primary border-top-3 mb-3">
           <div class="card-header bg-primary card-title"><strong>Subordinate leave list</strong></div>
-          <div class="card-body text-dark" *ngIf="is_list_loaded">
+          <div class="card-body text-dark table-responsive" *ngIf="is_list_loaded">
             <table class="table table-bordered">
               <thead>
                 <tr>
@@ -137,7 +137,7 @@
                   </td>
                 </tr>
                 <tr *ngIf="subordinateApplicationList.length <= 0">
-                  <td colspan="5">No Leave Found!</td>
+                  <td colspan="8">No Leave Found!</td>
                 </tr>
               </tbody>
             </table>
@@ -153,7 +153,7 @@
     <div class="col-lg-6">
       <div class="card border-top-primary border-top-3 mb-3">
           <div class="card-header bg-primary card-title"><strong>Academic Calendar</strong></div>
-          <div class="card-body text-dark" *ngIf="is_calender_loaded">
+          <div class="card-body text-dark table-responsive" *ngIf="is_calender_loaded">
             <ngx-fullcalendar #theCalendar defaultView="month" [events]="events" [options]="options"></ngx-fullcalendar>
           </div>
       </div>
@@ -226,7 +226,7 @@
                                         <td>{{ item.remaining_days ? item.remaining_days : '-' }}</td>
                                     </tr>
                                     <tr *ngIf="leaveBalanceList.length <= 0">
-                                        <td colspan="5">No Leave Balance added</td>
+                                        <td colspan="4">No Leave Balance added</td>
                                     </tr>
                                 </tbody>
                             </table>

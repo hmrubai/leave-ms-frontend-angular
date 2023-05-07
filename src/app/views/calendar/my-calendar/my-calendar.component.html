@@ -4,7 +4,7 @@
         <div class="card-header bg-primary">
           <h5><i class="fa fa-calendar"></i> Academic Calendar</h5>
         </div>
-        <div class="card-body text-dark" *ngIf="is_calender_loaded">
+        <div class="card-body text-dark table-responsive" *ngIf="is_calender_loaded">
             <ngx-fullcalendar #theCalendar defaultView="month" [events]="events" [options]="options"></ngx-fullcalendar>
         </div>
         <div class="card-footer">

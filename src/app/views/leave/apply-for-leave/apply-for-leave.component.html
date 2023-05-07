@@ -3,9 +3,9 @@
       <div class="card">
         <div class="card-header bg-primary">
           <h5><i class="fa fa-list"></i> Applied Leave List</h5>
-          <button class="btn btn-square btn-success btn-sm btn-sm-custom float-right" (click)="addApplyForLeaveModal.show()"><i class="fa fa-paper-plane"></i> Apply For a Leave</button>
+          <button class="btn btn-square btn-success btn-sm btn-sm-custom float-right" (click)="addApplyForLeaveModal.show()"><i class="fa fa-paper-plane"></i> Apply</button>
         </div>
-        <div class="card-body">
+        <div class="card-body table-responsive">
           <table class="table table-bordered">
             <thead>
               <tr>
@@ -38,7 +38,7 @@
                 </td>
               </tr>
               <tr *ngIf="applicationList.length <= 0">
-                <td colspan="5">No Leave Applied!</td>
+                <td colspan="7">No Leave Applied!</td>
               </tr>
             </tbody>
           </table>
