@@ -381,7 +381,10 @@ export class EmployeeComponent implements OnInit {
         this.onChangeBranchOrCompany();
         this._service.get('admin/branch-list-by-company-id/' + company.id).subscribe(res => {
             this.branchList = res.data;
-        }, err => { }
+            this.blockUI.stop();
+        }, err => { 
+            this.blockUI.stop();
+        }
         );
     }
 
