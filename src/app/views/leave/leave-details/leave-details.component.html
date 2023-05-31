@@ -4,7 +4,6 @@
         <div class="card-header bg-primary">
           <h5><i class="fa fa-list"></i> Leave Information</h5>
           <button class="btn btn-square btn-dark btn-sm btn-sm-custom float-right" (click)="backTo()"><i class="fa fa-arrow-circle-o-left"></i> Back</button>
-          <!--<button class="btn btn-square btn-success btn-sm btn-sm-custom float-right" (click)="addCompanyModal.show()"><i class="fa fa-plus"></i> Add New Category</button>-->
         </div>
         <div class="card-body">
 
@@ -61,10 +60,11 @@
                 <div class="col-lg-6">
                     <div class="card border-top-primary border-top-3 mb-3" *ngIf="is_loaded">
                         <div class="card-header"><strong>Leave Information</strong>
-                            <button type="button"  *ngIf="leaveDetails.leave.leave_status == 'Pending'" class="btn btn-warning btn-sm float-right"><strong>{{ leaveDetails.leave.leave_status }}</strong></button>
-                            <button type="button"  *ngIf="leaveDetails.leave.leave_status == 'Approved'" class="btn btn-success btn-sm float-right"><strong>{{ leaveDetails.leave.leave_status }}</strong></button>
-                            <button type="button"  *ngIf="leaveDetails.leave.leave_status == 'Rejected'" class="btn btn-danger btn-sm float-right"><strong>{{ leaveDetails.leave.leave_status }}</strong></button>
-                            <button type="button" *ngIf="is_withdrawable" class="btn btn-danger mr-2 btn-sm float-right"><strong>Withdraw Application</strong></button>
+                            <button type="button" *ngIf="leaveDetails.leave.leave_status == 'Pending'" class="btn btn-warning btn-sm float-right"><strong>{{ leaveDetails.leave.leave_status }}</strong></button>
+                            <button type="button" *ngIf="leaveDetails.leave.leave_status == 'Approved'" class="btn btn-success btn-sm float-right"><strong>{{ leaveDetails.leave.leave_status }}</strong></button>
+                            <button type="button" *ngIf="leaveDetails.leave.leave_status == 'Rejected'" class="btn btn-danger btn-sm float-right"><strong>{{ leaveDetails.leave.leave_status }}</strong></button>
+                            <button type="button" *ngIf="leaveDetails.leave.leave_status == 'Withdraw'" class="btn btn-danger btn-sm float-right"><strong>Withdrawn</strong></button>
+                            <button type="button" *ngIf="is_withdrawable" (click)="withdrawApplication()" class="btn btn-danger mr-2 btn-sm float-right"><strong>Withdraw Application</strong></button>
                         </div>
                         <div class="card-body text-primary">
                             <div class="row">
@@ -142,6 +142,7 @@
                                                     <span *ngIf="item.approval_status == 'Pending'" class="status bg-warning">{{ item.approval_status }}</span>
                                                     <span *ngIf="item.approval_status == 'Approved'" class="status bg-success">{{ item.approval_status }}</span>
                                                     <span *ngIf="item.approval_status == 'Rejected'" class="status bg-danger">{{ item.approval_status }}</span>
+                                                    <span *ngIf="item.approval_status == 'Withdraw'" class="status bg-danger">Withdrawn</span>
                                                 </td>
                                                 <td>{{ item.step ? item.step : '-' }}</td>
                                                 <td>

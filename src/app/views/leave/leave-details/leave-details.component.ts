@@ -182,6 +182,11 @@ export class LeaveDetailsComponent implements OnInit {
             leave_application_id: this.leave_application_id
         }
 
+        if (!this.is_withdrawable){
+            this.toastr.error('You can\'t modify this leave application! Already approved seen by your Supervisor!', 'Opps!', { timeOut: 3000 });
+            return;
+        }
+
         this.confirmService.confirm('Are you sure?', 'Do you want to withdraw application?')
         .subscribe(
         result => {
@@ -189,6 +194,7 @@ export class LeaveDetailsComponent implements OnInit {
                 this.blockUI.start('Updating...');
                 this._service.post('leave/withdraw-leave', params).subscribe(res => {
                     this.toastr.success(res.message, 'Successful!');
+                    this.getLeaveDetails();
                     this.blockUI.stop();
                 }, err => {
                     this.blockUI.stop();
@@ -197,50 +203,6 @@ export class LeaveDetailsComponent implements OnInit {
         }
         );
     }
-
-    // onFormSubmit(){
-    //     this.submitted = true;
-    //     if (this.entryForm.invalid) {
-    //         return;
-    //     }
-
-    //     const formData = new FormData();
-    //     if(this.uploadForm.get('image_file').value){
-    //         formData.append('file', this.uploadForm.get('image_file').value);
-    //     }
-
-    //     formData.append('name', this.entryForm.value.name.trim());
-    //     formData.append('address', this.entryForm.value.address.trim());
-    //     formData.append('contact_no', this.entryForm.value.contact_no.trim());
-    //     formData.append('company_email', this.entryForm.value.company_email.trim());
-    //     formData.append('hr_email', this.entryForm.value.hr_email.trim());
-    //     formData.append('leave_email', this.entryForm.value.leave_email.trim());
-    //     formData.append('employee_code_length', this.entryForm.value.employee_code_length);
-    //     formData.append('company_prefix', this.entryForm.value.company_prefix ? this.entryForm.value.company_prefix.trim() : null);
-    //     formData.append('is_active', this.entryForm.value.is_active);
-
-    //     this.entryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
-    //     if(this.entryForm.value.id){
-    //         formData.append('id', this.entryForm.value.id);
-    //     }
-
-    //     this._service.post('leave/withdraw-leave', formData).subscribe(
-    //         data => {
-    //             this.blockUI.stop();
-    //             if (data.status) {
-    //                 this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
-    //                 this.modalHide();
-    //                 this.getCompanyList();
-    //             } else {
-    //                 this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
-    //             }
-    //         },
-    //         err => {
-    //             this.blockUI.stop();
-    //             this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
-    //         }
-    //     );
-    // }
 
     backTo() {
         this.location.back();

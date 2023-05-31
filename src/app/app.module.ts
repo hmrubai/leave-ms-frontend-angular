@@ -31,6 +31,8 @@ import { DefaultLayoutComponent } from './containers';
 import { P404Component } from './views/error/404.component';
 import { P500Component } from './views/error/500.component';
 import { RegisterComponent } from './views/register/register.component';
+import { ConfirmComponent } from './_helpers/confirm-dialog/confirm.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const APP_CONTAINERS = [
   DefaultLayoutComponent
@@ -76,7 +78,8 @@ import { ChartsModule } from 'ng2-charts';
     ReactiveFormsModule,
     HttpClientModule,
     NgSelectModule,
-    NgxFullCalendarModule
+    NgxFullCalendarModule,
+    MatDialogModule
   ],
   declarations: [
     AppComponent,
@@ -85,6 +88,7 @@ import { ChartsModule } from 'ng2-charts';
     P500Component,
     AuthorizeDirective,
     RegisterComponent,
+    ConfirmComponent
     // MasterLoginComponent
   ],
   providers: [

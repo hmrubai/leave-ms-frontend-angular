@@ -2,8 +2,7 @@
 
     {{title}}</h1>
 <div matDialogContent>{{message}}</div>
-<div matDialogActions fxLayoutAlign="space-around center">
-
-    <button matDialogClose mat-button class="btn" (click)="dialogRef.close(false) ">Cancel</button>
-    <button matDialogClose mat-button class="btn btn-success" (click)="dialogRef.close(true)">Confirm</button>
+<div matDialogActions class="text-center" fxLayoutAlign="space-around center">
+        <button matDialogClose mat-button class="btn btn-secondary mr-2" (click)="dialogRef.close(false) ">Cancel</button>
+        <button matDialogClose mat-button class="btn btn-success" (click)="dialogRef.close(true)">Confirm</button>
 </div>
