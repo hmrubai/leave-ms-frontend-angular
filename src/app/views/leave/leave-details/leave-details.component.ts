@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
+import { ConfirmService } from '../../../_helpers/confirm-dialog/confirm.service';
 import { environment } from '../../../../environments/environment';
 import { CommonService } from '../../../_services/common.service';
 import { AuthenticationService } from '../../../_services/authentication.service';
@@ -40,6 +41,7 @@ export class LeaveDetailsComponent implements OnInit {
     explanationList: Array<any> = [];
 
     is_loaded = false;
+    is_withdrawable = true;
 
     @BlockUI() blockUI: NgBlockUI;
 
@@ -47,6 +49,7 @@ export class LeaveDetailsComponent implements OnInit {
         private _service: CommonService,
         public formBuilder: FormBuilder,
         private authService: AuthenticationService,
+        private confirmService: ConfirmService,
         private toastr: ToastrService,
         private route: ActivatedRoute,
         private router: Router,
@@ -129,6 +132,13 @@ export class LeaveDetailsComponent implements OnInit {
             if(res.data.employee.image){
                 this.profile_image = environment.imageURL + res.data.employee.image;
             }
+
+            res.data.leave_flow.forEach(element => {
+                if(element.approval_status != 'Pending'){
+                    this.is_withdrawable = false;
+                }
+            });
+
             this.is_loaded = true;
             this.blockUI.stop();
         }, err => { 
@@ -167,49 +177,70 @@ export class LeaveDetailsComponent implements OnInit {
         this.viewExplanationModal.hide();
     }
 
-    onFormSubmit(){
-        this.submitted = true;
-        if (this.entryForm.invalid) {
-            return;
+    withdrawApplication(){
+        let params = {
+            leave_application_id: this.leave_application_id
         }
 
-        const formData = new FormData();
-        if(this.uploadForm.get('image_file').value){
-            formData.append('file', this.uploadForm.get('image_file').value);
-        }
-
-        formData.append('name', this.entryForm.value.name.trim());
-        formData.append('address', this.entryForm.value.address.trim());
-        formData.append('contact_no', this.entryForm.value.contact_no.trim());
-        formData.append('company_email', this.entryForm.value.company_email.trim());
-        formData.append('hr_email', this.entryForm.value.hr_email.trim());
-        formData.append('leave_email', this.entryForm.value.leave_email.trim());
-        formData.append('employee_code_length', this.entryForm.value.employee_code_length);
-        formData.append('company_prefix', this.entryForm.value.company_prefix ? this.entryForm.value.company_prefix.trim() : null);
-        formData.append('is_active', this.entryForm.value.is_active);
-
-        this.entryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
-        if(this.entryForm.value.id){
-            formData.append('id', this.entryForm.value.id);
-        }
-
-        this._service.post('admin/company-save-or-update', formData).subscribe(
-            data => {
-                this.blockUI.stop();
-                if (data.status) {
-                    this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
-                    this.modalHide();
-                    this.getCompanyList();
-                } else {
-                    this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
-                }
-            },
-            err => {
-                this.blockUI.stop();
-                this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
+        this.confirmService.confirm('Are you sure?', 'Do you want to withdraw application?')
+        .subscribe(
+        result => {
+            if (result) {
+                this.blockUI.start('Updating...');
+                this._service.post('leave/withdraw-leave', params).subscribe(res => {
+                    this.toastr.success(res.message, 'Successful!');
+                    this.blockUI.stop();
+                }, err => {
+                    this.blockUI.stop();
+                });
             }
+        }
         );
     }
+
+    // onFormSubmit(){
+    //     this.submitted = true;
+    //     if (this.entryForm.invalid) {
+    //         return;
+    //     }
+
+    //     const formData = new FormData();
+    //     if(this.uploadForm.get('image_file').value){
+    //         formData.append('file', this.uploadForm.get('image_file').value);
+    //     }
+
+    //     formData.append('name', this.entryForm.value.name.trim());
+    //     formData.append('address', this.entryForm.value.address.trim());
+    //     formData.append('contact_no', this.entryForm.value.contact_no.trim());
+    //     formData.append('company_email', this.entryForm.value.company_email.trim());
+    //     formData.append('hr_email', this.entryForm.value.hr_email.trim());
+    //     formData.append('leave_email', this.entryForm.value.leave_email.trim());
+    //     formData.append('employee_code_length', this.entryForm.value.employee_code_length);
+    //     formData.append('company_prefix', this.entryForm.value.company_prefix ? this.entryForm.value.company_prefix.trim() : null);
+    //     formData.append('is_active', this.entryForm.value.is_active);
+
+    //     this.entryForm.value.id ? this.blockUI.start('Saving...') : this.blockUI.start('Updating...');
+    //     if(this.entryForm.value.id){
+    //         formData.append('id', this.entryForm.value.id);
+    //     }
+
+    //     this._service.post('leave/withdraw-leave', formData).subscribe(
+    //         data => {
+    //             this.blockUI.stop();
+    //             if (data.status) {
+    //                 this.toastr.success(data.message, 'Success!', { timeOut: 2000 });
+    //                 this.modalHide();
+    //                 this.getCompanyList();
+    //             } else {
+    //                 this.toastr.error(data.message, 'Error!', { timeOut: 2000 });
+    //             }
+    //         },
+    //         err => {
+    //             this.blockUI.stop();
+    //             this.toastr.error(err.message || err, 'Error!', { timeOut: 2000 });
+    //         }
+    //     );
+    // }
 
     backTo() {
         this.location.back();
