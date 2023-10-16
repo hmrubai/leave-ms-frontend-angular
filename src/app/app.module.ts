@@ -105,3 +105,5 @@ import { ChartsModule } from 'ng2-charts';
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
+
+//// "node_modules/font-awesome/css/font-awesome.css",

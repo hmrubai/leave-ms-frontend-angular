@@ -19,6 +19,7 @@ import * as moment from 'moment';
 export class EmployeeComponent implements OnInit {
     @ViewChild('addEmployeeLeaveBalanceModal') public addEmployeeLeaveBalanceModal: ModalDirective;
     @ViewChild('addEmployeeModal') public addEmployeeModal: ModalDirective;
+    @ViewChild('editEmployeeModal') public editEmployeeModal: ModalDirective;
     @ViewChild('employeeDetailsModal') public employeeDetailsModal: ModalDirective;
     @ViewChild('addChangePasswordModal') public addChangePasswordModal: ModalDirective;
     @ViewChild('viewExplanationModal') public viewExplanationModal: ModalDirective;
@@ -171,21 +172,21 @@ export class EmployeeComponent implements OnInit {
         this.entryForm = this.formBuilder.group({
             id: [null],
             name: [null, [Validators.required]],
-            father_name: [null, [Validators.required]],
-            mother_name: [null, [Validators.required]],
+            father_name: [null],
+            mother_name: [null],
             employee_id: [null, [Validators.required]],
             email: [null, [Validators.required]],
             mobile: [null, [Validators.required]],
-            nid: [null, [Validators.required]],
+            nid: [null],
             company_id: [null, [Validators.required]],
             branch_id: [null, [Validators.required]],
             present_address: [null],
             permanent_address: [null],
-            date_of_birth: [null, [Validators.required]],
-            joining_date: [null],
+            date_of_birth: [null],
+            joining_date: [null, [Validators.required]],
             blood_group: [null],
             marital_status: [null],
-            gender: [null],
+            gender: [null, [Validators.required]],
             department_id: [null, [Validators.required]],
             designation_id: [null, [Validators.required]],
             //wing: [null],
@@ -497,7 +498,7 @@ export class EmployeeComponent implements OnInit {
         }else{
             this.view_profile_image = "assets/img/avatars/profile.png";
         }
-        this.addEmployeeModal.show();
+        this.editEmployeeModal.show();
     }
 
     openDetailsModal(item){
@@ -613,7 +614,11 @@ export class EmployeeComponent implements OnInit {
         formData.append('applicable_tax_amount', this.entryForm.value.applicable_tax_amount ? this.entryForm.value.applicable_tax_amount.trim() : '');
         formData.append('official_achievement', this.entryForm.value.official_achievement ? this.entryForm.value.official_achievement.trim() : '');
         formData.append('remarks', this.entryForm.value.remarks ? this.entryForm.value.remarks.trim() : '');
-        formData.append('date_of_birth', this.validateDateTimeFormat(this.entryForm.value.date_of_birth));
+        if(this.entryForm.value.date_of_birth){
+            formData.append('date_of_birth', this.validateDateTimeFormat(this.entryForm.value.date_of_birth));
+        }else{
+            formData.append('date_of_birth', null);
+        }
         formData.append('joining_date', this.validateDateTimeFormat(this.entryForm.value.joining_date));
         formData.append('blood_group', this.entryForm.value.blood_group);
         formData.append('marital_status', this.entryForm.value.marital_status);
@@ -764,6 +769,7 @@ export class EmployeeComponent implements OnInit {
 
     modalHide() {
         this.addEmployeeModal.hide();
+        this.editEmployeeModal.hide();
         this.employeeDetailsModal.hide();
         this.entryForm.reset();
         this.uploadForm.reset();
