@@ -158,6 +158,11 @@ export const routes: Routes = [
       },
       {
         path: 'leave',
+        loadChildren: () => import('./views/leave/authority-all-leave-list/authority-all-leave-list.module').then(m => m.AuthorityAllLeaveListModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'leave',
         loadChildren: () => import('./views/leave/leave-details/leave-details.module').then(m => m.LeaveDetailsModule),
         canActivate: [AuthGuard]
       },

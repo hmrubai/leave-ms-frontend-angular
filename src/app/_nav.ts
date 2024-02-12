@@ -195,6 +195,12 @@ export const navItems: INavData[] = [
                 url: '/leave/admin-all-leave-list',
                 icon: 'icon-pin',
                 role: 'SuperAdministrator',
+            },
+            {
+                name: 'All Leave List',
+                url: '/leave/authority-all-leave-list',
+                icon: 'icon-pin',
+                role: 'Admin,ApprovalAuthority',
             }
         ]
     },

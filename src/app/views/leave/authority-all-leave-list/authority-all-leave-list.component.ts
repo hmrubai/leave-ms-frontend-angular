@@ -12,15 +12,20 @@ import {ModalDirective} from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
 
 @Component({
-    selector: 'app-apply-for-leave',
-    templateUrl: 'apply-for-leave.component.html',
-    styleUrls: ['apply-for-leave.component.scss']
+    selector: 'app-authority-all-leave-list',
+    templateUrl: 'authority-all-leave-list.component.html',
+    styleUrls: ['authority-all-leave-list.component.scss']
 })
-export class ApplyForLeaveComponent implements OnInit {
+export class AuthorityAllLeaveListComponent implements OnInit {
     @ViewChild('addApplyForLeaveModal') public addApplyForLeaveModal: ModalDirective;
     entryForm: FormGroup;
+    filterForm: FormGroup;
     submitted = false;
     returnUrl: string;
+
+    employee_id = null;
+    start_date = null;
+    end_date = null;
 
     modalTitle = 'Apply For a Leave';
     btnSaveText = 'Apply';
@@ -43,6 +48,7 @@ export class ApplyForLeaveComponent implements OnInit {
     currentUser: any = null;
 
     companyList: Array<any> = [];
+    employeeList: Array<any> = [];
     leavePolicyList: Array<any> = [];
     applicationList: Array<any> = [];
 
@@ -71,25 +77,42 @@ export class ApplyForLeaveComponent implements OnInit {
             start_date: [null, [Validators.required]],
             end_date: [null, [Validators.required]],
             reason: [null, [Validators.required]],
-            responsibility_carried_by: [null, [Validators.required]],
             is_half_day: [false],
             half_day: ['Not Applicable'],
+        });
+
+        this.filterForm = this.formBuilder.group({
+            id: [null],
+            employee_id: [null],
+            start_date: [null],
+            end_date: [null]
         });
 
         this.entryForm.controls['half_day'].disable();
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.getApplicationList();
-        this.getLeavePolicyList()
+        this.getEmployeeList();
     }
 
     get f() {
         return this.entryForm.controls;
     }
 
+    get ff() {
+        return this.filterForm.controls;
+    }
+
     getCompanyList() {
         this._service.get('admin/company-list').subscribe(res => {
             this.companyList = res.data;
+        }, err => { }
+        );
+    }
+
+    getEmployeeList(){
+        this._service.get('admin/employee-list').subscribe(res => {
+            this.employeeList = res.data;
         }, err => { }
         );
     }
@@ -101,9 +124,60 @@ export class ApplyForLeaveComponent implements OnInit {
         );
     }
 
+    onChangeEmployee(employee){
+        if(employee){
+            this.employee_id = employee.id;
+        }else{
+            this.employee_id = 0;
+        }
+        if(this.employee_id){
+            this.filterForm.controls['employee_id'].setValue(this.employee_id);
+            this.getFilterList();
+        }else{
+            this.filterForm.controls['employee_id'].setValue(0);
+            this.getApplicationList();
+        }
+        //console.log(this.filterForm.value)
+    }
+
+    changeFilterDate(){
+        if(this.start_date){
+            this.filterForm.controls['start_date'].setValue(this.validateDateTimeFormat(this.start_date));
+        }
+        if(this.end_date){
+            this.filterForm.controls['end_date'].setValue(this.validateDateTimeFormat(this.end_date));
+        }
+        
+        if(this.start_date && this.end_date){
+            this.getFilterList();
+        }else{
+            //this.getApplicationList();
+        }
+    }
+
+    resetFilterForm(){
+        this.employee_id = null;
+        this.start_date = null;
+        this.end_date = null;
+        this.filterForm.reset();
+        this.getApplicationList();
+    }
+
+    getFilterList(){
+        console.log(this.filterForm.value);
+        this.blockUI.start('Loading...');
+        this._service.post('approval/leave-application-filter', this.filterForm.value).subscribe(res => {
+            this.applicationList = res.data;
+            this.blockUI.stop();
+        }, err => { 
+            this.blockUI.stop();
+        }
+        );
+    }
+
     getApplicationList() {
         this.blockUI.start('Loading...');
-        this._service.get('leave/application-list').subscribe(res => {
+        this._service.post('approval/leave-application-filter', this.filterForm.value).subscribe(res => {
             this.applicationList = res.data;
             this.blockUI.stop();
         }, err => { 
@@ -181,6 +255,8 @@ export class ApplyForLeaveComponent implements OnInit {
         this.btnSaveText = 'Update';
 
         this.entryForm.controls['id'].setValue(item.id);
+        // this.entryForm.controls['fiscal_year'].setValue(item.fiscal_year);
+        // this.entryForm.controls['company_id'].setValue(item.company_id);
         this.entryForm.controls['start_date'].setValue(item.start_date);
         this.entryForm.controls['end_date'].setValue(item.end_date);
         this.entryForm.controls['is_half_day'].setValue(item.is_half_day);
@@ -208,8 +284,7 @@ export class ApplyForLeaveComponent implements OnInit {
             leave_policy_id: this.entryForm.value.leave_policy_id,
             is_half_day: this.entryForm.value.is_half_day,
             half_day: this.entryForm.value.half_day,
-            reason: this.entryForm.value.reason,
-            responsibility_carried_by: this.entryForm.value.responsibility_carried_by
+            reason: this.entryForm.value.reason
         }
 
         this._service.post('leave/submit-application', params).subscribe(
@@ -238,9 +313,7 @@ export class ApplyForLeaveComponent implements OnInit {
         this.addApplyForLeaveModal.hide();
         this.entryForm.reset();
         this.submitted = false;
-        this.entryForm.controls['is_half_day'].setValue(false);
-        this.entryForm.controls['half_day'].setValue('Not Applicable');
-        this.entryForm.controls['half_day'].disable();
+        this.entryForm.controls['is_half_day'].setValue(true);
         this.modalTitle = 'Apply For a Leave';
         this.btnSaveText = 'Apply';
     }
