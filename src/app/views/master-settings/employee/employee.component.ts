@@ -191,6 +191,7 @@ export class EmployeeComponent implements OnInit {
             designation_id: [null, [Validators.required]],
             //wing: [null],
             wing_id: [null],
+            is_hsep: [false],
             employment_type_id: [null, [Validators.required]],
             division_id: [null],
             district_id: [null],
@@ -459,6 +460,7 @@ export class EmployeeComponent implements OnInit {
         this.entryForm.controls['department_id'].setValue(item.department_id);
         this.entryForm.controls['designation_id'].setValue(item.designation_id);
         this.entryForm.controls['wing_id'].setValue(item.wing_id);
+        this.entryForm.controls['is_hsep'].setValue(item.is_hsep);
 
         this.entryForm.controls['employment_type_id'].setValue(item.employment_type_id);
         this.entryForm.controls['division_id'].setValue(item.division_id);
@@ -629,6 +631,7 @@ export class EmployeeComponent implements OnInit {
         formData.append('designation_id', this.entryForm.value.designation_id);
         //formData.append('wing', this.entryForm.value.wing);
         formData.append('wing_id', this.entryForm.value.wing_id);
+        formData.append('is_hsep', this.entryForm.value.is_hsep);
         formData.append('employment_type_id', this.entryForm.value.employment_type_id);
         formData.append('division_id', this.entryForm.value.division_id);
         formData.append('district_id', this.entryForm.value.district_id);

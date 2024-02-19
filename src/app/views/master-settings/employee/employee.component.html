@@ -38,12 +38,15 @@
                     {{ item.email }}<br/>
                     {{ item.mobile }}
                 </td>
-                <td>{{ item.designation ? item.designation : '-' }}<span *ngIf="item.wing">({{ item.wing_name }})</span>, {{ item.department ? item.department : '-' }}</td>
+                <td>
+                    {{ item.designation ? item.designation : '-' }}<span *ngIf="item.wing">({{ item.wing_name }})</span>, {{ item.department ? item.department : '-' }}<br/>
+                    <span *ngIf="item.is_hsep" class="badge badge-success">HSEP</span>
+                </td>
                 <td>
                     <button class="btn btn-success btn-sm mr-1" (click)="openDetailsModal(item)"><i class="fa fa-eye"></i>&nbsp;</button>
                     <button class="btn btn-primary btn-sm mr-1" (click)="editItem(item)"><i class="fa fa-pencil"></i>&nbsp;Edit</button>
-                    <button class="btn btn-warning btn-sm mr-1" (click)="openChangePasswordModal(item)"><i class="fa fa-lock"></i>&nbsp;Password Reset</button>
-                    <button class="btn btn-danger btn-sm" (click)="openOffboardModal(item, offboardTemplate)"><i class="fa fa-power-off"></i>&nbsp;Offboarding</button>
+                    <button class="btn btn-warning btn-sm mr-1" (click)="openChangePasswordModal(item)"><i class="fa fa-lock"></i>&nbsp; Reset</button>
+                    <button class="btn btn-danger btn-sm" (click)="openOffboardModal(item, offboardTemplate)"><i class="fa fa-power-off"></i></button>
                 </td>
               </tr>
               <tr *ngIf="employeeList.length <= 0">
@@ -207,6 +210,15 @@
                         <img src="{{ view_profile_image }}"  class="details-avatar-img" alt="">
                     </div>
                 </div>
+                <div class="form-group col-md-4 row">
+                    <label class="col-md-5 col-form-label font-weight-bold">Is HSEP</label>
+                    <div class="col-md-7 col-form-label">
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" formControlName="is_hsep" type="checkbox" id="is_hsep">
+                            <label class="form-check-label font-weight-bold" for="is_hsep">Yes</label>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </form>
@@ -301,18 +313,27 @@
                         <span *ngIf="f.office_contact_number.errors.required" class="text-danger"> Office Contact Number is required</span>
                     </div>
                 </div>
-                <div class="col-md-6 mt-3">
+                <div class="col-md-4 mt-3">
                     <label for="date_of_birth" class="form-label">Date Of Birth</label>
                     <input type="date" formControlName="date_of_birth" [ngClass]="{ 'is-invalid': submitted && f.date_of_birth.errors }" class="form-control" id="date_of_birth"  placeholder="Date Of Birth">
                     <div *ngIf="submitted && f.date_of_birth.errors" class="invalid-feedback">
                         <span *ngIf="f.date_of_birth.errors.required" class="text-danger"> Date Of Birth is required</span>
                     </div>
                 </div>
-                <div class="col-md-6 mt-3">
+                <div class="col-md-4 mt-3">
                     <label for="joining_date" class="form-label">Joining Date <span class="text-danger font-weight-bold">*</span></label>
                     <input type="date" formControlName="joining_date" [ngClass]="{ 'is-invalid': submitted && f.joining_date.errors }" class="form-control" id="joining_date"  placeholder="Joining Date">
                     <div *ngIf="submitted && f.joining_date.errors" class="invalid-feedback">
                         <span *ngIf="f.joining_date.errors.required" class="text-danger"> Joining Date is required</span>
+                    </div>
+                </div>
+                <div class="form-group col-md-4 mt-5 row">
+                    <label class="col-md-5 col-form-label font-weight-bold">Is HSEP</label>
+                    <div class="col-md-7 col-form-label">
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" formControlName="is_hsep" type="checkbox" id="is_hsep">
+                            <label class="form-check-label font-weight-bold" for="is_hsep">Yes</label>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-12 mt-3">
